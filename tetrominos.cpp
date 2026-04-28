@@ -1,5 +1,4 @@
 #include "tetrominos.h"
-#include <iostream>
 
 
 // Initialise un tetromino
@@ -61,3 +60,26 @@ void genereTetro (tetromino & tetro, char type) {
         tetro[3][2] = true;
     }
 }
+
+// Tourne un tetromino
+// False : Droite
+// True : Gauche
+void tournerTetro (tetromino & tetro, bool sens) {
+    tetromino aux;
+    genereTetro(aux, ' ');
+    if (sens) { // Trourne à gauche
+        for (int i = 0; i<4; ++i) {
+            for (int j = 0; j<4; ++j) {
+                aux[i][j] = tetro[j][3-i];
+            }
+        }
+    } else { // Trourne à droite
+        for (int i = 0; i<4; ++i) {
+            for (int j = 0; j<4; ++j) {
+                aux[i][j] = tetro[3-j][i];
+            }
+        }
+    }
+    tetro = aux;
+}
+
