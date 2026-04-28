@@ -1,5 +1,4 @@
 #pragma once
-#include "movTetronimo.h"
-
+#include "movTetromino.h"
 
 void jouer (grille & G, float & score);
