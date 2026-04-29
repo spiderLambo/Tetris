@@ -1,5 +1,5 @@
 #include "movTetromino.h"
-#include "tetrominos.cpp"
+
 
 // Tourner le tetromino courant
 void tourner (grille & G, bool sens) {

@@ -10,3 +10,6 @@ void genereTetro (tetromino & tetro, char type);
 // False : Droite
 // True : Gauche
 void tournerTetro (tetromino & tetro, bool sens);
+
+// Supprime une ligne d'un tetromino
+void supprimeLigneTetro (tetromino & tetro, int i);
