@@ -12,7 +12,8 @@ struct tetrominoPlace {
 struct grille {
     int nb; // nombre de tetromino placer
     tetrominoPlace * places; // tableau dynamique de tetromino placer
-    tetrominoPlace * courant; // tetromino
+    tetrominoPlace * courant; // tetromino jouer
+    tetrominoPlace * next; // tetromino de réserve
 };
 
 // Initiliser un nouveau courant
@@ -27,3 +28,5 @@ void placer (grille & G);
 // Supprime une ligne si elle est complete et fait descendre celles du dessus
 bool verifLigne (grille & G, int l);
 
+// Change le courant avec la réserve
+void reserver (grille & G);

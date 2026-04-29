@@ -5,7 +5,7 @@ void apparait(grille & G, tetrominoPlace & next) {
 	next.Positions[0] = 3;
 	next.Positions[1] = 0;
 	// Le Tetromino courant deviens le "next" Tetromino
-	G->courant = next;
+	G.courant = &next;
 }
 
 bool toucher (grille G) {
@@ -13,14 +13,14 @@ bool toucher (grille G) {
         // pour chaque Tetromino déja placer on va parcourir chaqune de ses cases
         for (int y = 0; y < 4; ++y) {
             for (int x = 0; x < 4; ++x) {
-                if (G->places[z].tetro[y][x]) { // On prend les coordonnés de toutes les cases remplit et placer
-                    int px = G->places[z].tetro[0] + x;
-                    int py = G->places[z].tetro[1] + y;
+                if (G.places[z].tetro[y][x]) { // On prend les coordonnés de toutes les cases remplit et placer
+                    int px = G.places[z].tetro[0] + x;
+                    int py = G.places[z].tetro[1] + y;
 		    for (int iy = 0; iy < 4; ++iy) {
                     	for (int ix = 0; ix < 4; ++ix) {
                              if (G.courant.tetro[iy][ix]) { // On prend les cordonnés de toutes les cases remplit du Tetronimo courant
-                                int cx = G->courant.Position[0] + ix;
-                                int yx = G->courant.Position[1] + iy;
+                                int cx = G.courant.Position[0] + ix;
+                                int yx = G.courant.Position[1] + iy;
                                 if (px == cx && py == cy) // test finale
                                     return true;
 			     }
@@ -50,12 +50,12 @@ void placer (grille &G) {
 }
 
 bool verifLigne (grille & G, int l) {
-	sum = 0; // sum est le nombre de cube placer sur la ligne l
+	int sum = 0; // sum est le nombre de cube placer sur la ligne l
 	for (int z = 0; z < G.nb; ++z) {
 		for (int y = 0; y < 4; ++y) {
             for (int x = 0; x < 4; ++x) {
-                if (G->places[z].tetro[y][x]) {
-                    int yy = G->places[z].Positions[1] + yy;
+                if (G.places[z].tetro[y][x]) {
+                    int yy = G.places[z].Positions[1] + yy;
                     if (yy == l)
                         sum++;
                 }
@@ -66,14 +66,20 @@ bool verifLigne (grille & G, int l) {
 		for (int t = 0; t < G.nb; ++t) {
 			for (int y = 0; y < 0; ++y) {
 				// si le tetromino a une ligne qui correspond a la ligne on supprime la ligne du Tetromino et on fait descendre celle du dessus, sinon si l'ordonnée du Tetromino est plus grande on fait descendre l'ordonnée de 1
-				if (G->places[t].Positions[1] + y == l) {
-					supprdescLigneTetro(G->places[t].tetro, y);
-				} else if (G->places[t].Positions[1] > l) {
-					--(G->places[t].Positions[1]);
+				if (G.places[t].Positions[1] + y == l) {
+					supprdescLigneTetro(G.places[t].tetro, y);
+				} else if (G.places[t].Positions[1] > l) {
+					--(G.places[t].Positions[1]);
 				}
 			}
 		}
 		return true;
 	}
 	return false;
+}
+
+void reserver (grille & G) {
+	tetrominoPlace tmp = G.courant;
+	G.courant = G.next;
+	G.next = tmp;
 }

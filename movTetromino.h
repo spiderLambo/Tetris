@@ -9,4 +9,3 @@ bool verifierColonneTetrominoVide (grille & G, int i);
 
 // Deplacer le tetromino courant
 void deplacer (grille & G, char dir);
-

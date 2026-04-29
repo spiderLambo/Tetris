@@ -12,4 +12,4 @@ void genereTetro (tetromino & tetro, char type);
 void tournerTetro (tetromino & tetro, bool sens);
 
 // Supprime une ligne d'un tetromino
-void supprimeLigneTetro (tetromino & tetro, int i);
+void supprdescLigneTetro (tetromino & tetro, int i);
