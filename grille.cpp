@@ -20,7 +20,7 @@ bool toucher (grille G) {
                     	for (int ix = 0; ix < 4; ++ix) {
                              if (G.courant.tetro[iy][ix]) { // On prend les cordonnés de toutes les cases remplit du Tetronimo courant
                                 int cx = G.courant.Position[0] + ix;
-                                int yx = G.courant.Position[1] + iy;
+                                int cy = G.courant.Position[1] + iy;
                                 if (px == cx && py == cy) // test finale
                                     return true;
 			     }
@@ -37,14 +37,14 @@ void placer (grille &G) {
     tetrominoPlace * T = new tetrominoPlace[G.nb + 1]; // dynamiquement on refait un tableau avec une case de plus
     // on copie les anciens
     for (int i = 0; i < G.nb; ++i) {
-        T[i] = G->places[i];
+        T[i] = G.places[i];
     }
     // ajout du courant a la fin
-    T[G.nb] = G->courant;
+    T[G.nb] = G.courant;
     // suppression de l'ancien tableau
-    delete[] G->places;
+    delete[] G.places;
     // remplacer
-    G->places = T;
+    G.places = T;
     // incrémenter
     G.nb++;
 }

@@ -5,7 +5,7 @@
 // Tetrominos avec sa position
 struct tetrominoPlace {
     tetromino tetro; // le tetromino
-    std::array <unsigned int, 2> Positions; // sa position
+    std::array <int, 2> Positions; // sa position
 };
 
 // Grille avec les tetrominos placés ou non
