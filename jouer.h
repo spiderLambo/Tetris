@@ -1,4 +1,14 @@
 #pragma once
 #include "movTetromino.h"
+#include <chrono>
+#include <SFML/Graphics.hpp>
 
-void jouer (grille & G, float & score);
+using regctangle = sf::RectangleShape;
+
+void jouer (grille & G, int & level, int & interval);
+
+void initRect (regctangle & rec, float taille, float x, float y);
+
+void afficherTetromino (sf::RenderWindow & f, tetrominoPlace t);
+
+void dessinerGrille (sf::RenderWindow & f, grille G);
