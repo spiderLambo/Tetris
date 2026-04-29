@@ -84,9 +84,15 @@ void tournerTetro (tetromino & tetro, bool sens) {
 }
 
 // Supprime une ligne d'un tetromino
-void supprimeLigneTetro (tetromino & tetro, int i) {
-    // Supression de la ligne
-    for (int j = 0; j<4; ++j) {
-        tetro[i][j] = false;
+void supprdescLigneTetro (tetromino & tetro, int i) {
+    // Supression de la ligne et descente des lignes du dessus
+    for (int x = 0; x<4; ++x) {
+	tetro[i][x] = tetro[i+1][x];
+	i += 1;
+	while (i != 3) {
+		tetro[i][x] = tetro[i+1][x];
+		i++;
+	}
+	tetro[3][x] = false;
     }
 }

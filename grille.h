@@ -24,6 +24,6 @@ bool toucher (grille G, int l);
 // Place le tetromino courant
 void placer (grille & G);
 
-// Supprime une ligne si elle est complete
-void verifLigne (grille & G);
+// Supprime une ligne si elle est complete et fait descendre celles du dessus
+bool verifLigne (grille & G, int l);
 
