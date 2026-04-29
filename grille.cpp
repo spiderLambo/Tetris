@@ -14,13 +14,13 @@ bool toucher (grille G) {
         for (int y = 0; y < 4; ++y) {
             for (int x = 0; x < 4; ++x) {
                 if (G.places[z].tetro[y][x]) { // On prend les coordonnés de toutes les cases remplit et placer
-                    int px = G.places[z].tetro[0] + x;
-                    int py = G.places[z].tetro[1] + y;
+                    int px = G.places[z].Positions[0] + x;
+                    int py = G.places[z].Positions[1] + y;
 		    for (int iy = 0; iy < 4; ++iy) {
                     	for (int ix = 0; ix < 4; ++ix) {
-                             if (G.courant.tetro[iy][ix]) { // On prend les cordonnés de toutes les cases remplit du Tetronimo courant
-                                int cx = G.courant.Position[0] + ix;
-                                int cy = G.courant.Position[1] + iy;
+                             if (G.courant->tetro[iy][ix]) { // On prend les cordonnés de toutes les cases remplit du Tetronimo courant
+                                int cx = G.courant->Positions[0] + ix;
+                                int cy = G.courant->Positions[1] + iy;
                                 if (px == cx && py == cy) // test finale
                                     return true;
 			     }
@@ -40,7 +40,7 @@ void placer (grille &G) {
         T[i] = G.places[i];
     }
     // ajout du courant a la fin
-    T[G.nb] = G.courant;
+    T[G.nb] = *G.courant;
     // suppression de l'ancien tableau
     delete[] G.places;
     // remplacer
@@ -79,7 +79,7 @@ bool verifLigne (grille & G, int l) {
 }
 
 void reserver (grille & G) {
-	tetrominoPlace tmp = G.courant;
+	tetrominoPlace *tmp = G.courant;
 	G.courant = G.next;
 	G.next = tmp;
 }
