@@ -24,9 +24,5 @@ void deplacer (grille & G, char dir) {
         // Verifie si le courant touche un mur
         if (G.courant->Positions[0] > 0 or verifierColonneTetrominoVide(G, -G.courant->Positions[0]))
             --G.courant->Positions[0];
-    }else if (dir == 'B') { // Avance le courant vers le bas
-        // Verifie si le courant peux decendre
-        if (!toucher(G))
-            ++G.courant->Positions[1];
     }
 }

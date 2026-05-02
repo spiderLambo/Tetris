@@ -17,10 +17,10 @@ struct grille {
 };
 
 // Initiliser un nouveau courant
-void apparait (grille & G, tetrominoPlace & next);
+void apparait (grille & G);
 
 // Verifie si le tetromino courant dois s'arreter
-bool toucher (grille G, int l);
+bool toucher (grille G);
 
 // Place le tetromino courant
 void placer (grille & G);

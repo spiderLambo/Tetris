@@ -1,66 +1,5 @@
 #include "jouer.h"
 
-// #include <iostream>
-
-void genereTetro (tetromino & tetro, char type) {
-    // Tetromino vide
-    for (int i = 0; i<4; ++i) {
-        tetro[0][i] = false;
-        tetro[1][i] = false;
-        tetro[2][i] = false;
-        tetro[3][i] = false;
-    }
-    if (type == 'I') {
-        // - - - -
-        // . . . .
-        for (int i = 0; i<4; ++i) {
-            tetro[2][i] = true;
-        }
-    } else if (type == 'O') {
-        // . - - .
-        // . - - .
-        tetro[1][1] = true;
-        tetro[2][1] = true;
-        tetro[1][2] = true;
-        tetro[2][2] = true;
-    } else if (type == 'T') {
-        // . - - -
-        // . . - .
-        tetro[2][1] = true;
-        tetro[2][2] = true;
-        tetro[2][3] = true;
-        tetro[3][2] = true;
-    } else if (type == 'L') {
-        // . - - -
-        // . - . .
-        tetro[2][1] = true;
-        tetro[2][2] = true;
-        tetro[2][3] = true;
-        tetro[3][1] = true;
-    } else if (type == 'J') {
-        // . - - -
-        // . . . -
-        tetro[2][1] = true;
-        tetro[2][2] = true;
-        tetro[2][3] = true;
-        tetro[3][3] = true;
-    } else if (type == 'Z') {
-        // . - - .
-        // . . - -
-        tetro[2][1] = true;
-        tetro[2][2] = true;
-        tetro[3][3] = true;
-        tetro[3][2] = true;
-    } else if (type == 'S') {
-        // . . - -
-        // . - - .
-        tetro[3][1] = true;
-        tetro[2][2] = true;
-        tetro[2][3] = true;
-        tetro[3][2] = true;
-    }
-}
-
 
 void initRect (regctangle & rec, float taillex, float tailley, float x, float y) {
     rec.setSize({taillex, tailley});
@@ -71,11 +10,11 @@ void initRect (regctangle & rec, float taillex, float tailley, float x, float y)
 }
 
 void afficherTetromino (sf::RenderWindow & f, tetrominoPlace t) {
-    for (int i = t.Positions[0]; i<t.Positions[0]+4; ++i) {
-        for (int j = t.Positions[1]; j<t.Positions[1]+4; ++j) {
+    for (int i = 0; i<4; ++i) {
+        for (int j = 0; j<4; ++j) {
             if (t.tetro[i][j]) {
                 regctangle r;
-                initRect(r, 15, 15, i*25+10, j*25+10);
+                initRect(r, 15, 15, (t.Positions[0]+j)*25+10, (t.Positions[1]+i)*25+10);
                 f.draw(r);
             }
         }
@@ -87,10 +26,20 @@ void dessinerGrille (sf::RenderWindow & f, grille G) {
     initRect(grilleRegctangle, 250, 500, 10, 10);
     f.draw(grilleRegctangle);
 
-    // afficher les tetrominos placées
+    // Afficher les tetrominos placées
     for (int i = 0; i<G.nb; ++i) {
         afficherTetromino(f, G.places[i]);
     }
+
+    // Afficher le courant
+    afficherTetromino(f, *G.courant);
+}
+
+tetrominoPlace choisisTetromino () {
+    tetrominoPlace t;
+    std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
+    genereTetro(t.tetro, choix[std::rand()%8]);
+    return t;
 }
 
 void jouer(grille & G, int & level, int & interval) {
@@ -115,15 +64,9 @@ int main () {
     sf::RenderWindow fenetre(sf::VideoMode({500, 520}), "Tetris");
     fenetre.setFramerateLimit(24);
     grille g;
-    tetrominoPlace S, T;
-    genereTetro(S.tetro, 'S');
-    genereTetro(T.tetro, 'T');
-    S.Positions = {3, 4};
-    T.Positions = {5, 15};
-    g.places = new tetrominoPlace [2];
-    g.places[0] = T;
-    g.places[1] = S;
-    g.nb = 2;
+    *g.next = choisisTetromino();
+    apparait(g);
+    *g.next = choisisTetromino();
 
     while (fenetre.isOpen()) {
         // Gestion des événements
@@ -135,6 +78,10 @@ int main () {
 
         fenetre.clear(sf::Color::Black);
 
+        if (toucher(g)) {
+            apparait(g);
+            *g.next = choisisTetromino();
+        }
 
         dessinerGrille(fenetre, g);
 

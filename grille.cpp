@@ -1,11 +1,11 @@
 #include "grille.h"
 
-void apparait(grille & G, tetrominoPlace & next) {
+void apparait(grille & G) {
 	// On place le "next" Tetromino sur le milieu en haut
-	next.Positions[0] = 3;
-	next.Positions[1] = 0;
+	G.next->Positions[0] = 3;
+	G.next->Positions[1] = 0;
 	// Le Tetromino courant deviens le "next" Tetromino
-	G.courant = &next;
+	G.courant = G.next;
 }
 
 bool toucher (grille G) {
