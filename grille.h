@@ -16,6 +16,9 @@ struct grille {
     tetrominoPlace * next; // tetromino de réserve
 };
 
+// Verifie si une ligne sur le tetromino courant est pleine
+bool verifierLigneTetrominoVide (grille & G, int i);
+
 // Initiliser un nouveau courant
 void apparait (grille & G);
 

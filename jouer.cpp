@@ -1,4 +1,5 @@
 #include "jouer.h"
+#include <iostream>
 
 
 void initRect (regctangle & rec, float taillex, float tailley, float x, float y) {
@@ -35,11 +36,9 @@ void dessinerGrille (sf::RenderWindow & f, grille G) {
     afficherTetromino(f, *G.courant);
 }
 
-tetrominoPlace choisisTetromino () {
-    tetrominoPlace t;
+void choisisTetromino (tetrominoPlace & T) {
     std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
-    genereTetro(t.tetro, choix[std::rand()%8]);
-    return t;
+    genereTetro(T.tetro, choix[std::rand()%7]);
 }
 
 void jouer(grille & G, int & level, int & interval) {
@@ -64,9 +63,10 @@ int main () {
     sf::RenderWindow fenetre(sf::VideoMode({500, 520}), "Tetris");
     fenetre.setFramerateLimit(24);
     grille g;
-    *g.next = choisisTetromino();
+    g.next = new tetrominoPlace;
+    choisisTetromino(*g.next);
     apparait(g);
-    *g.next = choisisTetromino();
+    choisisTetromino(*g.next);
 
     while (fenetre.isOpen()) {
         // Gestion des événements
@@ -80,7 +80,7 @@ int main () {
 
         if (toucher(g)) {
             apparait(g);
-            *g.next = choisisTetromino();
+            choisisTetromino(*g.next);
         }
 
         dessinerGrille(fenetre, g);

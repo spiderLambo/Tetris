@@ -1,11 +1,22 @@
 #include "grille.h"
+#include <iostream>
+
+bool verifierLigneTetrominoVide (grille & G, int i) {
+	for (int j = 0; j<4; ++j) {
+        if (G.courant->tetro[i][j]) return false;
+    }
+    return true;
+}
 
 void apparait(grille & G) {
-	// On place le "next" Tetromino sur le milieu en haut
-	G.next->Positions[0] = 3;
-	G.next->Positions[1] = 0;
 	// Le Tetromino courant deviens le "next" Tetromino
 	G.courant = G.next;
+
+	// On place le "next" Tetromino sur le milieu le plus haut possible
+	G.next->Positions[0] = 3;
+	for (int i = 0; i<4; ++i) {
+		if (!verifierLigneTetrominoVide(G, i)) G.next->Positions[1] = -i;
+	}
 }
 
 bool toucher (grille G) {

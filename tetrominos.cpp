@@ -1,14 +1,12 @@
 #include "tetrominos.h"
 
-
 // Initialise un tetromino
 void genereTetro (tetromino & tetro, char type) {
     // Tetromino vide
     for (int i = 0; i<4; ++i) {
-        tetro[0][i] = false;
-        tetro[1][i] = false;
-        tetro[2][i] = false;
-        tetro[3][i] = false;
+        for (int j = 0; j<4; ++j) {
+            tetro[i][j] = false;
+        }
     }
     if (type == 'I') {
         // - - - -

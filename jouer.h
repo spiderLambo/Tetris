@@ -14,4 +14,4 @@ void afficherTetromino (sf::RenderWindow & f, tetrominoPlace t);
 
 void dessinerGrille (sf::RenderWindow & f, grille G);
 
-tetrominoPlace choisisTetromino ();
+void choisisTetromino (tetrominoPlace & T);
