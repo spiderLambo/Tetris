@@ -70,13 +70,13 @@ def score(grille, a, b, c, d):
 
 "Jeu"
 Tetromino = {
-    'I': np.array([[1,1,1,1]]),
-    'O': np.array([[1,1],[1,1]]),
-    'T': np.array([[0,1,0],[1,1,1]]),
-    'L': np.array([[1,0],[1,0],[1,1]]),
-    'J': np.array([[0,1],[0,1],[1,1]]),
-    'Z': np.array([[1,1,0],[0,1,1]]),
-    'S': np.array([[0,1,1],[1,1,0]]),
+    'I': np.array([[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]]),
+    'O': np.array([[0, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0]]),
+    'T': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 1, 1], [0, 0, 1, 0]]),
+    'L': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 1, 1], [0, 0, 1, 0]]),
+    'J': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 1, 1], [0, 0, 0, 1]]),
+    'Z': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1]]),
+    'S': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 1, 1], [0, 1, 1, 0]]),
 }
 
 def tourner(piece, n):
@@ -127,6 +127,20 @@ def mllrcoup(grille, piece, a, b, c, d):
     return mllr_action
 
 "Connexion et jouer"
+def constructgrille(buffer):
+    grille = np.zeros(20, 10)
+    txt = buffer.strip(" ")
+    lignes = txt[1:].split("\n")
+    pos = []
+    for i in lignes:
+        pos.append(lignes.split(","))
+    for j in range(len(pos)):
+        for cle, valeur in Tetromino.items():
+            if pos[j][0] == cle:
+                grille[pos[j][1]:pos[j][1]+4, pos[j][2]:pos[j][2]+4] = valeur
+            else:
+                print("[!]> ERROR")
+    return grille
 
 def client():
     print("connexion au serveur jeu (C++): {HOST}:{PORT}")
@@ -140,3 +154,10 @@ def client():
             print("[!]: IA deconnecter")
             break
         buffer += recv
+        piece = buffer.split("\n")
+        grille = constructgrille(buffer)
+
+
+        rot, col = mllrcoup(grille, piece[0], a, b, c, d)
+        msg = f'deplacement: {col}, rotation: {rot}'
+        s.send(msg.encode())
