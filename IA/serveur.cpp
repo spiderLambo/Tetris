@@ -1,6 +1,9 @@
 #include "serveur.h"
+#include "../grille.h"
 #include <iostream>
 #include <string>
+#include <cstring>
+#include <unistd.h>
 #include <arpa/inet.h>
 
 char msg(grille & G) {
@@ -10,11 +13,6 @@ char msg(grille & G) {
 		msg += line;
 	}
 	return msg;
-}
-
-void decode(action & a, char &msg) {
-	std::string str(msg);
-
 }
 
 int run() {
@@ -51,13 +49,15 @@ int run() {
 			std::cout << "[!]> accept error" << std::endl;
 			return -1;
 		}
-		char msg[2048] = "ca marche";
-		int envoyer = send(servfd, msg, sizeof(msg), 0);
+		char msg[] = "ca marche";
+		int envoyer = send(clifd, msg, strlen(msg), 0);
 		if (envoyer == -1) {
 			std::cout << "[!]> send error" << std::endl;
 			return -1;
 		}
+        close(clifd);
 	}
+    close(servfd);
 	return 0;
 }
 
