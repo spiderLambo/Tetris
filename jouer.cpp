@@ -41,20 +41,33 @@ void choisisTetromino (tetrominoPlace & T) {
     genereTetro(T.tetro, choix[std::rand()%7]);
 }
 
-void jouer(grille & G, int & level, int & interval) {
+void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f) {
     std::chrono::time_point<std::chrono::system_clock> debut = std::chrono::system_clock::now();
     std::chrono::time_point<std::chrono::system_clock> fin = debut + std::chrono::milliseconds(interval);
     std::chrono::time_point<std::chrono::system_clock> maintenant;
+    char bouge = ' ';
 
-    do { // Bouchle pour avoir le temps de l'intervale
+    do { // Boucle pour avoir le temps de l'intervale
         maintenant = std::chrono::system_clock::now();
         std::chrono::milliseconds ecoule = std::chrono::duration_cast<std::chrono::milliseconds>(maintenant - debut);
+
+        f.clear(sf::Color::Black);
         // char sens;
         // std::cin>>sens;
         // if (sens) {
         //     tourner(G, sens);
             // sens = is null
         // }
+        // Stocker la direction dans laquel bouger le tetromino
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) bouge = 'G';
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) bouge = 'D';
+        // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) bouge = 'D';
+        deplacer(G, bouge);
+        bouge = ' ';
+
+        dessinerGrille(f, G);
+
+        f.display();
 
     } while (maintenant < fin);
 }
@@ -68,6 +81,8 @@ int main () {
     apparait(g);
     choisisTetromino(*g.next);
 
+    int l, i = 1000;
+
     while (fenetre.isOpen()) {
         // Gestion des événements
         sf::Event event;
@@ -76,17 +91,15 @@ int main () {
                 fenetre.close();
         }
 
-        fenetre.clear(sf::Color::Black);
+        // if (toucher(g)) {
+        //     apparait(g);
+        //     choisisTetromino(*g.next);
+        // }
 
-        if (toucher(g)) {
-            apparait(g);
-            choisisTetromino(*g.next);
-        }
-
-        dessinerGrille(fenetre, g);
+        jouer(g, l, i, fenetre);
 
 
-        fenetre.display();
+
     }
 
     return 0;
