@@ -94,3 +94,17 @@ void reserver (grille & G) {
 	G.courant = G.next;
 	G.next = tmp;
 }
+
+bool posEtat (grille G, int x, int y) {
+	for (int itetro = 0; itetro<G.nb; ++itetro) {
+		for (int ix = 0; ix<4; ++ix) {
+			for (int iy = 0; iy<4; ++iy) {
+				if (
+					x == G.places[itetro].Positions[0] + ix and
+					y == G.places[itetro].Positions[1] + iy
+				) return G.places[itetro].tetro[ix][iy];
+			}
+		}
+	}
+	return false;
+}

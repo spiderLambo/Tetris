@@ -61,7 +61,7 @@ void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f) {
         // Stocker la direction dans laquel bouger le tetromino
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) bouge = 'G';
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) bouge = 'D';
-        // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) bouge = 'D';
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) bouge = 'b';
         deplacer(G, bouge);
         bouge = ' ';
 

@@ -33,3 +33,6 @@ bool verifLigne (grille & G, int l);
 
 // Change le courant avec la réserve
 void reserver (grille & G);
+
+// Verifie l'etat d'une position
+bool posEtat (grille G, int x, int y);
