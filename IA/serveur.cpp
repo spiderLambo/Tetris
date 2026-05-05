@@ -1,18 +1,46 @@
 #include "serveur.h"
-#include "../grille.h"
 #include <iostream>
-#include <string>
 #include <cstring>
 #include <unistd.h>
 #include <arpa/inet.h>
 
-char msg(grille & G) {
-	std::string msg = "courant: " + G.courant->tetro + "\n";
+std::string converstring(tetromino & T) {
+	if ((T[1][1] == true) && (T[2][1] == true) && (T[1][2] == true) && T[2][2] == true) {
+		return "O";
+	} else if ((T[2][1] == true) && (T[2][2] == true) && (T[2][3] == true) && (T[3][2] == true)) {
+		return "T";
+	} else if ((T[2][1] == true) && (T[2][2] == true) && (T[2][3] == true) && (T[3][1] == true)) {
+		return "L";
+	} else if ((T[2][1] == true) && (T[2][2] == true) && (T[2][3] == true) && (T[3][3] == true)) {
+		return "J";
+	} else if ((T[2][1] == true) && (T[2][2] == true) && (T[3][3] == true) && (T[3][2] == true)) {
+		return "Z";
+	} else if ((T[3][1] == true) && (T[2][2] == true) && (T[2][3] == true) && (T[3][2] == true)) {
+		return "S";
+	} else if ((T[2][0] == true) && (T[2][1] == true) && (T[2][2] == true) && (T[2][3] == true)) {
+		return "I";
+	} else {
+		std::cout << "Rien retourner bzr" << std::endl;
+	}
+	return "";
+}
+
+std::string msg(grille & G) {
+	std::string msg = "courant: " + converstring(G.courant->tetro) + "\n";
 	for (int i = 0; i < G.nb; ++i) {
-		std::string line = G.places[i].tetro + "," + G.places[i].Positions[0] + "," + G.places[i].Positions[1] + "\n";
+		std::string line = converstring(G.places[i].tetro) + "," + std::to_string(G.places[i].Positions[0]) + "," + std::to_string(G.places[i].Positions[1]) + "\n";
 		msg += line;
 	}
 	return msg;
+}
+
+void decode(std::string & str, action & a) {
+	int rot;
+	int deplacement;
+	rot = std::stoi(&str[13]);
+	deplacement = std::stoi(&str[26]);
+	a.rot = rot;
+	a.depla = deplacement;
 }
 
 int run() {
@@ -55,9 +83,17 @@ int run() {
 			std::cout << "[!]> send error" << std::endl;
 			return -1;
 		}
-        close(clifd);
+		char buffer[2048];
+		int recu = recv(clifd, buffer, strlen(buffer), 0);
+		if (recu == -1) {
+			std::cout << "[!]> recv  error" << std::endl;
+			return -1;
+		} else {
+			std::cout << buffer << std::endl;
+		}
+		close(clifd);
 	}
-    close(servfd);
+	close(servfd);
 	return 0;
 }
 
