@@ -15,7 +15,7 @@ bool verifierColonneTetrominoVide (grille G, int i) {
     return true;
 }
 
-std::array <std::array <int, 2>, 4> positionsAVerifier (grille G) {
+std::array <std::array <int, 2>, 4> positionsAVerifierBas (grille G) {
     std::array <std::array <int, 2>, 4> positions;
     for (int i = 0; i<4; ++i) {
         if (!verifierColonneTetrominoVide(G, i)) {
@@ -31,9 +31,32 @@ std::array <std::array <int, 2>, 4> positionsAVerifier (grille G) {
 }
 
 bool peuxDecendre (grille G) {
-    std::array <std::array <int, 2>, 4> pos = positionsAVerifier(G);
+    std::array <std::array <int, 2>, 4> pos = positionsAVerifierBas(G);
     for (int i = 0; i<4; ++i) {
         if (pos[i][1]>=19 or posEtat(G, pos[i][0], pos[i][1] + 1)) return false;
+    }
+    return true;
+}
+
+std::array <std::array <int, 2>, 4> positionsAVerifierGauche (grille G) {
+    std::array <std::array <int, 2>, 4> positions;
+    for (int i = 0; i<4; ++i) {
+        if (!verifierLigneTetrominoVide(G, i)) {
+            int j = 3;
+            while (j>=0 and !G.courant->tetro[i][j]) {
+                --j;
+            }
+            positions[i] = {j + G.courant->Positions[0], i + G.courant->Positions[1]};
+        }
+        else positions[i] = {-4, -4};
+    }
+    return positions;
+}
+
+bool verifierDroiteDeplacer(grille G) {
+    std::array <std::array <int, 2>, 4> pos = positionsAVerifierBas(G);
+    for (int i = 0; i<4; ++i) {
+        if (pos[i][0]>=10 or posEtat(G, pos[i][0], pos[i][1] + 1)) return false;
     }
     return true;
 }

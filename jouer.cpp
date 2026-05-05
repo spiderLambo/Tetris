@@ -56,7 +56,7 @@ void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f) {
         // Stocker la direction dans laquel bouger le tetromino
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) bouge = 'G';
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) bouge = 'D';
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) bouge = 'B';
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) bouge = 'B';
         deplacer(G, bouge);
 
         // Changer le courant si on eenvoie le courna en bas
@@ -66,6 +66,10 @@ void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f) {
         }
 
         bouge = ' ';
+
+        // On verifie si le joueur tourne la piece
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) tourner(G, false);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) tourner(G, true);
 
         dessinerGrille(f, G);
 
