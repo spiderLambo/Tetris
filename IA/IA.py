@@ -89,7 +89,7 @@ def collision(grille, piece, lig, col):
     for i in range(h):
         for j in range(w):
             if piece[i, j] == 1:
-                if grille[lig+i, row+j] == 1:
+                if grille[lig+i, col+j] == 1:
                     return True
 
 def placer(grille, piece, lig, col):
@@ -139,7 +139,7 @@ def constructgrille(buffer):
             if pos[j][0] == cle:
                 grille[pos[j][1]:pos[j][1]+4, pos[j][2]:pos[j][2]+4] = valeur
             else:
-                print("[!]> ERROR")
+                print("[!]: ERROR")
     return grille
 
 def client():
