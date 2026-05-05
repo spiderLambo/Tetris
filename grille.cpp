@@ -8,15 +8,28 @@ bool verifierLigneTetrominoVide (grille & G, int i) {
     return true;
 }
 
-void apparait(grille & G) {
-	// Le Tetromino courant deviens le "next" Tetromino
-	G.courant = G.next;
+void choisisTetromino (tetrominoPlace & T) {
+    std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
+    genereTetro(T.tetro, choix[std::rand()%7]);
+}
 
-	// On place le "next" Tetromino sur le milieu le plus haut possible
-	G.next->Positions[0] = 3;
-	for (int i = 0; i<4; ++i) {
-		if (!verifierLigneTetrominoVide(G, i)) G.next->Positions[1] = -i;
-	}
+void apparait(grille & G) {
+    tetrominoPlace * place = new tetrominoPlace[G.nb + 1];
+    for (int i = 0; i < G.nb; ++i) {
+        place[i] = G.places[i];
+    }
+    place[G.nb] = *G.courant;   // AVANT d'incrémenter
+    ++G.nb;
+    delete[] G.places;
+    G.places = place;
+
+    G.courant = G.next;
+    G.next = new tetrominoPlace;
+    choisisTetromino(*G.next);
+    G.next->Positions[0] = 3;
+    for (int i = 0; i < 4; ++i) {
+        if (!verifierLigneTetrominoVide(G, i)) G.next->Positions[1] = -i;
+    }
 }
 
 bool toucher (grille G) {

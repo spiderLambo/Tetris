@@ -36,11 +36,6 @@ void dessinerGrille (sf::RenderWindow & f, grille G) {
     afficherTetromino(f, *G.courant);
 }
 
-void choisisTetromino (tetrominoPlace & T) {
-    std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
-    genereTetro(T.tetro, choix[std::rand()%7]);
-}
-
 void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f) {
     std::chrono::time_point<std::chrono::system_clock> debut = std::chrono::system_clock::now();
     std::chrono::time_point<std::chrono::system_clock> fin = debut + std::chrono::milliseconds(interval);
@@ -63,6 +58,13 @@ void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f) {
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) bouge = 'D';
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) bouge = 'B';
         deplacer(G, bouge);
+
+        // Changer le courant si on eenvoie le courna en bas
+        if (bouge == 'B') {
+            apparait(G);
+            maintenant == fin;
+        }
+
         bouge = ' ';
 
         dessinerGrille(f, G);
@@ -71,6 +73,9 @@ void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f) {
 
     } while (maintenant < fin);
     deplacer(G, 'b');
+    if (toucher(G)) {
+        apparait(G);
+    }
 
     dessinerGrille(f, G);
 
@@ -80,32 +85,40 @@ void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f) {
 int main () {
     sf::RenderWindow fenetre(sf::VideoMode({500, 520}), "Tetris");
     fenetre.setFramerateLimit(24);
+    
     grille g;
+    g.nb = 0;
+    g.places = new tetrominoPlace[0];
+    
+    g.courant = new tetrominoPlace;
     g.next = new tetrominoPlace;
+    
+    choisisTetromino(*g.courant);
+    g.courant->Positions[0] = 3;
+    g.courant->Positions[1] = 0; 
+    for (int i = 0; i < 4; ++i) {
+        if (!verifierLigneTetrominoVide(g, i)) g.courant->Positions[1] = -i;
+    }
+    
     choisisTetromino(*g.next);
-    apparait(g);
-    choisisTetromino(*g.next);
+    g.next->Positions[0] = 3;
+    g.next->Positions[1] = 0;
 
-    int l, i = 1000;
+    int l = 0, intervalle = 1000;
 
     while (fenetre.isOpen()) {
-        // Gestion des événements
         sf::Event event;
         while (fenetre.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 fenetre.close();
         }
-
-        // if (toucher(g)) {
-        //     apparait(g);
-        //     choisisTetromino(*g.next);
-        // }
-
-        jouer(g, l, i, fenetre);
-
-
-
+        jouer(g, l, intervalle, fenetre);
     }
+
+    // Libérer la mémoire
+    delete g.courant;
+    delete g.next;
+    delete[] g.places;
 
     return 0;
 }

@@ -12,6 +12,4 @@ void afficherTetromino (sf::RenderWindow & f, tetrominoPlace t);
 
 void dessinerGrille (sf::RenderWindow & f, grille G);
 
-void choisisTetromino (tetrominoPlace & T);
-
 void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f);

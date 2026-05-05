@@ -36,3 +36,5 @@ void reserver (grille & G);
 
 // Verifie l'etat d'une position
 bool posEtat (grille G, int x, int y);
+
+void choisisTetromino (tetrominoPlace & T);
