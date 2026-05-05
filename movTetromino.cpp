@@ -33,10 +33,7 @@ std::array <std::array <int, 2>, 4> positionsAVerifier (grille G) {
 bool peuxDecendre (grille G) {
     std::array <std::array <int, 2>, 4> pos = positionsAVerifier(G);
     for (int i = 0; i<4; ++i) {
-        if (posEtat(G, pos[i][0], pos[i][1] + 1)) {
-            if (pos[i][1]>20) return true;
-            else return false;
-        }
+        if (pos[i][1]>=19 or posEtat(G, pos[i][0], pos[i][1] + 1)) return false;
     }
     return true;
 }
@@ -54,5 +51,9 @@ void deplacer (grille & G, char dir) {
     } else if (dir == 'b') { // fait decendre de 1
         if (peuxDecendre(G)) 
             ++G.courant->Positions[1];
+    } else if (dir == 'B') {
+        while (peuxDecendre(G)) {
+            ++G.courant->Positions[1];
+        }
     }
 }
