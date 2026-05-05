@@ -36,7 +36,7 @@ void dessinerGrille (sf::RenderWindow & f, grille G) {
     afficherTetromino(f, *G.courant);
 }
 
-void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f) {
+void jouer(grille & G, int & interval, sf::RenderWindow & f) {
     std::chrono::time_point<std::chrono::system_clock> debut = std::chrono::system_clock::now();
     std::chrono::time_point<std::chrono::system_clock> fin = debut + std::chrono::milliseconds(interval);
     std::chrono::time_point<std::chrono::system_clock> maintenant;
@@ -47,12 +47,7 @@ void jouer(grille & G, int & level, int & interval, sf::RenderWindow & f) {
         std::chrono::milliseconds ecoule = std::chrono::duration_cast<std::chrono::milliseconds>(maintenant - debut);
 
         f.clear(sf::Color::Black);
-        // char sens;
-        // std::cin>>sens;
-        // if (sens) {
-        //     tourner(G, sens);
-            // sens = is null
-        // }
+
         // Stocker la direction dans laquel bouger le tetromino
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) bouge = 'G';
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) bouge = 'D';
@@ -108,7 +103,7 @@ int main () {
     g.next->Positions[0] = 3;
     g.next->Positions[1] = 0;
 
-    int l = 0, intervalle = 1000;
+    int level = 0, nombreDeLignes = 0, score = 0, intervalle = 1000;
 
     while (fenetre.isOpen()) {
         sf::Event event;
@@ -116,7 +111,27 @@ int main () {
             if (event.type == sf::Event::Closed)
                 fenetre.close();
         }
-        jouer(g, l, intervalle, fenetre);
+        jouer(g, intervalle, fenetre);
+
+        // Supprimer les lignes completes
+        int ligneSupr = 0;
+        for (int i = 0; i<20; ++i) {
+            if (verifLigne(g, i)) {
+                ++ligneSupr;
+                ++nombreDeLignes;
+            }
+        }
+        level = nombreDeLignes/10;
+        if (ligneSupr == 1) score = score + level * 100;
+        else if (ligneSupr == 2) score = score + level * 300;
+        else if (ligneSupr == 3) score = score + level * 500;
+        else if (ligneSupr == 4) score = score + level * 800;
+        else if (ligneSupr > 4) score = score + 50*ligneSupr*level;
+        if (ligneSupr != 0) {
+            if (level == 0) intervalle = 1000;
+            else if (level < 15) intervalle = intervalle * 0.75;
+            else intervalle = intervalle * 0.9;
+        }
     }
 
     // Libérer la mémoire

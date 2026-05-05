@@ -17,7 +17,7 @@ std::array <std::array <int, 2>, 4> positionsAVerifierGauche (grille G);
 bool peuxDecendre (grille G);
 
 // Verifie si le courant peut aller a droite
-// bool verifierDroiteDeplacer(grille G);
+bool verifierGaucheDeplacer(grille G);
 
 // Deplacer le tetromino courant
 void deplacer (grille & G, char dir);

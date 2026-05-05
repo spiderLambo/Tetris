@@ -53,7 +53,7 @@ std::array <std::array <int, 2>, 4> positionsAVerifierGauche (grille G) {
     return positions;
 }
 
-bool verifierDroiteDeplacer(grille G) {
+bool verifierGaucheDeplacer(grille G) {
     std::array <std::array <int, 2>, 4> pos = positionsAVerifierBas(G);
     for (int i = 0; i<4; ++i) {
         if (pos[i][0]>=10 or posEtat(G, pos[i][0], pos[i][1] + 1)) return false;

@@ -18,7 +18,7 @@ void apparait(grille & G) {
     for (int i = 0; i < G.nb; ++i) {
         place[i] = G.places[i];
     }
-    place[G.nb] = *G.courant;   // AVANT d'incrémenter
+    place[G.nb] = *G.courant;
     ++G.nb;
     delete[] G.places;
     G.places = place;
