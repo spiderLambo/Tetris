@@ -1,6 +1,13 @@
 #include "jouer.h"
 #include <iostream>
-
+ 
+void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y) {
+    sf::Font font;
+    font.loadFromFile(police);
+    sf::Text text(texte, font, 50);
+    text.setPosition(x, y);
+    f.draw(text);
+}
 
 void initRect (regctangle & rec, float taillex, float tailley, float x, float y) {
     rec.setSize({taillex, tailley});
@@ -36,17 +43,22 @@ void dessinerGrille (sf::RenderWindow & f, grille G) {
     afficherTetromino(f, *G.courant);
 }
 
-void jouer(grille & G, int & interval, sf::RenderWindow & f) {
+void jouer(grille & G, int level, int score, int & interval, sf::RenderWindow & f) {
     std::chrono::time_point<std::chrono::system_clock> debut = std::chrono::system_clock::now();
     std::chrono::time_point<std::chrono::system_clock> fin = debut + std::chrono::milliseconds(interval);
     std::chrono::time_point<std::chrono::system_clock> maintenant;
     char bouge = ' ';
-
+    
+    
+    
     do { // Boucle pour avoir le temps de l'intervale
         maintenant = std::chrono::system_clock::now();
         std::chrono::milliseconds ecoule = std::chrono::duration_cast<std::chrono::milliseconds>(maintenant - debut);
-
+        
         f.clear(sf::Color::Black);
+        // Afficher les infos
+        afficherTexte(f, "Level : " + std::to_string(level), "./chomsky/Chomsky.woff", 300, 50);
+        afficherTexte(f, "Score : " + std::to_string(score), "./chomsky/Chomsky.woff", 300, 150);
 
         // Stocker la direction dans laquel bouger le tetromino
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) bouge = 'G';
@@ -109,9 +121,10 @@ int main () {
         sf::Event event;
         while (fenetre.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
-                fenetre.close();
+            fenetre.close();
         }
-        jouer(g, intervalle, fenetre);
+        jouer(g, level, score, intervalle, fenetre);
+
 
         // Supprimer les lignes completes
         int ligneSupr = 0;
