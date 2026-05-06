@@ -147,13 +147,12 @@ def client():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
     print("[+]: IA connecter")
-    BUFFER = ''
     while True:
         recv = s.recv(4096).decode('utf-8')
         if not recv:
             print("[!]: IA deconnecter")
             break
-        buffer += recv
+        print(recv)
         piece = buffer.split("\n")
         grille = constructgrille(buffer)
 
