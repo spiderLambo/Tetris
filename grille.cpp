@@ -1,124 +1,141 @@
 #include "grille.h"
-#include <iostream>
 
-bool verifierLigneTetrominoVide (grille & G, int i) {
-	for (int j = 0; j<4; ++j) {
-        if (G.courant->tetro[i][j]) return false;
+void initGrille (grille & g) {
+    for (int i = 0; i<HAUTEUR; ++i) {
+        for (int j = 0; j<LARGEUR; ++j) {
+            g[i][j] = ' ';
+        }
+    }
+}
+
+void afficheGrille (grille g) {
+    for (int i = 0; i<HAUTEUR; ++i) {
+        for (int j = 0; j<LARGEUR; ++j) {
+            std::cout<<g[i][j]<<'|';
+        } std::cout<<std::endl;
+    }
+}
+
+void apparait (grille & g, char type) {
+    if (type == 'I') {
+        g[0][3] = 'C';
+        g[0][4] = 'C';
+        g[0][5] = 'C';
+        g[0][6] = 'C';
+    } else if (type == 'T') {
+        g[0][4] = 'C';
+        g[0][5] = 'C';
+        g[0][6] = 'C';
+        g[1][5] = 'C';
+    }
+}
+
+void placer (grille & g) {
+    for (int i = 0; i<HAUTEUR; ++i) {
+        for (int j = 0; j<LARGEUR; ++j) {
+            if (g[i][j] == 'C') g[i][j] = 'P';
+        }
+    }
+}
+
+bool peuxGauche (grille g) {
+    for (int i = 0; i<HAUTEUR; ++i) {
+        int j = 0;
+        while (j<LARGEUR - 1 and g[i][j] != 'C') {
+            ++j;
+        }
+        if (g[i][j-1] != ' ') return false;
     }
     return true;
 }
 
-void choisisTetromino (tetrominoPlace & T) {
-    std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
-    genereTetro(T.tetro, choix[std::rand()%7]);
+bool peuxDroite (grille g) {
+    for (int i = 0; i<HAUTEUR; ++i) {
+        int j = LARGEUR-1;
+        while (j>0 and g[i][j] != 'C') {
+            --j;
+        }
+        if (g[i][j+1] != ' ' or j == LARGEUR-1) return false;
+    }
+    return true;
 }
 
-void apparait(grille & G) {
-    tetrominoPlace * place = new tetrominoPlace[G.nb + 1];
-    for (int i = 0; i < G.nb; ++i) {
-        place[i] = G.places[i];
+bool peuxDecendre (grille g) {
+    for (int j = 0; j<LARGEUR; ++j) {
+        int i = HAUTEUR - 1;
+        while (i>0 and g[i][j] != 'C') {
+            --i;
+        }
+        if (g[i+1][j] != ' ') return false;
     }
-    place[G.nb] = *G.courant;
-    ++G.nb;
-    delete[] G.places;
-    G.places = place;
-
-    G.courant = G.next;
-    G.next = new tetrominoPlace;
-    choisisTetromino(*G.next);
-    G.next->Positions[0] = 3;
-    for (int i = 0; i < 4; ++i) {
-        if (!verifierLigneTetrominoVide(G, i)) G.next->Positions[1] = -i + 1;
-    }
+    return true;
 }
 
-bool toucher (grille G) {
-    for (int z = 0; z < G.nb; ++z) {
-        // pour chaque Tetromino déja placer on va parcourir chaqune de ses cases
-        for (int y = 0; y < 4; ++y) {
-            for (int x = 0; x < 4; ++x) {
-                if (G.places[z].tetro[y][x]) { // On prend les coordonnés de toutes les cases remplit et placer
-                    int px = G.places[z].Positions[0] + x;
-                    int py = G.places[z].Positions[1] + y;
-		    for (int iy = 0; iy < 4; ++iy) {
-                    	for (int ix = 0; ix < 4; ++ix) {
-                             if (G.courant->tetro[iy][ix]) { // On prend les cordonnés de toutes les cases remplit du Tetronimo courant
-                                int cx = G.courant->Positions[0] + ix;
-                                int cy = G.courant->Positions[1] + iy;
-                                if (px == cx && py == cy) // test finale
-                                    return true;
-			     }
-			}
-		    }
-		}
-	    }
-	}
-    }
-    return false;
-}
-
-void placer (grille &G) {
-    tetrominoPlace * T = new tetrominoPlace[G.nb + 1]; // dynamiquement on refait un tableau avec une case de plus
-    // on copie les anciens
-    for (int i = 0; i < G.nb; ++i) {
-        T[i] = G.places[i];
-    }
-    // ajout du courant a la fin
-    T[G.nb] = *G.courant;
-    // suppression de l'ancien tableau
-    delete[] G.places;
-    // remplacer
-    G.places = T;
-    // incrémenter
-    G.nb++;
-}
-
-bool verifLigne (grille & G, int l) {
-	int sum = 0; // sum est le nombre de cube placer sur la ligne l
-	for (int z = 0; z < G.nb; ++z) {
-		for (int y = 0; y < 4; ++y) {
-            for (int x = 0; x < 4; ++x) {
-                if (G.places[z].tetro[y][x]) {
-                    int yy = G.places[z].Positions[1] + yy;
-                    if (yy == l)
-                        sum++;
-                }
+void gauche (grille & g) {
+    for (int j = 0; j<LARGEUR-1; ++j) {
+        for (int i = 0; i<HAUTEUR-1;++i) {
+            if (g[i][j+1] == 'C') {
+                g[i][j+1] = ' ';
+                g[i][j] = 'C';
             }
-		}
-	}
-	if (sum == 10) { // si la sum = 10 alors la ligne est complète il faut la supprimer et placer celle du dessus sur l
-		for (int t = 0; t < G.nb; ++t) {
-			for (int y = 0; y < 0; ++y) {
-				// si le tetromino a une ligne qui correspond a la ligne on supprime la ligne du Tetromino et on fait descendre celle du dessus, sinon si l'ordonnée du Tetromino est plus grande on fait descendre l'ordonnée de 1
-				if (G.places[t].Positions[1] + y == l) {
-					supprdescLigneTetro(G.places[t].tetro, y);
-				} else if (G.places[t].Positions[1] > l) {
-					--(G.places[t].Positions[1]);
-				}
-			}
-		}
-		return true;
-	}
-	return false;
+        }
+    }
 }
 
-void reserver (grille & G) {
-	tetrominoPlace *tmp = G.courant;
-	G.courant = G.next;
-	G.next = tmp;
+void droite (grille & g) {
+    for (int j = LARGEUR-1; j>0; --j) {
+        for (int i = 0; i<HAUTEUR-1; ++i) {
+            if (g[i][j-1] == 'C') {
+                g[i][j-1] = ' ';
+                g[i][j] = 'C';
+            }
+        }
+    }
 }
 
-bool posEtat (grille G, int x, int y) {
-	for (int itetro = 0; itetro<G.nb; ++itetro) {
-		for (int ix = 0; ix<4; ++ix) {
-			for (int iy = 0; iy<4; ++iy) {
-				if (
-					x == G.places[itetro].Positions[0] + ix and
-					y == G.places[itetro].Positions[1] + iy and
-                    G.places[itetro].tetro[ix][iy]
-                ) return true;
-			}
-		}
-	}
-	return false;
+void descendre (grille & g) {
+    for (int i = HAUTEUR-1; i>0; --i) {
+        for (int j = 0; j<LARGEUR; ++j) {
+            if (g[i-1][j] == 'C') {
+                g[i][j] = 'C';
+                g[i-1][j] = ' ';
+            }
+        } 
+    }
+}
+
+void deplacer (grille & g, char dir) {
+    if (dir == 'G' and peuxGauche(g)) {
+        gauche(g);
+    } else if (dir == 'D' and peuxDroite(g)) {
+        droite(g);
+    } else if (dir == 'b' and peuxDecendre(g)) {
+        descendre(g);
+    } else if (dir == 'B') {
+        while (peuxDecendre(g)) {
+            descendre(g);
+        }
+    }
+}
+
+bool collision (grille g) {
+    return !peuxDecendre(g);
+}
+
+int main () {
+    grille g;
+    initGrille(g);
+    apparait(g, 'I');
+    deplacer(g, 'B');
+    placer(g);
+    afficheGrille(g);
+    std::cout<<"---"<<std::endl;
+    apparait(g, 'T');
+    deplacer(g, 'D');
+    deplacer(g, 'D');
+
+    deplacer(g, 'B');
+    afficheGrille(g);
+    
+    return 0;
 }

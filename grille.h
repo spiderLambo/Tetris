@@ -1,40 +1,36 @@
 #pragma once
+// #include "tetrominos.h"
 #include <array>
-#include "tetrominos.h"
+#include <iostream>
 
-// Tetrominos avec sa position
-struct tetrominoPlace {
-    tetromino tetro; // le tetromino
-    std::array <int, 2> Positions; // sa position
-};
+const int HAUTEUR = 20;
+const int LARGEUR = 10;
 
-// Grille avec les tetrominos placés ou non
-struct grille {
-    int nb; // nombre de tetromino placer
-    tetrominoPlace * places; // tableau dynamique de tetromino placer
-    tetrominoPlace * courant; // tetromino jouer
-    tetrominoPlace * next; // tetromino de réserve
-};
+using grille = std::array<std::array<char, LARGEUR>, HAUTEUR>;
 
-// Verifie si une ligne sur le tetromino courant est pleine
-bool verifierLigneTetrominoVide (grille & G, int i);
+void initGrille (grille & g);
 
-// Initiliser un nouveau courant
-void apparait (grille & G);
+void afficheGrille (grille g);
 
-// Verifie si le tetromino courant dois s'arreter
-bool toucher (grille G);
+void apparait (grille & g, char type);
 
-// Place le tetromino courant
-void placer (grille & G);
 
-// Supprime une ligne si elle est complete et fait descendre celles du dessus
-bool verifLigne (grille & G, int l);
+void placer (grille & g);
 
-// Change le courant avec la réserve
-void reserver (grille & G);
+bool peuxGauche (grille g);
 
-// Verifie l'etat d'une position
-bool posEtat (grille G, int x, int y);
+bool peuxDroite (grille g);
 
-void choisisTetromino (tetrominoPlace & T);
+bool peuxDecendre (grille g);
+
+void gauche (grille & g);
+
+void droite (grille & g);
+
+void descendre (grille & g);
+
+void deplacer (grille & g, char dir);
+
+bool collision (grille g);
+
+void tourner (grille & g, bool sens);
