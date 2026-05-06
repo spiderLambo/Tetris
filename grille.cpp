@@ -28,7 +28,7 @@ void apparait(grille & G) {
     choisisTetromino(*G.next);
     G.next->Positions[0] = 3;
     for (int i = 0; i < 4; ++i) {
-        if (!verifierLigneTetrominoVide(G, i)) G.next->Positions[1] = -i;
+        if (!verifierLigneTetrominoVide(G, i)) G.next->Positions[1] = -i + 1;
     }
 }
 
@@ -114,8 +114,9 @@ bool posEtat (grille G, int x, int y) {
 			for (int iy = 0; iy<4; ++iy) {
 				if (
 					x == G.places[itetro].Positions[0] + ix and
-					y == G.places[itetro].Positions[1] + iy
-				) return G.places[itetro].tetro[ix][iy];
+					y == G.places[itetro].Positions[1] + iy and
+                    G.places[itetro].tetro[ix][iy]
+                ) return true;
 			}
 		}
 	}

@@ -33,7 +33,10 @@ std::array <std::array <int, 2>, 4> positionsAVerifierBas (grille G) {
 bool peuxDecendre (grille G) {
     std::array <std::array <int, 2>, 4> pos = positionsAVerifierBas(G);
     for (int i = 0; i<4; ++i) {
-        if (pos[i][1]>=19 or posEtat(G, pos[i][0], pos[i][1] + 1)) return false;
+        if (
+            (pos[i][1]>=19 or posEtat(G, pos[i][0], pos[i][1] + 1)) and
+            !(pos[i][0] == -4 and pos[i][1] == -4)
+        ) return false;
     }
     return true;
 }

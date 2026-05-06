@@ -31,7 +31,7 @@ void afficherTetromino (sf::RenderWindow & f, tetrominoPlace t) {
 
 void dessinerGrille (sf::RenderWindow & f, grille G) {
     regctangle grilleRegctangle;
-    initRect(grilleRegctangle, 250, 500, 10, 10);
+    initRect(grilleRegctangle, 240, 490, 10, 10);
     f.draw(grilleRegctangle);
 
     // Afficher les tetrominos placées
@@ -81,6 +81,14 @@ void jouer(grille & G, int level, int score, int & interval, sf::RenderWindow & 
         dessinerGrille(f, G);
 
         f.display();
+        std::cout<<"--------------"<<std::endl;
+        for (int iiiii = 0; iiiii<G.nb; ++iiiii) {
+            std::cout<<iiiii<<" : "<<std::endl;
+        for (int j = 0; j<4; ++j) {
+            for (int i = 0; i<4; ++i) {
+                std::cout<<G.courant[iiiii].tetro[i][j];
+            }std::cout<<std::endl;
+        }}
 
     } while (maintenant < fin);
     deplacer(G, 'b');
@@ -94,7 +102,7 @@ void jouer(grille & G, int level, int score, int & interval, sf::RenderWindow & 
 }
 
 int main () {
-    sf::RenderWindow fenetre(sf::VideoMode({500, 520}), "Tetris");
+    sf::RenderWindow fenetre(sf::VideoMode({500, 510}), "Tetris");
     fenetre.setFramerateLimit(24);
     
     grille g;
