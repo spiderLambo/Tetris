@@ -1,5 +1,6 @@
 #include "serveur.h"
 #include <iostream>
+#include <string>
 #include <cstring>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -43,11 +44,15 @@ void decode(std::string & str, action & a) {
 	a.depla = deplacement;
 }
 
-int run() {
+void joue(grille & G, action & a) {
+	
+}
+
+int run(grille & G) {
 	int servfd, clifd;
 	struct sockaddr_in servaddr;
 	struct sockaddr_storage cliaddr;
-	std::string Buffer = "";
+	action a;
 
 	servfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (servfd == -1) {
@@ -68,17 +73,20 @@ int run() {
 		std::cout << "[!]> listen error" << std::endl;
 		return -1;
 	}
+	
+	socklen_t size = sizeof(cliaddr);
+	clifd = accept(servfd, (struct sockaddr *)&cliaddr, &size);
+	if (clifd == -1) {
+		std::cout << "[!]> accept error" << std::endl;
+		return -1;
+	}
 
 	bool run = true;
 	while (run) {
-		socklen_t size = sizeof(cliaddr);
-		clifd = accept(servfd, (struct sockaddr *)&cliaddr, &size);
-		if (clifd == -1) {
-			std::cout << "[!]> accept error" << std::endl;
-			return -1;
-		}
-		char msg[] = "ca marche";
-		int envoyer = send(clifd, msg, strlen(msg), 0);
+		std::string create = msg(G);
+		char *msg = new char[create.length()+1];
+		std::strcpy(msg, create.c_str());
+		int envoyer = send(clifd, msg, sizeof(msg), 0);
 		if (envoyer == -1) {
 			std::cout << "[!]> send error" << std::endl;
 			return -1;
@@ -90,9 +98,14 @@ int run() {
 			return -1;
 		} else {
 			std::cout << buffer << std::endl;
+			std::string buff(buffer, sizeof(buffer));
+			decode(buff, a);
+			joue(G, a);
 		}
-		close(clifd);
+		delete[] msg;
 	}
+
+	close(clifd);
 	close(servfd);
 	return 0;
 }
