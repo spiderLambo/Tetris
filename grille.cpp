@@ -121,21 +121,3 @@ void deplacer (grille & g, char dir) {
 bool collision (grille g) {
     return !peuxDecendre(g);
 }
-
-int main () {
-    grille g;
-    initGrille(g);
-    apparait(g, 'I');
-    deplacer(g, 'B');
-    placer(g);
-    afficheGrille(g);
-    std::cout<<"---"<<std::endl;
-    apparait(g, 'T');
-    deplacer(g, 'D');
-    deplacer(g, 'D');
-
-    deplacer(g, 'B');
-    afficheGrille(g);
-    
-    return 0;
-}
