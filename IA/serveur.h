@@ -11,14 +11,11 @@ struct action {
 	int depla;
 };
 
-// Retrouve le type du tetromino
-std::string converstring(tetromino & T);
+// Ecrit la grille du jeu a chaque longueur avec le courant en haut (le fichier est sans arret réecrit
+void ecrire (std::string & title, grille & G);
 
-// Encode la grille a l'instant t et le Tetromino courant
-std::string msg(grille & G);
-
-// Decode le coup a jouer envoyer par le client python
-void decode(std::string & str, action & a);
+// Lit l'action optimal calculer par le client et la stock dans action (le fichier n'est jamais réinitialiser, ce qui permet un historique des coups)
+void lire (std::string & title, action & a);
 
 // Joue le coup calculer
 void joue(grille & G, action & a);

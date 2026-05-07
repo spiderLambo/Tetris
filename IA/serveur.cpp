@@ -5,43 +5,32 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-std::string converstring(tetromino & T) {
-	if ((T[1][1] == true) && (T[2][1] == true) && (T[1][2] == true) && T[2][2] == true) {
-		return "O";
-	} else if ((T[2][1] == true) && (T[2][2] == true) && (T[2][3] == true) && (T[3][2] == true)) {
-		return "T";
-	} else if ((T[2][1] == true) && (T[2][2] == true) && (T[2][3] == true) && (T[3][1] == true)) {
-		return "L";
-	} else if ((T[2][1] == true) && (T[2][2] == true) && (T[2][3] == true) && (T[3][3] == true)) {
-		return "J";
-	} else if ((T[2][1] == true) && (T[2][2] == true) && (T[3][3] == true) && (T[3][2] == true)) {
-		return "Z";
-	} else if ((T[3][1] == true) && (T[2][2] == true) && (T[2][3] == true) && (T[3][2] == true)) {
-		return "S";
-	} else if ((T[2][0] == true) && (T[2][1] == true) && (T[2][2] == true) && (T[2][3] == true)) {
-		return "I";
+void ecrire (std::string & title, grille & G) {
+	std::ofstream fic;
+	fic.open(title);
+	if (fic.is_open()) {
+		fic << ;
+		for (int i = 0; i < HAUTEUR; ++i) {
+			for (int j = 0; j < LARGEUR, ++j) {
+				fic << G[i][j];
+			}
+			fic << "";
+		}
 	} else {
-		std::cout << "Rien retourner bzr" << std::endl;
+		std::cout << "[!]> Ouverture en écriture n'a pas marcher" << std::endl;
 	}
-	return "";
 }
 
-std::string msg(grille & G) {
-	std::string msg = "courant: " + converstring(G.courant->tetro) + "\n";
-	for (int i = 0; i < G.nb; ++i) {
-		std::string line = converstring(G.places[i].tetro) + "," + std::to_string(G.places[i].Positions[0]) + "," + std::to_string(G.places[i].Positions[1]) + "\n";
-		msg += line;
-	}
-	return msg;
-}
-
-void decode(std::string & str, action & a) {
+void lire (std::string & title, action & a) {
 	int rot;
-	int deplacement;
-	rot = std::stoi(&str[13]);
-	deplacement = std::stoi(&str[26]);
-	a.rot = rot;
-	a.depla = deplacement;
+	int depla;
+	std::ifstream fic;
+	fic.open(title);
+	if (fic.is_open()) {
+		
+	} else {
+		std::cout << "[!]> Ouverture en lecture n'a pas marcher" << std::endl;
+	}
 }
 
 void joue(grille & G, action & a) {
@@ -83,37 +72,23 @@ int run(grille & G) {
 
 	bool run = true;
 	while (run) {
-		std::string create = msg(G);
-		char *msg = new char[create.length()+1];
-		std::strcpy(msg, create.c_str());
-		int envoyer = send(clifd, msg, sizeof(msg), 0);
+		ecrire("grille.txt", G);
+		int envoyer = send(clifd, , , 0);
 		if (envoyer == -1) {
 			std::cout << "[!]> send error" << std::endl;
 			return -1;
 		}
-		char buffer[2048];
-		int recu = recv(clifd, buffer, strlen(buffer), 0);
+		int recu = recv(clifd, , , 0);
 		if (recu == -1) {
 			std::cout << "[!]> recv  error" << std::endl;
 			return -1;
 		} else {
-			std::cout << buffer << std::endl;
-			std::string buff(buffer, sizeof(buffer));
-			decode(buff, a);
+			lire(coup.txt, a);
 			joue(G, a);
 		}
-		delete[] msg;
 	}
 
 	close(clifd);
 	close(servfd);
-	return 0;
-}
-
-int main() {
-	int ru = run();
-	if (ru == 0) {
-		std::cout << "ca marche" << std::endl;
-	}
 	return 0;
 }
