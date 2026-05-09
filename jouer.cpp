@@ -61,7 +61,7 @@ void jouer(grille & G, int level, int score, int & interval, sf::RenderWindow & 
         // Changer le courant si on eenvoie le courna en bas
         if (bouge == 'B') {
             placer(G);
-            apparait(G, 'T');
+            genereTetromino(G);
             maintenant == fin;
         }
 
@@ -76,9 +76,13 @@ void jouer(grille & G, int level, int score, int & interval, sf::RenderWindow & 
         f.display();
 
     } while (maintenant < fin);
+    // Faire decendre le tetromino
+    deplacer(G, 'b');
+
+    // Verifier les collision
     if (collision(G)) {
         placer(G);
-        apparait(G, 'T');
+        genereTetromino(G);
     }
 
     dessinerGrille(f, G);

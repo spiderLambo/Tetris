@@ -2,6 +2,7 @@
 // #include "tetrominos.h"
 #include <array>
 #include <iostream>
+#include <cstdlib>
 
 const int HAUTEUR = 20;
 const int LARGEUR = 10;
@@ -14,6 +15,7 @@ void afficheGrille (grille g);
 
 void apparait (grille & g, char type);
 
+void genereTetromino (grille & g);
 
 void placer (grille & g);
 

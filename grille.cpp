@@ -22,12 +22,42 @@ void apparait (grille & g, char type) {
         g[0][4] = 'C';
         g[0][5] = 'C';
         g[0][6] = 'C';
+    } else if (type == 'O') {
+        g[0][4] = 'C';
+        g[0][5] = 'C';
+        g[1][4] = 'C';
+        g[1][5] = 'C';
     } else if (type == 'T') {
         g[0][4] = 'C';
         g[0][5] = 'C';
         g[0][6] = 'C';
         g[1][5] = 'C';
+    } else if (type == 'L') {
+        g[0][4] = 'C';
+        g[0][5] = 'C';
+        g[0][6] = 'C';
+        g[1][4] = 'C';
+    } else if (type == 'J') {
+        g[0][4] = 'C';
+        g[0][5] = 'C';
+        g[0][6] = 'C';
+        g[1][6] = 'C';
+    } else if (type == 'Z') {
+        g[0][4] = 'C';
+        g[0][5] = 'C';
+        g[1][5] = 'C';
+        g[1][6] = 'C';
+    } else if (type == 'S') {
+        g[0][5] = 'C';
+        g[0][6] = 'C';
+        g[1][4] = 'C';
+        g[1][5] = 'C';
     }
+}
+
+void genereTetromino (grille & g) {
+    std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
+    apparait(g, choix[std::rand()%7]);
 }
 
 void placer (grille & g) {
