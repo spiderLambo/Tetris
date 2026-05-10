@@ -35,4 +35,8 @@ void deplacer (grille & g, char dir);
 
 bool collision (grille g);
 
+void tournerGauche (grille & g, int x, int y);
+
+void tournerDroite (grille & g, int x, int y);
+
 void tourner (grille & g, bool sens);

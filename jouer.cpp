@@ -68,8 +68,8 @@ void jouer(grille & G, int level, int score, int & interval, sf::RenderWindow & 
         bouge = ' ';
 
         // On verifie si le joueur tourne la piece
-        // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) tourner(G, false);
-        // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) tourner(G, true);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) tourner(G, false);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) tourner(G, true);
 
         dessinerGrille(f, G);
 
