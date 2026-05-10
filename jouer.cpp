@@ -36,75 +36,88 @@ void dessinerGrille (sf::RenderWindow & f, grille G) {
 }
 
 void jouer(grille & G, int level, int score, int & interval, sf::RenderWindow & f) {
-    std::chrono::time_point<std::chrono::system_clock> debut = std::chrono::system_clock::now();
-    std::chrono::time_point<std::chrono::system_clock> fin = debut + std::chrono::milliseconds(interval);
+    std::chrono::time_point<std::chrono::system_clock> fin = std::chrono::system_clock::now() + std::chrono::milliseconds(interval);
     std::chrono::time_point<std::chrono::system_clock> maintenant;
-    char bouge = ' ';
-    
-    
-    
-    do { // Boucle pour avoir le temps de l'intervale
+
+    do {
         maintenant = std::chrono::system_clock::now();
-        std::chrono::milliseconds ecoule = std::chrono::duration_cast<std::chrono::milliseconds>(maintenant - debut);
-        
-        f.clear(sf::Color::Black);
-        // Afficher les infos
-        afficherTexte(f, "Level : " + std::to_string(level), "./chomsky/Chomsky.woff", 300, 50);
-        afficherTexte(f, "Score : " + std::to_string(score), "./chomsky/Chomsky.woff", 300, 150);
 
-        // Stocker la direction dans laquel bouger le tetromino
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) bouge = 'G';
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) bouge = 'D';
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) bouge = 'B';
-        deplacer(G, bouge);
-
-        // Changer le courant si on eenvoie le courna en bas
-        if (bouge == 'B') {
-            placer(G);
-            genereTetromino(G);
-            maintenant == fin;
+        sf::Event event;
+        while (f.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) f.close();
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Left)  deplacer(G, 'G');
+                else if (event.key.code == sf::Keyboard::Right) deplacer(G, 'D');
+                else if (event.key.code == sf::Keyboard::Enter) {
+                        deplacer(G, 'B');
+                        placer(G);
+                        genereTetromino(G);
+                        maintenant = fin;
+                } else if (event.key.code ==  sf::Keyboard::Up) tourner(G, false);
+                else if (event.key.code == sf::Keyboard::Down) tourner(G, true);
+            }
         }
 
-        bouge = ' ';
-
-        // On verifie si le joueur tourne la piece
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) tourner(G, false);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) tourner(G, true);
-
+        f.clear(sf::Color::Black);
+        afficherTexte(f, "Level : " + std::to_string(level), "./chomsky/Chomsky.woff", 300, 50);
+        afficherTexte(f, "Score : " + std::to_string(score), "./chomsky/Chomsky.woff", 300, 150);
         dessinerGrille(f, G);
-
         f.display();
 
     } while (maintenant < fin);
-    // Faire decendre le tetromino
+
+
     deplacer(G, 'b');
 
-    // Verifier les collision
+
     if (collision(G)) {
         placer(G);
         genereTetromino(G);
     }
 
     dessinerGrille(f, G);
-
     f.display();
 }
+
 
 int main () {
     sf::RenderWindow fenetre(sf::VideoMode({500, 510}), "Tetris");
     fenetre.setFramerateLimit(24);
     
-    int level = 0, score = 0, intervalle = 1000;
-
     grille g;
     initGrille(g);
-    apparait(g, 'T');
+    genereTetromino(g);
+
+    int level = 0, nombreDeLignes = 0, score = 0, intervalle = 1000;
     while (fenetre.isOpen()) {
-        sf::Event event;
-        while (fenetre.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-            fenetre.close();
-        }
+        // sf::Event event;
+        // while (fenetre.pollEvent(event)) {
+        //     if (event.type == sf::Event::Closed)
+        //     fenetre.close();
+        // }
         jouer(g, level, score, intervalle, fenetre);
+
+         // Supprimer les lignes completes
+        int ligneSupr = 0;
+        for (int i = 0; i<HAUTEUR; ++i) {
+            if (peuxSupprimerLigne(g, i)) {
+                supprimerLigne(g, i);
+                ++ligneSupr;
+                ++nombreDeLignes;
+            }
+        }
+
+        // Calcul des valeurs a moidifier
+        level = nombreDeLignes/10;
+        if (ligneSupr == 1) score = score + level * 100;
+        else if (ligneSupr == 2) score = score + level * 300;
+        else if (ligneSupr == 3) score = score + level * 500;
+        else if (ligneSupr == 4) score = score + level * 800;
+        else if (ligneSupr > 4) score = score + 50*ligneSupr*level;
+        if (ligneSupr != 0) {
+            if (level == 0) intervalle = 1000;
+            else if (level < 15) intervalle = intervalle * 0.75;
+            else intervalle = intervalle * 0.9;
+        }
     }
 }

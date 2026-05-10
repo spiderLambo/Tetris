@@ -12,4 +12,4 @@ jouer:
 	g++ -Wall -c jouer.cpp -o jouer.o
 
 clean:
-	rm -f tetrominos.o grille.o movTetromino.o jouer.o tetris
+	rm -f grille.o jouer.o tetris

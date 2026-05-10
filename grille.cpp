@@ -58,6 +58,7 @@ void apparait (grille & g, char type) {
 void genereTetromino (grille & g) {
     std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
     apparait(g, choix[std::rand()%7]);
+    // apparait(g, 'O');
 }
 
 void placer (grille & g) {
@@ -68,36 +69,27 @@ void placer (grille & g) {
     }
 }
 
-bool peuxGauche (grille g) {
-    for (int i = 0; i<HAUTEUR; ++i) {
-        int j = 0;
-        while (j<LARGEUR - 1 and g[i][j] != 'C') {
-            ++j;
-        }
-        if (g[i][j-1] != ' ') return false;
-    }
+bool peuxGauche(grille g) {
+    for (int i = 0; i < HAUTEUR; ++i)
+        for (int j = 0; j < LARGEUR; ++j)
+            if (g[i][j] == 'C' and (j == 0 or g[i][j-1] == 'P'))
+                    return false;
     return true;
 }
 
-bool peuxDroite (grille g) {
-    for (int i = 0; i<HAUTEUR; ++i) {
-        int j = LARGEUR-1;
-        while (j>0 and g[i][j] != 'C') {
-            --j;
-        }
-        if (g[i][j+1] != ' ' or j == LARGEUR-1) return false;
-    }
+bool peuxDroite(grille g) {
+    for (int i = 0; i < HAUTEUR; ++i)
+        for (int j = 0; j < LARGEUR; ++j)
+            if (g[i][j] == 'C' and (j == LARGEUR-1 or g[i][j+1] == 'P'))
+                    return false;
     return true;
 }
 
-bool peuxDecendre (grille g) {
-    for (int j = 0; j<LARGEUR; ++j) {
-        int i = HAUTEUR - 1;
-        while (i>0 and g[i][j] != 'C') {
-            --i;
-        }
-        if (g[i+1][j] != ' ') return false;
-    }
+bool peuxDecendre(grille g) {
+    for (int i = 0; i < HAUTEUR; ++i)
+        for (int j = 0; j < LARGEUR; ++j)
+            if (g[i][j] == 'C' and (i == HAUTEUR-1 or g[i+1][j] == 'P'))
+                    return false;
     return true;
 }
 
@@ -330,5 +322,20 @@ void tourner (grille & g, bool sens) {
             ++j;
         }
         ++i;
+    }
+}
+
+bool peuxSupprimerLigne (grille G, int l) {
+    for (int i = 0; i<LARGEUR; ++i) {
+        if (G[l][i] != 'P') return false;
+    }
+    return true;
+}
+
+void supprimerLigne (grille & G, int l) {
+    for (int i = l; i>1; --i) {
+        for (int j = 0; j<LARGEUR; ++j) {
+            G[i][j] = G[i-1][j];
+        }
     }
 }
