@@ -19,6 +19,7 @@ void ecrire (std::string & title, grille & G) {
 	} else {
 		std::cout << "[!]> Ouverture en écriture n'a pas marcher" << std::endl;
 	}
+    fic.close();
 }
 
 void lire (std::string & title, action & a) {
@@ -27,10 +28,12 @@ void lire (std::string & title, action & a) {
 	std::ifstream fic;
 	fic.open(title);
 	if (fic.is_open()) {
-		
+		fic >> a.rot;
+        fic >> a.depla;
 	} else {
 		std::cout << "[!]> Ouverture en lecture n'a pas marcher" << std::endl;
 	}
+    fic.close();
 }
 
 void joue(grille & G, action & a) {
@@ -70,20 +73,23 @@ int run(grille & G) {
 		return -1;
 	}
 
+    std::cout << "[SERVEUR]: client connecté\n";
+
 	bool run = true;
 	while (run) {
 		ecrire("grille.txt", G);
-		int envoyer = send(clifd, , , 0);
+        const char* msg = "GO";
+		int envoyer = send(clifd, msg, strlen(msg), 0);
 		if (envoyer == -1) {
 			std::cout << "[!]> send error" << std::endl;
 			return -1;
 		}
-		int recu = recv(clifd, , , 0);
+		int recu = recv(clifd, buffer, sizeof(buffer), 0);
 		if (recu == -1) {
 			std::cout << "[!]> recv  error" << std::endl;
 			return -1;
 		} else {
-			lire(coup.txt, a);
+			lire("coup.txt", a);
 			joue(G, a);
 		}
 	}

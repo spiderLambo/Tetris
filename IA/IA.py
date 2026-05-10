@@ -127,20 +127,22 @@ def mllrcoup(grille, piece, a, b, c, d):
     return mllr_action
 
 "Connexion et jouer"
-def constructgrille(buffer):
+def lire_grille():
+    with open("grille.txt", "r") as f:
+        lignes = f.read().splitlines()
+
+    piece = lignes[0]
+
     grille = np.zeros(20, 10)
-    txt = buffer.strip(" ")
-    lignes = txt[1:].split("\n")
-    pos = []
-    for i in lignes:
-        pos.append(lignes.split(","))
-    for j in range(len(pos)):
-        for cle, valeur in Tetromino.items():
-            if pos[j][0] == cle:
-                grille[pos[j][1]:pos[j][1]+4, pos[j][2]:pos[j][2]+4] = valeur
-            else:
-                print("[!]: ERROR")
-    return grille
+
+    for ligne in lignes[1:]:
+        grille[li
+
+    return piece, grille
+
+def ecrire_coup(rot, col):
+    with open("coup.txt", "w") as f:
+        f.write(f"{rot} {col}")
 
 def client():
     print("connexion au serveur jeu (C++): {HOST}:{PORT}")
@@ -148,15 +150,13 @@ def client():
     s.connect((HOST, PORT))
     print("[+]: IA connecter")
     while True:
-        recv = s.recv(4096).decode('utf-8')
-        if not recv:
+        msg = s.recv(4096).decode()
+        if not msg:
             print("[!]: IA deconnecter")
             break
-        print(recv)
-        piece = buffer.split("\n")
-        grille = constructgrille(buffer)
+        if msg == "GO":
+               piece, grille = lire_grille()
+               rot, col = mllrcoup(grille, piece, a, b, c, d)
+               s.send(b"OK")
 
-
-        rot, col = mllrcoup(grille, piece[0], a, b, c, d)
-        msg = f'deplacement: {col}, rotation: {rot}'
-        s.send(msg.encode())
+client()
