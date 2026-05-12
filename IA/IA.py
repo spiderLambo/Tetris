@@ -103,7 +103,7 @@ def mutation(v):
 def genetic_algo():
     population = []
     for _ in range(1000):
-        population.append({"vector": random_vector(), "fitness": 0})
+        population.append({"vector": random_vect(), "fitness": 0})
 
     for generation in range(100):
         for i in range(len(population)):
@@ -112,7 +112,7 @@ def genetic_algo():
         while len(children) < 300:
             p1, p2 = tournament_selection(population)
             child = crossover(p1, p2)
-            child = mutate(child)
+            child = mutation(child)
             children.append({"vector": child, "fitness": 0})
         population = population[:300]
         population.extend(children)
@@ -185,13 +185,14 @@ def lire_grille():
         lignes = f.read().splitlines()
     piece = lignes[0]
     grille = np.zeros(20, 10)
-    for ligne in lignes[1:]:
-        grille[]
+    for i in range(20):
+        for j in range(10):
+            grille[i, j] = int(lignes[i][j])
     return piece, grille
 
 def ecrire_coup(rot, col):
     with open("coup.txt", "w") as f:
-        f.write(f"{rot} {col}")
+        f.write(f"{rot} {col}\n")
 
 def client():
     print("connexion au serveur jeu (C++): {HOST}:{PORT}")
@@ -207,6 +208,7 @@ def client():
         if msg == "GO":
             piece, grille = lire_grille()
             rot, col = mllrcoup(grille, piece, a, b, c, d)
+            ecrire_coup(rot, col)
             s.send(b"OK")
 
 client()
