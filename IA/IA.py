@@ -66,7 +66,60 @@ def score(grille, a, b, c, d):
 
 "optimisation de a, b, c, d"
 
+"-------------------"
+def normalisation(v):
+    norm = np.linalg.norm(v)
+    if norm == 0:
+        return random_vect()
+    return v/norm
 
+def random_vect():
+    v = np.random.uniform(-1, 1, 4)
+    return normalisation(v)
+"-------------------"
+
+def fitness (v):
+    total_lines = 0
+    for _ in range(100):
+        total_lines += 
+    return total_lines
+
+def tournament_selection(population):
+    sample = np.random.sample(population, 100)
+    sample.sort(key=lambda x: x["fitness"], reverse=True)
+    return sample[0], sample[1]
+
+def crossover(p1, p2):
+    child = ((p1["vector"]*p1["fitness"]) + (p2["vector"]*p2["fitness"]))
+    return normalisation(child)
+
+def mutation(v):
+    if np.random.random() < 0.05:
+        i = np.random.randint(0, 3)
+        v[i] += np.random.uniform(-0.02, 0.02)
+        v = normalisation(v)
+    return v
+
+def genetic_algo():
+    population = []
+    for _ in range(1000):
+        population.append({"vector": random_vector(), "fitness": 0})
+
+    for generation in range(100):
+        for i in range(len(population)):
+            population[i]["fitness"] = fitness(population[i]["vector"])
+        children = []
+        while len(children) < 300:
+            p1, p2 = tournament_selection(population)
+            child = crossover(p1, p2)
+            child = mutate(child)
+            children.append({"vector": child, "fitness": 0})
+        population = population[:300]
+        population.extend(children)
+
+    population.sort(key=lambda x: x["fitness"], reverse=True)
+    best = population[0]
+    return best["vector"][0], best["vector"][1], best["vector"][2], best["vector"][3] 
 
 "Jeu"
 Tetromino = {
@@ -130,14 +183,10 @@ def mllrcoup(grille, piece, a, b, c, d):
 def lire_grille():
     with open("grille.txt", "r") as f:
         lignes = f.read().splitlines()
-
     piece = lignes[0]
-
     grille = np.zeros(20, 10)
-
     for ligne in lignes[1:]:
-        grille[li
-
+        grille[]
     return piece, grille
 
 def ecrire_coup(rot, col):
@@ -149,14 +198,15 @@ def client():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
     print("[+]: IA connecter")
+    a, b, c, d = genetic_algo()
     while True:
         msg = s.recv(4096).decode()
         if not msg:
             print("[!]: IA deconnecter")
             break
         if msg == "GO":
-               piece, grille = lire_grille()
-               rot, col = mllrcoup(grille, piece, a, b, c, d)
-               s.send(b"OK")
+            piece, grille = lire_grille()
+            rot, col = mllrcoup(grille, piece, a, b, c, d)
+            s.send(b"OK")
 
 client()
