@@ -4,6 +4,7 @@ Dans le C++ main a chaque fois que un coup est jouer le C++ envoie un socket de 
 
 import socket
 import numpy as np
+import random
 
 HOST = '127.0.0.1'
 PORT = 63424
@@ -17,17 +18,21 @@ def aggregateheight(grille):
         for lig in range(h):
             if grille[lig, col] == 1:
                 height = h - lig
+                break
         heights.append(height)
     return np.sum(heights)
 
 def completelines(grille):
     complete = 0
-    for lig in range(np.shape(grille)[0]):
-        for col in range(np.shape(grille)[1]):
+    h, w = np.shape(grille)
+    for lig in range(h):
+        full = True
+        for col in range(w):
             if grille[lig, col] == 0:
+                full = False
                 break
-            elif (col == np.shape(grille)[1]) and (grille[lig, col] == 1):
-                complete+=1
+        if full:
+            complete += 1
     return complete
 
 def hole(grille):
@@ -62,7 +67,7 @@ def score(grille, a, b, c, d):
     lines = completelines(grille)
     holes = hole(grille)
     bump = bumpiness(grille)
-    return a*height + b*lines + c*hole + d*bump
+    return -a*height + b*lines + -c*holes + -d*bump
 
 "optimisation de a, b, c, d"
 
@@ -85,7 +90,7 @@ def fitness (v):
     return total_lines
 
 def tournament_selection(population):
-    sample = np.random.sample(population, 100)
+    sample = random.sample(population, 100)
     sample.sort(key=lambda x: x["fitness"], reverse=True)
     return sample[0], sample[1]
 
@@ -114,6 +119,7 @@ def genetic_algo():
             child = crossover(p1, p2)
             child = mutation(child)
             children.append({"vector": child, "fitness": 0})
+        population.sort(key=lambda x: x["fitness"], reverse=True)
         population = population[:300]
         population.extend(children)
 
@@ -126,7 +132,7 @@ Tetromino = {
     'I': np.array([[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]]),
     'O': np.array([[0, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0]]),
     'T': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 1, 1], [0, 0, 1, 0]]),
-    'L': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 1, 1], [0, 0, 1, 0]]),
+    'L': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 1, 1], [0, 1, 0, 0]]),
     'J': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 1, 1], [0, 0, 0, 1]]),
     'Z': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1]]),
     'S': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 1, 1], [0, 1, 1, 0]]),
@@ -142,8 +148,11 @@ def collision(grille, piece, lig, col):
     for i in range(h):
         for j in range(w):
             if piece[i, j] == 1:
+                if lig+i >= H or col+j >= W:
+                    return True
                 if grille[lig+i, col+j] == 1:
                     return True
+    return False
 
 def placer(grille, piece, lig, col):
     new_grille = grille.copy()
@@ -168,11 +177,14 @@ def fairetomber(grille, piece, col):
 def mllrcoup(grille, piece, a, b, c, d):
     mllr = -float("inf")
     mllr_action = None
+    piece = Tetromino[piece]
 
     for rot in range(4):
         p = tourner(piece, rot)
         for col in range(np.shape(grille)[1]):
             new_grille = fairetomber(grille, p, col)
+            if new_grille is None:
+                continue
             s = score(new_grille, a, b, c, d)
             if s > mllr:
                 mllr = s
@@ -184,10 +196,10 @@ def lire_grille():
     with open("grille.txt", "r") as f:
         lignes = f.read().splitlines()
     piece = lignes[0]
-    grille = np.zeros(20, 10)
+    grille = np.zeros((20, 10))
     for i in range(20):
         for j in range(10):
-            grille[i, j] = int(lignes[i][j])
+            grille[i, j] = int(lignes[i+1][j])
     return piece, grille
 
 def ecrire_coup(rot, col):
@@ -205,7 +217,7 @@ def client():
         if not msg:
             print("[!]: IA deconnecter")
             break
-        if msg == "GO":
+        if msg.strip() == "GO":
             piece, grille = lire_grille()
             rot, col = mllrcoup(grille, piece, a, b, c, d)
             ecrire_coup(rot, col)
