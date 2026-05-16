@@ -10,6 +10,8 @@ void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, 
 
 void initRect (regctangle & rec, float taille, float x, float y);
 
-void dessinerGrille (sf::RenderWindow & f, grille G);
+void afficherNext (sf::RenderWindow & f, char next);
+
+void dessinerGrille (sf::RenderWindow & f, plateau G);
 
 void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow & f);

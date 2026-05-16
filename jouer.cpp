@@ -16,17 +16,72 @@ void initRect (regctangle & rec, float taillex, float tailley, float x, float y)
     rec.setOutlineThickness(10);
 }
 
-void dessinerGrille (sf::RenderWindow & f, grille G) {
+void afficherNext (sf::RenderWindow & f, char next) {
+    afficherTexte(f, "Suivant : ", "./chomsky/Chomsky.woff", 300, 100);
+
+    regctangle r1;
+    regctangle r2;
+    regctangle r3;
+    regctangle r4;
+
+
+    if (next == 'I') {
+        initRect(r1, 15, 15, 350, 175);
+        initRect(r2, 15, 15, 375, 175);
+        initRect(r3, 15, 15, 400, 175);
+        initRect(r4, 15, 15, 425, 175);
+    } else if (next == 'O') {
+        initRect(r1, 15, 15, 375, 175);
+        initRect(r2, 15, 15, 400, 175);
+        initRect(r3, 15, 15, 375, 200);
+        initRect(r4, 15, 15, 400, 200);
+    } else if (next == 'T') {
+        initRect(r1, 15, 15, 350, 175);
+        initRect(r2, 15, 15, 375, 175);
+        initRect(r3, 15, 15, 400, 175);
+        initRect(r4, 15, 15, 375, 200);
+    } else if (next == 'L') {
+        initRect(r1, 15, 15, 350, 175);
+        initRect(r2, 15, 15, 375, 175);
+        initRect(r3, 15, 15, 400, 175);
+        initRect(r4, 15, 15, 350, 200);
+    } else if (next == 'J') {
+        initRect(r1, 15, 15, 350, 175);
+        initRect(r2, 15, 15, 375, 175);
+        initRect(r3, 15, 15, 400, 175);
+        initRect(r4, 15, 15, 400, 200);
+    } else if (next == 'Z') {
+        initRect(r1, 15, 15, 350, 175);
+        initRect(r2, 15, 15, 375, 175);
+        initRect(r3, 15, 15, 375, 200);
+        initRect(r4, 15, 15, 400, 200);
+    } else if (next == 'S') {
+        initRect(r1, 15, 15, 375, 175);
+        initRect(r2, 15, 15, 400, 175);
+        initRect(r3, 15, 15, 350, 200);
+        initRect(r4, 15, 15, 375, 200);
+    }
+
+    f.draw(r1);
+    f.draw(r2);
+    f.draw(r3);
+    f.draw(r4);
+}
+
+void dessinerGrille (sf::RenderWindow & f, plateau G) {
     regctangle grilleRegctangle;
 
     // Afficher la grille
     initRect(grilleRegctangle, 240, 490, 10, 10);
     f.draw(grilleRegctangle);
 
+    // Afficher le next
+    afficherNext(f, G.next);
+
     // Afficher les tetrominos
     for (int i = 0; i<HAUTEUR; ++i) {
         for (int j = 0; j<LARGEUR; ++j) {
-            if (G[i][j] != ' ') {
+            if (G.gr[i][j] != ' ') {
                 regctangle r;
                 initRect(r, 15, 15, j*25+10, i*25+10);
                 f.draw(r);
@@ -59,9 +114,9 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
         }
 
         f.clear(sf::Color::Black);
-        afficherTexte(f, "Level : " + std::to_string(level), "./chomsky/Chomsky.woff", 300, 50);
-        afficherTexte(f, "Score : " + std::to_string(score), "./chomsky/Chomsky.woff", 300, 150);
-        dessinerGrille(f, G.gr);
+        afficherTexte(f, "Level : " + std::to_string(level), "./chomsky/Chomsky.woff", 300, 20);
+        afficherTexte(f, "Score : " + std::to_string(score), "./chomsky/Chomsky.woff", 300, 60);
+        dessinerGrille(f, G);
         f.display();
 
     } while (maintenant < fin);
@@ -78,7 +133,7 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
     if (fini(G.gr)) f.close();
 
 
-    dessinerGrille(f, G.gr);
+    dessinerGrille(f, G);
     f.display();
 }
 
