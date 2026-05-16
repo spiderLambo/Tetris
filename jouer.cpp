@@ -35,7 +35,7 @@ void dessinerGrille (sf::RenderWindow & f, grille G) {
     }
 }
 
-void jouer(grille & G, int level, int score, int & interval, sf::RenderWindow & f) {
+void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow & f) {
     std::chrono::time_point<std::chrono::system_clock> fin = std::chrono::system_clock::now() + std::chrono::milliseconds(interval);
     std::chrono::time_point<std::chrono::system_clock> maintenant;
 
@@ -46,39 +46,39 @@ void jouer(grille & G, int level, int score, int & interval, sf::RenderWindow & 
         while (f.pollEvent(event)) {
             if (event.type == sf::Event::Closed) f.close();
             if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Left)  deplacer(G, 'G');
-                else if (event.key.code == sf::Keyboard::Right) deplacer(G, 'D');
+                if (event.key.code == sf::Keyboard::Left)  deplacer(G.gr, 'G');
+                else if (event.key.code == sf::Keyboard::Right) deplacer(G.gr, 'D');
                 else if (event.key.code == sf::Keyboard::Enter) {
-                        deplacer(G, 'B');
-                        placer(G);
+                        deplacer(G.gr, 'B');
+                        placer(G.gr);
                         genereTetromino(G);
                         maintenant = fin;
-                } else if (event.key.code ==  sf::Keyboard::Up) tourner(G, false);
-                else if (event.key.code == sf::Keyboard::Down) tourner(G, true);
+                } else if (event.key.code ==  sf::Keyboard::Up) tourner(G.gr, false);
+                else if (event.key.code == sf::Keyboard::Down) tourner(G.gr, true);
             }
         }
 
         f.clear(sf::Color::Black);
         afficherTexte(f, "Level : " + std::to_string(level), "./chomsky/Chomsky.woff", 300, 50);
         afficherTexte(f, "Score : " + std::to_string(score), "./chomsky/Chomsky.woff", 300, 150);
-        dessinerGrille(f, G);
+        dessinerGrille(f, G.gr);
         f.display();
 
     } while (maintenant < fin);
 
 
-    deplacer(G, 'b');
+    deplacer(G.gr, 'b');
 
 
-    if (collision(G)) {
-        placer(G);
+    if (collision(G.gr)) {
+        placer(G.gr);
         genereTetromino(G);
     }
 
-    if (fini(G)) f.close();
+    if (fini(G.gr)) f.close();
 
 
-    dessinerGrille(f, G);
+    dessinerGrille(f, G.gr);
     f.display();
 }
 
@@ -87,8 +87,10 @@ int main () {
     sf::RenderWindow fenetre(sf::VideoMode({500, 510}), "Tetris");
     fenetre.setFramerateLimit(24);
     
-    grille g;
-    initGrille(g);
+    plateau g;
+    initGrille(g.gr);
+    std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
+    g.next = choix[std::rand()%7];
     genereTetromino(g);
 
     int level = 0, nombreDeLignes = 0, score = 0, intervalle = 1000;
@@ -103,8 +105,8 @@ int main () {
          // Supprimer les lignes completes
         int ligneSupr = 0;
         for (int i = 0; i<HAUTEUR; ++i) {
-            if (peuxSupprimerLigne(g, i)) {
-                supprimerLigne(g, i);
+            if (peuxSupprimerLigne(g.gr, i)) {
+                supprimerLigne(g.gr, i);
                 ++ligneSupr;
                 ++nombreDeLignes;
             }

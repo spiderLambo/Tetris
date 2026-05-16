@@ -55,9 +55,10 @@ void apparait (grille & g, char type) {
     }
 }
 
-void genereTetromino (grille & g) {
+void genereTetromino (plateau & g) {
     std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
-    apparait(g, choix[std::rand()%7]);
+    apparait(g.gr, g.next);
+    g.next = choix[std::rand()%7];
     // apparait(g, 'O');
 }
 

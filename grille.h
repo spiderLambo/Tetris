@@ -9,13 +9,18 @@ const int LARGEUR = 10;
 
 using grille = std::array<std::array<char, LARGEUR>, HAUTEUR>;
 
+struct plateau {
+    grille gr;
+    char next;
+};
+
 void initGrille (grille & g);
 
 void afficheGrille (grille g);
 
 void apparait (grille & g, char type);
 
-void genereTetromino (grille & g);
+void genereTetromino (plateau & g);
 
 void placer (grille & g);
 
