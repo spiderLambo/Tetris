@@ -75,6 +75,9 @@ void jouer(grille & G, int level, int score, int & interval, sf::RenderWindow & 
         genereTetromino(G);
     }
 
+    if (fini(G)) f.close();
+
+
     dessinerGrille(f, G);
     f.display();
 }

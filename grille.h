@@ -44,3 +44,5 @@ void tourner (grille & g, bool sens);
 bool peuxSupprimerLigne (grille G, int l);
 
 void supprimerLigne (grille & G, int l);
+
+bool fini (grille G);

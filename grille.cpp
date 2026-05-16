@@ -339,3 +339,10 @@ void supprimerLigne (grille & G, int l) {
         }
     }
 }
+
+bool fini (grille G) {
+    for (int i = 0; i<LARGEUR; ++i) {
+        if (G[0][i] == 'P') return true;
+    }
+    return false;
+}
