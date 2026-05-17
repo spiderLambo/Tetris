@@ -1,5 +1,7 @@
 #include "jouer.h"
 
+bool premiereReserveEffectuee = false;
+
 void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y) {
     sf::Font font;
     font.loadFromFile(police);
@@ -145,7 +147,7 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
     }
 }
 
-void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow & f) {
+void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow & f, bool & peuxReserver) {
     std::chrono::time_point<std::chrono::system_clock> fin = std::chrono::system_clock::now() + std::chrono::milliseconds(interval);
     std::chrono::time_point<std::chrono::system_clock> maintenant;
 
@@ -162,10 +164,18 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
                         deplacer(G.gr, 'B');
                         placer(G.gr);
                         genereTetromino(G);
+                        peuxReserver = true;
                         maintenant = fin;
                 } else if (event.key.code ==  sf::Keyboard::Up) tourner(G.gr, false);
                 else if (event.key.code == sf::Keyboard::Down) tourner(G.gr, true);
-                else if (event.key.code == sf::Keyboard::R) reserver(G);
+                else if (event.key.code == sf::Keyboard::R and peuxReserver) {
+                    reserver(G);
+                    if (!premiereReserveEffectuee) {
+                        premiereReserveEffectuee = true;
+                        genereTetromino(G);
+                    }
+                    peuxReserver = false;
+                }
             }
         }
 
@@ -178,12 +188,14 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
     } while (maintenant < fin);
 
 
+
     deplacer(G.gr, 'b');
 
 
     if (collision(G.gr)) {
         placer(G.gr);
         genereTetromino(G);
+        peuxReserver = true;
     }
 
     if (fini(G.gr)) f.close();
@@ -204,6 +216,8 @@ int main () {
     g.next = choix[std::rand()%7];
     genereTetromino(g);
 
+    bool peuxReserver = true;
+
     int level = 1, nombreDeLignes = 10, score = 0, intervalle = 1000;
     while (fenetre.isOpen()) {
         // sf::Event event;
@@ -211,7 +225,7 @@ int main () {
         //     if (event.type == sf::Event::Closed)
         //     fenetre.close();
         // }
-        jouer(g, level, score, intervalle, fenetre);
+        jouer(g, level, score, intervalle, fenetre, peuxReserver);
 
          // Supprimer les lignes completes
         int ligneSupr = 0;

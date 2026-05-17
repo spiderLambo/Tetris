@@ -360,6 +360,6 @@ void reserver (plateau & G) {
     }
 
     // effectue l'échange
+    apparait(G.gr, G.reserve);
     G.reserve = G.nextPrecedent;
-    apparait(G.gr, G.next);
 }
