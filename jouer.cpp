@@ -198,7 +198,10 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
 
     if (!stop) deplacer(G.gr, 'b');
 
-    if (fini(G.gr)) f.close();
+    if (fini(G.gr)) {
+        std::cout<<"Vous êtes allez au niveau "<<level<<" avec un score de "<<score<<std::endl;
+        f.close();
+    }
 
 
     dessinerGrille(f, G);
