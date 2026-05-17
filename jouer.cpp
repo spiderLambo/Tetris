@@ -221,7 +221,7 @@ int main () {
 
     bool peuxReserver = true;
 
-    int level = 1, nombreDeLignes = 10, score = 0, intervalle = 1000;
+    int level = 1, Nouveaulevel = 1, nombreDeLignes = 10, score = 0, intervalle = 1000;
     while (fenetre.isOpen()) {
         // sf::Event event;
         // while (fenetre.pollEvent(event)) {
@@ -241,16 +241,17 @@ int main () {
         }
 
         // Calcul des valeurs a moidifier
-        level = nombreDeLignes/10;
+        Nouveaulevel = nombreDeLignes/10;
         if (ligneSupr == 1) score = score + level * 100;
         else if (ligneSupr == 2) score = score + level * 300;
         else if (ligneSupr == 3) score = score + level * 500;
         else if (ligneSupr == 4) score = score + level * 800;
         else if (ligneSupr > 4) score = score + 50*ligneSupr*level;
-        if (ligneSupr != 0) {
+        if (Nouveaulevel != level) {
             if (level == 0) intervalle = 1000;
             else if (level < 15) intervalle = intervalle * 0.75;
             else intervalle = intervalle * 0.9;
         }
+        level = Nouveaulevel;
     }
 }
