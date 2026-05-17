@@ -161,6 +161,7 @@ void tournerGauche (grille & g, int x, int y) {
         g[y][x]=' '; g[y+2][x]=' '; g[y+3][x]=' ';
         g[y+1][x-1]='C'; g[y+1][x+1]='C'; g[y+1][x+2]='C';
 
+
     // ------- T -------
     } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C' && g[y+1][x+1]=='C') {
         g[y][x]=' ';
@@ -174,6 +175,7 @@ void tournerGauche (grille & g, int x, int y) {
     } else if (g[y][x]=='C' && g[y+1][x-1]=='C' && g[y+2][x]=='C' && g[y+1][x]=='C') {
         g[y][x]=' ';
         g[y+1][x+1]='C';
+
 
     // ------- L -------
     } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C' && g[y+1][x]=='C') {
@@ -200,6 +202,7 @@ void tournerDroite (grille & g, int x, int y) {
         g[y][x]=' '; g[y+2][x]=' '; g[y+3][x]=' ';
         g[y+1][x-1]='C'; g[y+1][x+1]='C'; g[y+1][x+2]='C';
 
+
     // ------- T -------
     } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C' && g[y+1][x+1]=='C') {
         g[y][x+2]=' ';
@@ -207,18 +210,19 @@ void tournerDroite (grille & g, int x, int y) {
     } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y+1][x+1]=='C') {
         g[y][x]=' ';
         g[y+1][x-1]='C';
-    } else if (g[y][x]=='C' && g[y][x]=='C' && g[y+1][x+1]=='C' && g[y+1][x]=='C') {
+    } else if (g[y][x]=='C' && g[y+1][x-1]=='C' && g[y+1][x+1]=='C' && g[y+1][x]=='C') {
         g[y+1][x-1]=' ';
         g[y+2][x]='C';
-    } else if (g[y][x]=='C' && g[y][x]=='C' && g[y+2][x]=='C' && g[y+1][x]=='C') {
+    } else if (g[y][x]=='C' && g[y+1][x-1]=='C' && g[y+2][x]=='C' && g[y+1][x]=='C') {
         g[y+2][x]=' ';
         g[y+1][x+1]='C';
+
 
 
     // ------- L -------
     } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C' && g[y+1][x]=='C') {
         g[y][x]=' ';g[y][x+2]=' ';g[y+1][x]=' ';
-        // g[y-1][x+1]='C';g[y+1][x+1]='C';g[y-1][x]='C';
+        g[y-1][x+1]='C';g[y+1][x+1]='C';g[y-1][x]='C';
     } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y+2][x+1]=='C') {
         g[y][x]=' ';g[y+2][x]=' ';g[y+2][x+1]=' ';
         g[y+1][x-1]='C';g[y+1][x+1]='C';g[y+2][x-1]='C';
