@@ -129,6 +129,18 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
     initRect(grilleRegctangle, 240, 490, 10, 10, sf::Color(28,28,46), sf::Color(64,64,96));
     f.draw(grilleRegctangle);
 
+    // Afficher les lignes pour guider le joueur
+    for (int i = 1; i<LARGEUR; ++i) {
+        for (int j = 1; j<HAUTEUR; ++j) {
+            if (G.gr[j][i] == 'C' or G.gr[j][i-1] == 'C') {
+            regctangle ligne;
+            ligne.setSize({10, 500-j*25});
+            ligne.setPosition(25*i, j*25);
+            ligne.setFillColor(sf::Color(136,136,170));
+            f.draw(ligne);}
+        }
+    }
+
     // Afficher le next
     afficherNext(f, G.next);
 
