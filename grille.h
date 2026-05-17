@@ -12,6 +12,7 @@ using grille = std::array<std::array<char, LARGEUR>, HAUTEUR>;
 struct plateau {
     grille gr;
     char next, nextPrecedent, reserve;
+    int nbRotations, nbRotationsReserve;
 };
 
 void initGrille (grille & g);
@@ -40,11 +41,11 @@ void deplacer (grille & g, char dir);
 
 bool collision (grille g);
 
-void tournerGauche (grille & g, int x, int y);
+void tournerGauche (plateau & G, int x, int y, int & nbrot);
 
-void tournerDroite (grille & g, int x, int y);
+void tournerDroite (plateau & G, int x, int y, int & nbrot);
 
-void tourner (grille & g, bool sens);
+void tourner (plateau & g, bool sens);
 
 bool peuxSupprimerLigne (grille G, int l);
 

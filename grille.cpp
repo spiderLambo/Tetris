@@ -63,6 +63,7 @@ void genereTetromino (plateau & g) {
     g.nextPrecedent = g.next;
     apparait(g.gr, g.next);
     g.next = choix[std::rand()%7];
+    g.nbRotations = 0;
 }
 
 // Version de debug
@@ -155,164 +156,177 @@ bool collision (grille g) {
     return !peuxDecendre(g);
 }
 
-void tournerGauche (grille & g, int x, int y) {
+void tournerGauche (plateau & G, int x, int y) {
+    G.nbRotations = (G.nbRotations + 1) % 4;
+
     // ------- I -------
-    if (g[y][x]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C' && g[y][x+3]=='C') {
-        g[y][x]=' '; g[y][x+2]=' '; g[y][x+3]=' ';
-        g[y-1][x+1]='C'; g[y+1][x+1]='C'; g[y+2][x+1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y+3][x]=='C') {
-        g[y][x]=' '; g[y+2][x]=' '; g[y+3][x]=' ';
-        g[y+1][x-1]='C'; g[y+1][x+1]='C'; g[y+1][x+2]='C';
+    if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y][x+2]=='C' && G.gr[y][x+3]=='C') {
+        G.gr[y][x]=' '; G.gr[y][x+2]=' '; G.gr[y][x+3]=' ';
+        G.gr[y-1][x+1]='C'; G.gr[y+1][x+1]='C'; G.gr[y+2][x+1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+2][x]=='C' && G.gr[y+3][x]=='C') {
+        G.gr[y][x]=' '; G.gr[y+2][x]=' '; G.gr[y+3][x]=' ';
+        G.gr[y+1][x-1]='C'; G.gr[y+1][x+1]='C'; G.gr[y+1][x+2]='C';
 
-
+    
     // ------- T -------
-    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C' && g[y+1][x+1]=='C') {
-        g[y][x]=' ';
-        g[y-1][x+1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y+1][x+1]=='C') {
-        g[y+2][x]=' ';
-        g[y+1][x-1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x-1]=='C' && g[y+1][x+1]=='C' && g[y+1][x]=='C') {
-        g[y+1][x+1]=' ';
-        g[y+2][x]='C';
-    } else if (g[y][x]=='C' && g[y+1][x-1]=='C' && g[y+2][x]=='C' && g[y+1][x]=='C') {
-        g[y][x]=' ';
-        g[y+1][x+1]='C';
-
-
-    // ------- L -------
-    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C' && g[y+1][x]=='C') {
-        g[y][x]=' ';g[y][x+2]=' ';g[y+1][x]=' ';
-        g[y-1][x+1]='C';g[y+1][x+1]='C';g[y+1][x+2]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y+2][x+1]=='C') {
-        g[y][x]=' ';g[y+2][x]=' ';g[y+2][x+1]=' ';
-        g[y+1][x-1]='C';g[y+1][x+1]='C';g[y][x+1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x-1]=='C' && g[y+1][x-2]=='C') {
-        g[y][x]=' ';g[y+1][x]=' ';g[y+1][x-2]=' ';
-        g[y][x-2]='C';g[y][x-1]='C';g[y+2][x-1]='C';
-    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y+2][x+1]=='C' && g[y+1][x+1]=='C') {
-        g[y][x]=' ';g[y][x+1]=' ';g[y+2][x+1]=' ';
-        g[y+1][x]='C';g[y+2][x]='C';g[y+1][x+2]='C';
-
-
-    // ------- J -------
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y+2][x-1]=='C') {
-        g[y][x]=' ';g[y+2][x]=' ';g[y+2][x-1]=' ';
-        g[y][x-1]='C';g[y+1][x-1]='C';g[y+1][x+1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x+1]=='C' && g[y+1][x+2]=='C') {
-        g[y][x]=' ';g[y+1][x+2]=' ';g[y+1][x]=' ';
-        g[y][x+1]='C';g[y+2][x+1]='C';g[y][x+2]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y][x+1]=='C') {
-        g[y][x]=' ';g[y][x+1]=' ';g[y+2][x]=' ';
-        g[y+1][x-1]='C';g[y+1][x+1]='C';g[y+2][x+1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x+2]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C') {
-        g[y][x]=' ';g[y][x+2]=' ';g[y+1][x+2]=' ';
-        g[y-1][x+1]='C';g[y+1][x+1]='C';g[y+1][x]='C';
-
-
-    // ------- Z -------
-    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y+1][x+1]=='C' && g[y+1][x+2]=='C') {
-        g[y][x]=' ';g[y+1][x+2]=' ';
-        g[y+1][x]='C';g[y+2][x]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x-1]=='C' && g[y+2][x-1]=='C') {
-        g[y+1][x-1]=' ';g[y+2][x-1]=' ';
-        g[y+1][x+1]='C';g[y][x-1]='C';
-
-
-    // ------- S -------
-    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y+1][x-1]=='C' && g[y+1][x]=='C') {
-        g[y][x]=' ';g[y][x+1]=' ';
-        g[y][x-1]='C';g[y+2][x]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x+1]=='C' && g[y+2][x+1]=='C') {
-        g[y][x]=' ';g[y+2][x+1]=' ';
-        g[y][x+1]='C';g[y][x+2]='C';
-    }
-}
-
-void tournerDroite (grille & g, int x, int y) {
-    // ------- I -------
-    if (g[y][x]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C' && g[y][x+3]=='C') {
-        g[y][x]=' '; g[y][x+2]=' '; g[y][x+3]=' ';
-        g[y-1][x+1]='C'; g[y+1][x+1]='C'; g[y+2][x+1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y+3][x]=='C') {
-        g[y][x]=' '; g[y+2][x]=' '; g[y+3][x]=' ';
-        g[y+1][x-1]='C'; g[y+1][x+1]='C'; g[y+1][x+2]='C';
-
-
-    // ------- T -------
-    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C' && g[y+1][x+1]=='C') {
-        g[y][x+2]=' ';
-        g[y-1][x+1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y+1][x+1]=='C') {
-        g[y][x]=' ';
-        g[y+1][x-1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x-1]=='C' && g[y+1][x+1]=='C' && g[y+1][x]=='C') {
-        g[y+1][x-1]=' ';
-        g[y+2][x]='C';
-    } else if (g[y][x]=='C' && g[y+1][x-1]=='C' && g[y+2][x]=='C' && g[y+1][x]=='C') {
-        g[y+2][x]=' ';
-        g[y+1][x+1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y][x+2]=='C' && G.gr[y+1][x+1]=='C') {
+        G.gr[y][x]=' ';
+        G.gr[y-1][x+1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+2][x]=='C' && G.gr[y+1][x+1]=='C') {
+        G.gr[y+2][x]=' ';
+        G.gr[y+1][x-1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x-1]=='C' && G.gr[y+1][x+1]=='C' && G.gr[y+1][x]=='C') {
+        G.gr[y+1][x+1]=' ';
+        G.gr[y+2][x]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x-1]=='C' && G.gr[y+2][x]=='C' && G.gr[y+1][x]=='C') {
+        G.gr[y][x]=' ';
+        G.gr[y+1][x+1]='C';
 
 
 
     // ------- L -------
-    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C' && g[y+1][x]=='C') {
-        g[y][x]=' ';g[y][x+2]=' ';g[y+1][x]=' ';
-        g[y-1][x+1]='C';g[y+1][x+1]='C';g[y-1][x]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y+2][x+1]=='C') {
-        g[y][x]=' ';g[y+2][x]=' ';g[y+2][x+1]=' ';
-        g[y+1][x-1]='C';g[y+1][x+1]='C';g[y+2][x-1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x-1]=='C' && g[y+1][x-2]=='C') {
-        g[y][x]=' ';g[y+1][x]=' ';g[y+1][x-2]=' ';
-        g[y][x-1]='C';g[y+2][x]='C';g[y+2][x-1]='C';
-    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y+2][x+1]=='C' && g[y+1][x+1]=='C') {
-        g[y][x]=' ';g[y][x+1]=' ';g[y+2][x+1]=' ';
-        g[y+1][x]='C';g[y][x+2]='C';g[y+1][x+2]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y][x+2]=='C' && G.gr[y+1][x]=='C') {
+        G.gr[y][x]=' ';G.gr[y][x+2]=' ';G.gr[y+1][x]=' ';
+        G.gr[y-1][x+1]='C';G.gr[y+1][x+1]='C';G.gr[y+1][x+2]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+2][x]=='C' && G.gr[y+2][x+1]=='C') {
+        G.gr[y][x]=' ';G.gr[y+2][x]=' ';G.gr[y+2][x+1]=' ';
+        G.gr[y+1][x-1]='C';G.gr[y+1][x+1]='C';G.gr[y][x+1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+1][x-1]=='C' && G.gr[y+1][x-2]=='C') {
+        G.gr[y][x]=' ';G.gr[y+1][x]=' ';G.gr[y+1][x-2]=' ';
+        G.gr[y][x-2]='C';G.gr[y][x-1]='C';G.gr[y+2][x-1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y+2][x+1]=='C' && G.gr[y+1][x+1]=='C') {
+        G.gr[y][x]=' ';G.gr[y][x+1]=' ';G.gr[y+2][x+1]=' ';
+        G.gr[y+1][x]='C';G.gr[y+2][x]='C';G.gr[y+1][x+2]='C';
+
 
 
     // ------- J -------
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y+2][x-1]=='C') {
-        g[y][x]=' ';g[y+2][x]=' ';g[y+2][x-1]=' ';
-        g[y+2][x+1]='C';g[y+1][x-1]='C';g[y+1][x+1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x+1]=='C' && g[y+1][x+2]=='C') {
-        g[y][x]=' ';g[y+1][x+2]=' ';g[y+1][x]=' ';
-        g[y][x+1]='C';g[y+2][x+1]='C';g[y+2][x]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+2][x]=='C' && g[y][x+1]=='C') {
-        g[y][x]=' ';g[y][x+1]=' ';g[y+2][x]=' ';
-        g[y+1][x-1]='C';g[y+1][x+1]='C';g[y][x-1]='C';
-    } else if (g[y][x]=='C' && g[y+1][x+2]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C') {
-        g[y][x]=' ';g[y][x+2]=' ';g[y+1][x+2]=' ';
-        g[y-1][x+1]='C';g[y+1][x+1]='C';g[y-1][x+2]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+2][x]=='C' && G.gr[y+2][x-1]=='C') {
+        G.gr[y][x]=' ';G.gr[y+2][x]=' ';G.gr[y+2][x-1]=' ';
+        G.gr[y][x-1]='C';G.gr[y+1][x-1]='C';G.gr[y+1][x+1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+1][x+1]=='C' && G.gr[y+1][x+2]=='C') {
+        G.gr[y][x]=' ';G.gr[y+1][x+2]=' ';G.gr[y+1][x]=' ';
+        G.gr[y][x+1]='C';G.gr[y+2][x+1]='C';G.gr[y][x+2]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+2][x]=='C' && G.gr[y][x+1]=='C') {
+        G.gr[y][x]=' ';G.gr[y][x+1]=' ';G.gr[y+2][x]=' ';
+        G.gr[y+1][x-1]='C';G.gr[y+1][x+1]='C';G.gr[y+2][x+1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x+2]=='C' && G.gr[y][x+1]=='C' && G.gr[y][x+2]=='C') {
+        G.gr[y][x]=' ';G.gr[y][x+2]=' ';G.gr[y+1][x+2]=' ';
+        G.gr[y-1][x+1]='C';G.gr[y+1][x+1]='C';G.gr[y+1][x]='C';
+
 
 
     // ------- Z -------
-    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y+1][x+1]=='C' && g[y+1][x+2]=='C') {
-        g[y][x]=' ';g[y+1][x+2]=' ';
-        g[y+1][x]='C';g[y+2][x]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x-1]=='C' && g[y+2][x-1]=='C') {
-        g[y+1][x-1]=' ';g[y+2][x-1]=' ';
-        g[y+1][x+1]='C';g[y][x-1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y+1][x+1]=='C' && G.gr[y+1][x+2]=='C') {
+        G.gr[y][x]=' ';G.gr[y+1][x+2]=' ';
+        G.gr[y+1][x]='C';G.gr[y+2][x]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+1][x-1]=='C' && G.gr[y+2][x-1]=='C') {
+        G.gr[y+1][x-1]=' ';G.gr[y+2][x-1]=' ';
+        G.gr[y+1][x+1]='C';G.gr[y][x-1]='C';
+
 
 
     // ------- S -------
-    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y+1][x-1]=='C' && g[y+1][x]=='C') {
-        g[y][x]=' ';g[y][x+1]=' ';
-        g[y][x-1]='C';g[y+2][x]='C';
-    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x+1]=='C' && g[y+2][x+1]=='C') {
-        g[y][x]=' ';g[y+2][x+1]=' ';
-        g[y][x+1]='C';g[y][x+2]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y+1][x-1]=='C' && G.gr[y+1][x]=='C') {
+        G.gr[y][x]=' ';G.gr[y][x+1]=' ';
+        G.gr[y][x-1]='C';G.gr[y+2][x]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+1][x+1]=='C' && G.gr[y+2][x+1]=='C') {
+        G.gr[y][x]=' ';G.gr[y+2][x+1]=' ';
+        G.gr[y][x+1]='C';G.gr[y][x+2]='C';
     }
 }
 
-void tourner (grille & g, bool sens) {
-    grille copie = g;
+
+void tournerDroite (plateau & G, int x, int y) {
+    G.nbRotations = (G.nbRotations + 3) % 4;
+
+    // ------- I -------
+    if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y][x+2]=='C' && G.gr[y][x+3]=='C') {
+        G.gr[y][x]=' '; G.gr[y][x+2]=' '; G.gr[y][x+3]=' ';
+        G.gr[y-1][x+1]='C'; G.gr[y+1][x+1]='C'; G.gr[y+2][x+1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+2][x]=='C' && G.gr[y+3][x]=='C') {
+        G.gr[y][x]=' '; G.gr[y+2][x]=' '; G.gr[y+3][x]=' ';
+        G.gr[y+1][x-1]='C'; G.gr[y+1][x+1]='C'; G.gr[y+1][x+2]='C';
+
+
+
+    // ------- T -------
+    } else if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y][x+2]=='C' && G.gr[y+1][x+1]=='C') {
+        G.gr[y][x+2]=' ';
+        G.gr[y-1][x+1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+2][x]=='C' && G.gr[y+1][x+1]=='C') {
+        G.gr[y][x]=' ';
+        G.gr[y+1][x-1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x-1]=='C' && G.gr[y+1][x+1]=='C' && G.gr[y+1][x]=='C') {
+        G.gr[y+1][x-1]=' ';
+        G.gr[y+2][x]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x-1]=='C' && G.gr[y+2][x]=='C' && G.gr[y+1][x]=='C') {
+        G.gr[y+2][x]=' ';
+        G.gr[y+1][x+1]='C';
+
+
+
+    // ------- L -------
+    } else if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y][x+2]=='C' && G.gr[y+1][x]=='C') {
+        G.gr[y][x]=' ';G.gr[y][x+2]=' ';G.gr[y+1][x]=' ';
+        G.gr[y-1][x+1]='C';G.gr[y+1][x+1]='C';G.gr[y-1][x]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+2][x]=='C' && G.gr[y+2][x+1]=='C') {
+        G.gr[y][x]=' ';G.gr[y+2][x]=' ';G.gr[y+2][x+1]=' ';
+        G.gr[y+1][x-1]='C';G.gr[y+1][x+1]='C';G.gr[y+2][x-1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+1][x-1]=='C' && G.gr[y+1][x-2]=='C') {
+        G.gr[y][x]=' ';G.gr[y+1][x]=' ';G.gr[y+1][x-2]=' ';
+        G.gr[y][x-1]='C';G.gr[y+2][x]='C';G.gr[y+2][x-1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y+2][x+1]=='C' && G.gr[y+1][x+1]=='C') {
+        G.gr[y][x]=' ';G.gr[y][x+1]=' ';G.gr[y+2][x+1]=' ';
+        G.gr[y+1][x]='C';G.gr[y][x+2]='C';G.gr[y+1][x+2]='C';
+
+
+
+    // ------- J -------
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+2][x]=='C' && G.gr[y+2][x-1]=='C') {
+        G.gr[y][x]=' ';G.gr[y+2][x]=' ';G.gr[y+2][x-1]=' ';
+        G.gr[y+2][x+1]='C';G.gr[y+1][x-1]='C';G.gr[y+1][x+1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+1][x+1]=='C' && G.gr[y+1][x+2]=='C') {
+        G.gr[y][x]=' ';G.gr[y+1][x+2]=' ';G.gr[y+1][x]=' ';
+        G.gr[y][x+1]='C';G.gr[y+2][x+1]='C';G.gr[y+2][x]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+2][x]=='C' && G.gr[y][x+1]=='C') {
+        G.gr[y][x]=' ';G.gr[y][x+1]=' ';G.gr[y+2][x]=' ';
+        G.gr[y+1][x-1]='C';G.gr[y+1][x+1]='C';G.gr[y][x-1]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x+2]=='C' && G.gr[y][x+1]=='C' && G.gr[y][x+2]=='C') {
+        G.gr[y][x]=' ';G.gr[y][x+2]=' ';G.gr[y+1][x+2]=' ';
+        G.gr[y-1][x+1]='C';G.gr[y+1][x+1]='C';G.gr[y-1][x+2]='C';
+
+
+
+    // ------- Z -------
+    } else if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y+1][x+1]=='C' && G.gr[y+1][x+2]=='C') {
+        G.gr[y][x]=' ';G.gr[y+1][x+2]=' ';
+        G.gr[y+1][x]='C';G.gr[y+2][x]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+1][x-1]=='C' && G.gr[y+2][x-1]=='C') {
+        G.gr[y+1][x-1]=' ';G.gr[y+2][x-1]=' ';
+        G.gr[y+1][x+1]='C';G.gr[y][x-1]='C';
+
+
+
+    // ------- S -------
+    } else if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y+1][x-1]=='C' && G.gr[y+1][x]=='C') {
+        G.gr[y][x]=' ';G.gr[y][x+1]=' ';
+        G.gr[y][x-1]='C';G.gr[y+2][x]='C';
+    } else if (G.gr[y][x]=='C' && G.gr[y+1][x]=='C' && G.gr[y+1][x+1]=='C' && G.gr[y+2][x+1]=='C') {
+        G.gr[y][x]=' ';G.gr[y+2][x+1]=' ';
+        G.gr[y][x+1]='C';G.gr[y][x+2]='C';
+    }
+}
+
+void tourner (plateau & g, bool sens) {
+    grille copie = g.gr;
 
     bool stop = false;
     int i = 0;
     while (i < HAUTEUR && !stop) {
         int j = 0;
         while (j < LARGEUR && !stop) {
-            if (g[i][j] == 'C') {
+            if (g.gr[i][j] == 'C') {
                 stop = true;
                 if (sens) tournerGauche(g, j, i);
                 else tournerDroite(g, j, i);
@@ -324,15 +338,15 @@ void tourner (grille & g, bool sens) {
 
     // Vérifier si la grille est bonne
     int nbCAvant = 0, nbCApres = 0;
-    for (int i = 1; i < HAUTEUR; ++i) {
+    for (int i = 0; i < HAUTEUR; ++i) {
         for (int j = 1; j < LARGEUR; ++j) {
             if (copie[i][j] == 'C') ++nbCAvant;
-            if (g[i][j] == 'C')  ++nbCApres;
+            if (g.gr[i][j] == 'C')  ++nbCApres;
         }
     }
 
     if (nbCAvant != nbCApres) {
-        g = copie;
+        g.gr = copie;
     }
 }
 
@@ -375,5 +389,9 @@ void reserver (plateau & G) {
 
     // effectue l'échange
     apparait(G.gr, G.reserve);
+    for (int i = 0; i<G.nbRotationsReserve; ++i) {
+        tourner(G, true);
+    }
+    G.nbRotationsReserve = G.nbRotations;
     G.reserve = G.nextPrecedent;
 }

@@ -168,8 +168,8 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
                         genereTetromino(G);
                         peuxReserver = true;
                         stop = true;
-                } else if (event.key.code ==  sf::Keyboard::Up) tourner(G.gr, true);
-                else if (event.key.code == sf::Keyboard::Down) tourner(G.gr, false);
+                } else if (event.key.code ==  sf::Keyboard::Up) tourner(G, true);
+                else if (event.key.code == sf::Keyboard::Down) tourner(G, false);
                 else if (event.key.code == sf::Keyboard::R and peuxReserver) {
                     reserver(G);
                     if (!premiereReserveEffectuee) {
