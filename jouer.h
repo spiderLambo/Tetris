@@ -12,7 +12,7 @@ void initRect (regctangle & rec, float taille, float x, float y);
 
 void afficherNext (sf::RenderWindow & f, char next);
 
-void afficherReserve (sf::RenderWindow & f, char next);
+void afficherReserve (sf::RenderWindow & f, char next, int rotation);
 
 void dessinerGrille (sf::RenderWindow & f, plateau G);
 

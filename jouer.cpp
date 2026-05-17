@@ -70,7 +70,7 @@ void afficherNext (sf::RenderWindow & f, char next) {
     f.draw(r4);
 }
 
-void afficherReserve (sf::RenderWindow & f, char reserve) {
+void afficherReserve (sf::RenderWindow & f, char reserve, int rotations) {
     afficherTexte(f, "Reserve : ", "./chomsky/Chomsky.woff", 300, 250);
 
     regctangle r1;
@@ -79,39 +79,99 @@ void afficherReserve (sf::RenderWindow & f, char reserve) {
     regctangle r4;
 
 
-    if (reserve == 'I') {
+    if (reserve == 'I' and (rotations == 0 or rotations == 2)) {
         initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
         initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
         initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
         initRect(r4, 15, 15, 425, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
+    } else if (reserve == 'I' and (rotations == 1 or rotations == 3)) {
+        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
+        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(0, 245, 255));
+        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(0, 245, 255));
+        initRect(r4, 15, 15, 375, 400, sf::Color::Transparent, sf::Color(0, 245, 255));
     } else if (reserve == 'O') {
         initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 0, 128));
         initRect(r2, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(255, 0, 128));
         initRect(r3, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 0, 128));
         initRect(r4, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(255, 0, 128));
-    } else if (reserve == 'T') {
+    } else if (reserve == 'T'  and rotations == 0) {
         initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
         initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
         initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
         initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
-    } else if (reserve == 'L') {
+    } else if (reserve == 'T'  and rotations == 1) {
+        initRect(r1, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
+    } else if (reserve == 'T'  and rotations == 2) {
+        initRect(r1, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r3, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r4, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
+    } else if (reserve == 'T'  and rotations == 3) {
+        initRect(r1, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
+    } else if (reserve == 'L' and rotations == 0) {
         initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
         initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
         initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
         initRect(r4, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-    } else if (reserve == 'J') {
+    } else if (reserve == 'L' and rotations == 1) {
+        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r4, 15, 15, 400, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
+    } else if (reserve == 'L' and rotations == 2) {
+        initRect(r1, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r3, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r4, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
+    } else if (reserve == 'L' and rotations == 3) {
+        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r4, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
+    } else if (reserve == 'J' and rotations == 0) {
         initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(255, 230, 0));
         initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 230, 0));
         initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(255, 230, 0));
         initRect(r4, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(255, 230, 0));
-    } else if (reserve == 'Z') {
+    } else if (reserve == 'J' and rotations == 1) {
+        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r4, 15, 15, 350, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
+    } else if (reserve == 'J' and rotations == 2) {
+        initRect(r1, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r3, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r4, 15, 15, 400, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
+    } else if (reserve == 'J' and rotations == 3) {
+        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r4, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
+    } else if (reserve == 'Z' and (rotations == 0 or rotations == 2)) {
         initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
         initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
         initRect(r3, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
         initRect(r4, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
-    } else if (reserve == 'S') {
+    }  else if (reserve == 'Z' and (rotations == 1 or rotations == 3)) {
+        initRect(r1, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r3, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r4, 15, 15, 350, 375, sf::Color::Transparent, sf::Color(255, 106, 0));
+    } else if (reserve == 'S' and (rotations == 0 or rotations == 2)) {
         initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
         initRect(r2, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r3, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
+    } else if (reserve == 'S' and (rotations == 1 or rotations == 3)) {
+        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r2, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(255, 106, 0));
         initRect(r3, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
         initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
     }
@@ -134,7 +194,7 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
         for (int j = 1; j<HAUTEUR; ++j) {
             if (G.gr[j][i] == 'C' or G.gr[j][i-1] == 'C') {
             regctangle ligne;
-            ligne.setSize({10, 500-j*25});
+            ligne.setSize({10, static_cast<float>(500-j*25)});
             ligne.setPosition(25*i, j*25);
             ligne.setFillColor(sf::Color(136,136,170));
             f.draw(ligne);}
@@ -145,7 +205,7 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
     afficherNext(f, G.next);
 
     // Afficher la reserve
-    afficherReserve(f, G.reserve);
+    afficherReserve(f, G.reserve, G.nbRotationsReserve);
 
     // Afficher les tetrominos
     for (int i = 0; i<HAUTEUR; ++i) {
