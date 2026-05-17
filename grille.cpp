@@ -53,6 +53,9 @@ void apparait (grille & g, char type) {
         g[1][4] = 'C';
         g[1][5] = 'C';
     }
+
+    // Eviter les bugs de rotation
+    deplacer(g, 'b');
 }
 
 void genereTetromino (plateau & g) {
@@ -302,11 +305,13 @@ void tournerDroite (grille & g, int x, int y) {
 }
 
 void tourner (grille & g, bool sens) {
+    grille copie = g;
+
     bool stop = false;
     int i = 0;
-    while (i<HAUTEUR && !stop) {
+    while (i < HAUTEUR && !stop) {
         int j = 0;
-        while (j<LARGEUR && !stop) {
+        while (j < LARGEUR && !stop) {
             if (g[i][j] == 'C') {
                 stop = true;
                 if (sens) tournerGauche(g, j, i);
@@ -315,6 +320,19 @@ void tourner (grille & g, bool sens) {
             ++j;
         }
         ++i;
+    }
+
+    // Vérifier si la grille est bonne
+    int nbCAvant = 0, nbCApres = 0;
+    for (int i = 1; i < HAUTEUR; ++i) {
+        for (int j = 1; j < LARGEUR; ++j) {
+            if (copie[i][j] == 'C') ++nbCAvant;
+            if (g[i][j] == 'C')  ++nbCApres;
+        }
+    }
+
+    if (nbCAvant != nbCApres) {
+        g = copie;
     }
 }
 
