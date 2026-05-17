@@ -60,8 +60,14 @@ void genereTetromino (plateau & g) {
     g.nextPrecedent = g.next;
     apparait(g.gr, g.next);
     g.next = choix[std::rand()%7];
-    // apparait(g, 'O');
 }
+
+// // Version de debug
+// void genereTetromino (plateau & g) {
+//     g.nextPrecedent = g.next;
+//     apparait(g.gr, g.next);
+//     g.next = 'O';
+// }
 
 void placer (grille & g) {
     for (int i = 0; i<HAUTEUR; ++i) {
@@ -335,10 +341,15 @@ bool peuxSupprimerLigne (grille G, int l) {
 }
 
 void supprimerLigne (grille & G, int l) {
-    for (int i = l; i>1; --i) {
+    for (int i = l; i>0; --i) {
         for (int j = 0; j<LARGEUR; ++j) {
             G[i][j] = G[i-1][j];
         }
+    }
+
+    // Vider la 1ere ligne
+    for (int j = 0; j<LARGEUR; ++j) {
+        G[0][j] = ' ';
     }
 }
 

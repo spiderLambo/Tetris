@@ -151,6 +151,8 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
     std::chrono::time_point<std::chrono::system_clock> fin = std::chrono::system_clock::now() + std::chrono::milliseconds(interval);
     std::chrono::time_point<std::chrono::system_clock> maintenant;
 
+    bool stop = false;
+
     do {
         maintenant = std::chrono::system_clock::now();
 
@@ -165,7 +167,7 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
                         placer(G.gr);
                         genereTetromino(G);
                         peuxReserver = true;
-                        maintenant = fin;
+                        stop = true;
                 } else if (event.key.code ==  sf::Keyboard::Up) tourner(G.gr, false);
                 else if (event.key.code == sf::Keyboard::Down) tourner(G.gr, true);
                 else if (event.key.code == sf::Keyboard::R and peuxReserver) {
@@ -185,11 +187,7 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
         dessinerGrille(f, G);
         f.display();
 
-    } while (maintenant < fin);
-
-
-
-    deplacer(G.gr, 'b');
+    } while (maintenant < fin and !stop);
 
 
     if (collision(G.gr)) {
@@ -197,6 +195,8 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
         genereTetromino(G);
         peuxReserver = true;
     }
+
+    if (!stop) deplacer(G.gr, 'b');
 
     if (fini(G.gr)) f.close();
 
