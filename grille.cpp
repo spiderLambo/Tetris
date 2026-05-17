@@ -55,19 +55,19 @@ void apparait (grille & g, char type) {
     }
 }
 
-// void genereTetromino (plateau & g) {
-//     std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
-//     g.nextPrecedent = g.next;
-//     apparait(g.gr, g.next);
-//     g.next = choix[std::rand()%7];
-// }
-
-// Version de debug
 void genereTetromino (plateau & g) {
+    std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
     g.nextPrecedent = g.next;
     apparait(g.gr, g.next);
-    g.next = 'L';
+    g.next = choix[std::rand()%7];
 }
+
+// Version de debug
+// void genereTetromino (plateau & g) {
+//     g.nextPrecedent = g.next;
+//     apparait(g.gr, g.next);
+//     g.next = 'I';
+// }
 
 void placer (grille & g) {
     for (int i = 0; i<HAUTEUR; ++i) {
@@ -205,6 +205,24 @@ void tournerGauche (grille & g, int x, int y) {
     } else if (g[y][x]=='C' && g[y+1][x+2]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C') {
         g[y][x]=' ';g[y][x+2]=' ';g[y+1][x+2]=' ';
         g[y-1][x+1]='C';g[y+1][x+1]='C';g[y+1][x]='C';
+
+
+    // ------- Z -------
+    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y+1][x+1]=='C' && g[y+1][x+2]=='C') {
+        g[y][x]=' ';g[y+1][x+2]=' ';
+        g[y+1][x]='C';g[y+2][x]='C';
+    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x-1]=='C' && g[y+2][x-1]=='C') {
+        g[y+1][x-1]=' ';g[y+2][x-1]=' ';
+        g[y+1][x+1]='C';g[y][x-1]='C';
+
+
+    // ------- S -------
+    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y+1][x-1]=='C' && g[y+1][x]=='C') {
+        g[y][x]=' ';g[y][x+1]=' ';
+        g[y][x-1]='C';g[y+2][x]='C';
+    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x+1]=='C' && g[y+2][x+1]=='C') {
+        g[y][x]=' ';g[y+2][x+1]=' ';
+        g[y][x+1]='C';g[y][x+2]='C';
     }
 }
 
@@ -262,6 +280,24 @@ void tournerDroite (grille & g, int x, int y) {
     } else if (g[y][x]=='C' && g[y+1][x+2]=='C' && g[y][x+1]=='C' && g[y][x+2]=='C') {
         g[y][x]=' ';g[y][x+2]=' ';g[y+1][x+2]=' ';
         g[y-1][x+1]='C';g[y+1][x+1]='C';g[y-1][x+2]='C';
+
+
+    // ------- Z -------
+    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y+1][x+1]=='C' && g[y+1][x+2]=='C') {
+        g[y][x]=' ';g[y+1][x+2]=' ';
+        g[y+1][x]='C';g[y+2][x]='C';
+    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x-1]=='C' && g[y+2][x-1]=='C') {
+        g[y+1][x-1]=' ';g[y+2][x-1]=' ';
+        g[y+1][x+1]='C';g[y][x-1]='C';
+
+
+    // ------- S -------
+    } else if (g[y][x]=='C' && g[y][x+1]=='C' && g[y+1][x-1]=='C' && g[y+1][x]=='C') {
+        g[y][x]=' ';g[y][x+1]=' ';
+        g[y][x-1]='C';g[y+2][x]='C';
+    } else if (g[y][x]=='C' && g[y+1][x]=='C' && g[y+1][x+1]=='C' && g[y+2][x+1]=='C') {
+        g[y][x]=' ';g[y+2][x+1]=' ';
+        g[y][x+1]='C';g[y][x+2]='C';
     }
 }
 
