@@ -68,6 +68,58 @@ void afficherNext (sf::RenderWindow & f, char next) {
     f.draw(r4);
 }
 
+void afficherReserve (sf::RenderWindow & f, char reserve) {
+    afficherTexte(f, "Reserve : ", "./chomsky/Chomsky.woff", 300, 250);
+
+    regctangle r1;
+    regctangle r2;
+    regctangle r3;
+    regctangle r4;
+
+
+    if (reserve == 'I') {
+        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
+        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
+        initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
+        initRect(r4, 15, 15, 425, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
+    } else if (reserve == 'O') {
+        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 0, 128));
+        initRect(r2, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(255, 0, 128));
+        initRect(r3, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 0, 128));
+        initRect(r4, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(255, 0, 128));
+    } else if (reserve == 'T') {
+        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
+    } else if (reserve == 'L') {
+        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r4, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
+    } else if (reserve == 'J') {
+        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(255, 230, 0));
+        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 230, 0));
+        initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(255, 230, 0));
+        initRect(r4, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(255, 230, 0));
+    } else if (reserve == 'Z') {
+        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r3, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r4, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
+    } else if (reserve == 'S') {
+        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r2, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r3, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
+    }
+
+    f.draw(r1);
+    f.draw(r2);
+    f.draw(r3);
+    f.draw(r4);
+}
+
 void dessinerGrille (sf::RenderWindow & f, plateau G) {
     regctangle grilleRegctangle;
 
@@ -77,6 +129,9 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
 
     // Afficher le next
     afficherNext(f, G.next);
+
+    // Afficher la reserve
+    afficherReserve(f, G.reserve);
 
     // Afficher les tetrominos
     for (int i = 0; i<HAUTEUR; ++i) {
@@ -110,6 +165,7 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
                         maintenant = fin;
                 } else if (event.key.code ==  sf::Keyboard::Up) tourner(G.gr, false);
                 else if (event.key.code == sf::Keyboard::Down) tourner(G.gr, true);
+                else if (event.key.code == sf::Keyboard::R) reserver(G);
             }
         }
 

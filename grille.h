@@ -11,7 +11,7 @@ using grille = std::array<std::array<char, LARGEUR>, HAUTEUR>;
 
 struct plateau {
     grille gr;
-    char next;
+    char next, nextPrecedent, reserve;
 };
 
 void initGrille (grille & g);
@@ -51,3 +51,5 @@ bool peuxSupprimerLigne (grille G, int l);
 void supprimerLigne (grille & G, int l);
 
 bool fini (grille G);
+
+void reserver (plateau & G);

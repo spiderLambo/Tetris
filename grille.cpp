@@ -57,6 +57,7 @@ void apparait (grille & g, char type) {
 
 void genereTetromino (plateau & g) {
     std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
+    g.nextPrecedent = g.next;
     apparait(g.gr, g.next);
     g.next = choix[std::rand()%7];
     // apparait(g, 'O');
@@ -346,4 +347,19 @@ bool fini (grille G) {
         if (G[0][i] == 'P') return true;
     }
     return false;
+}
+
+void reserver (plateau & G) {
+    // Retire le courant
+    for (int i = 0; i<HAUTEUR; ++i) {
+        for (int j = 0; j<LARGEUR; ++j) {
+            if (G.gr[i][j] == 'C') {
+                G.gr[i][j] = ' ';
+            }
+        }
+    }
+
+    // effectue l'échange
+    G.reserve = G.nextPrecedent;
+    apparait(G.gr, G.next);
 }
