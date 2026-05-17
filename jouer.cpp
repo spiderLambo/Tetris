@@ -3,16 +3,16 @@
 void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y) {
     sf::Font font;
     font.loadFromFile(police);
-    sf::Text text(texte, font, 50);
+    sf::Text text(texte, font, 25);
     text.setPosition(x, y);
     f.draw(text);
 }
 
-void initRect (regctangle & rec, float taillex, float tailley, float x, float y) {
+void initRect (regctangle & rec, float taillex, float tailley, float x, float y, sf::Color fond, sf::Color outline) {
     rec.setSize({taillex, tailley});
     rec.setPosition({x, y});
-    rec.setFillColor(sf::Color::Transparent);
-    rec.setOutlineColor(sf::Color(255, 255, 255));
+    rec.setFillColor(fond);
+    rec.setOutlineColor(outline);
     rec.setOutlineThickness(10);
 }
 
@@ -26,40 +26,40 @@ void afficherNext (sf::RenderWindow & f, char next) {
 
 
     if (next == 'I') {
-        initRect(r1, 15, 15, 350, 175);
-        initRect(r2, 15, 15, 375, 175);
-        initRect(r3, 15, 15, 400, 175);
-        initRect(r4, 15, 15, 425, 175);
+        initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(0, 245, 255));
+        initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(0, 245, 255));
+        initRect(r3, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(0, 245, 255));
+        initRect(r4, 15, 15, 425, 175, sf::Color::Transparent, sf::Color(0, 245, 255));
     } else if (next == 'O') {
-        initRect(r1, 15, 15, 375, 175);
-        initRect(r2, 15, 15, 400, 175);
-        initRect(r3, 15, 15, 375, 200);
-        initRect(r4, 15, 15, 400, 200);
+        initRect(r1, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(255, 0, 128));
+        initRect(r2, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(255, 0, 128));
+        initRect(r3, 15, 15, 375, 200, sf::Color::Transparent, sf::Color(255, 0, 128));
+        initRect(r4, 15, 15, 400, 200, sf::Color::Transparent, sf::Color(255, 0, 128));
     } else if (next == 'T') {
-        initRect(r1, 15, 15, 350, 175);
-        initRect(r2, 15, 15, 375, 175);
-        initRect(r3, 15, 15, 400, 175);
-        initRect(r4, 15, 15, 375, 200);
+        initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r3, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(123, 47, 255));
+        initRect(r4, 15, 15, 375, 200, sf::Color::Transparent, sf::Color(123, 47, 255));
     } else if (next == 'L') {
-        initRect(r1, 15, 15, 350, 175);
-        initRect(r2, 15, 15, 375, 175);
-        initRect(r3, 15, 15, 400, 175);
-        initRect(r4, 15, 15, 350, 200);
+        initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r3, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(57, 255, 20));
+        initRect(r4, 15, 15, 350, 200, sf::Color::Transparent, sf::Color(57, 255, 20));
     } else if (next == 'J') {
-        initRect(r1, 15, 15, 350, 175);
-        initRect(r2, 15, 15, 375, 175);
-        initRect(r3, 15, 15, 400, 175);
-        initRect(r4, 15, 15, 400, 200);
+        initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(255, 230, 0));
+        initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(255, 230, 0));
+        initRect(r3, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(255, 230, 0));
+        initRect(r4, 15, 15, 400, 200, sf::Color::Transparent, sf::Color(255, 230, 0));
     } else if (next == 'Z') {
-        initRect(r1, 15, 15, 350, 175);
-        initRect(r2, 15, 15, 375, 175);
-        initRect(r3, 15, 15, 375, 200);
-        initRect(r4, 15, 15, 400, 200);
+        initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r3, 15, 15, 375, 200, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r4, 15, 15, 400, 200, sf::Color::Transparent, sf::Color(255, 106, 0));
     } else if (next == 'S') {
-        initRect(r1, 15, 15, 375, 175);
-        initRect(r2, 15, 15, 400, 175);
-        initRect(r3, 15, 15, 350, 200);
-        initRect(r4, 15, 15, 375, 200);
+        initRect(r1, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r2, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r3, 15, 15, 350, 200, sf::Color::Transparent, sf::Color(255, 106, 0));
+        initRect(r4, 15, 15, 375, 200, sf::Color::Transparent, sf::Color(255, 106, 0));
     }
 
     f.draw(r1);
@@ -72,7 +72,7 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
     regctangle grilleRegctangle;
 
     // Afficher la grille
-    initRect(grilleRegctangle, 240, 490, 10, 10);
+    initRect(grilleRegctangle, 240, 490, 10, 10, sf::Color(28,28,46), sf::Color(64,64,96));
     f.draw(grilleRegctangle);
 
     // Afficher le next
@@ -83,7 +83,7 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
         for (int j = 0; j<LARGEUR; ++j) {
             if (G.gr[i][j] != ' ') {
                 regctangle r;
-                initRect(r, 15, 15, j*25+10, i*25+10);
+                initRect(r, 15, 15, j*25+10, i*25+10, sf::Color(0, 53, 69), sf::Color(0, 136, 160));
                 f.draw(r);
             }
         }
@@ -113,7 +113,7 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
             }
         }
 
-        f.clear(sf::Color::Black);
+        f.clear(sf::Color(19,19,31));
         afficherTexte(f, "Level : " + std::to_string(level), "./chomsky/Chomsky.woff", 300, 20);
         afficherTexte(f, "Score : " + std::to_string(score), "./chomsky/Chomsky.woff", 300, 60);
         dessinerGrille(f, G);
@@ -148,7 +148,7 @@ int main () {
     g.next = choix[std::rand()%7];
     genereTetromino(g);
 
-    int level = 0, nombreDeLignes = 0, score = 0, intervalle = 1000;
+    int level = 1, nombreDeLignes = 10, score = 0, intervalle = 1000;
     while (fenetre.isOpen()) {
         // sf::Event event;
         // while (fenetre.pollEvent(event)) {
