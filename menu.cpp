@@ -1,5 +1,6 @@
 #include "menu.h"
 
+// Affiche le texte
 void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, sf::Color couleur, int taille, float x, float y) {
     sf::Font font;
     font.loadFromFile(police);
@@ -9,6 +10,8 @@ void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, 
     f.draw(text);
 }
 
+
+// Affiche le menu
 void afficherMenu(sf::RenderWindow& f, int selection)
 {
     f.clear(sf::Color(8, 8, 18));
@@ -28,23 +31,22 @@ void afficherMenu(sf::RenderWindow& f, int selection)
 
 
     // OPTIONS
-    std::array <std::string, 4> options = {
-        "JOUER",
-        "REGARDER",
-        "PARAMETRES",
-        "QUITTER"
-    };
+    std::array <std::string, 4> options = {"JOUER", "REGARDER", "PARAMETRES", "QUITTER"};
 
-    for (int i = 0; i < 4; ++i)
-    {
+    // Texte
+    for (int i = 0; i < 4; ++i) {
         sf::Color color;
         std::string font;
 
-        if (i == selection)
-            {color = sf::Color(255, 0, 180);
-            font = "font/savery/savery.regular.ttf";}
-        else
-            {color = sf::Color(180, 180, 220);font="font/savery/savery.outline.ttf";}
+        // Affiche en rose
+        if (i == selection) {
+            color = sf::Color(255, 0, 180);
+            font = "font/savery/savery.regular.ttf";
+        // Affiche en non séléctionné
+        } else {
+            color = sf::Color(180, 180, 220);
+            font="font/savery/savery.outline.ttf";
+        }
 
         afficherTexte( f, options[i], font, color, 48, 140, 190 + i * 80 );
     }
@@ -64,8 +66,7 @@ void afficherMenu(sf::RenderWindow& f, int selection)
 }
 
 
-int main()
-{
+int main() {
     sf::RenderWindow fenetre(sf::VideoMode({500, 510}), "Tetris");
     fenetre.setFramerateLimit(60);
 
@@ -78,7 +79,9 @@ int main()
         {
             if (event.type == sf::Event::Closed) fenetre.close();
             if (event.type == sf::Event::MouseButtonPressed) {
+                // On lance tetris en solo
                 if (selection == 0) system("./tetris");
+                // On quitte
                 if (selection == 3) fenetre.close();
             }
         }
@@ -98,6 +101,7 @@ int main()
             }
         }
 
+        // On affiche le menu
         afficherMenu(fenetre, selection);
     }
 }

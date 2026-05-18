@@ -1,7 +1,14 @@
 #include "jouer.h"
 
+// Variable globale pour la 1ere réserve
 bool premiereReserveEffectuee = false;
 
+
+
+
+
+
+// Affiche du texte
 void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y) {
     sf::Font font;
     font.loadFromFile(police);
@@ -10,6 +17,7 @@ void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, 
     f.draw(text);
 }
 
+// Initialise un rectangle
 void initRect (regctangle & rec, float taillex, float tailley, float x, float y, sf::Color fond, sf::Color outline) {
     rec.setSize({taillex, tailley});
     rec.setPosition({x, y});
@@ -18,15 +26,27 @@ void initRect (regctangle & rec, float taillex, float tailley, float x, float y,
     rec.setOutlineThickness(10);
 }
 
+
+
+
+
+
+
+
+// Afficher le sivant
 void afficherNext (sf::RenderWindow & f, char next) {
+    // Texte du "suivant"
     afficherTexte(f, "Suivant : ", "./chomsky/Chomsky.woff", 300, 100);
 
+
+    // 4 Rectangles pour les carrés qui constituent le tetromino
     regctangle r1;
     regctangle r2;
     regctangle r3;
     regctangle r4;
 
 
+    // En fonction du suivant on initialise différamment
     if (next == 'I') {
         initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(0, 245, 255));
         initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(0, 245, 255));
@@ -64,21 +84,28 @@ void afficherNext (sf::RenderWindow & f, char next) {
         initRect(r4, 15, 15, 375, 200, sf::Color::Transparent, sf::Color(255, 106, 0));
     }
 
+    // Dessine les carrés
     f.draw(r1);
     f.draw(r2);
     f.draw(r3);
     f.draw(r4);
 }
 
+
+// Affiche la réserve
 void afficherReserve (sf::RenderWindow & f, char reserve, int rotations) {
+    // Affiche le texte "Reserve"
     afficherTexte(f, "Reserve : ", "./chomsky/Chomsky.woff", 300, 250);
 
+    // 4 Rectangles pour les carrés qui constituent le tetromino
     regctangle r1;
     regctangle r2;
     regctangle r3;
     regctangle r4;
 
 
+    // En fonction du réservé et de la rotation
+    // on initialise différamment
     if (reserve == 'I' and (rotations == 0 or rotations == 2)) {
         initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
         initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
@@ -176,12 +203,18 @@ void afficherReserve (sf::RenderWindow & f, char reserve, int rotations) {
         initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
     }
 
+    // Dessine les carrés
     f.draw(r1);
     f.draw(r2);
     f.draw(r3);
     f.draw(r4);
 }
 
+
+
+
+
+// Afficher la grille
 void dessinerGrille (sf::RenderWindow & f, plateau G) {
     regctangle grilleRegctangle;
 
@@ -219,10 +252,15 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
     }
 }
 
+
+// Jouer 1 tour
 void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow & f, bool & peuxReserver) {
+    // Calcul de quand est la fin
     std::chrono::time_point<std::chrono::system_clock> fin = std::chrono::system_clock::now() + std::chrono::milliseconds(interval);
+    // Renvoie maintenant
     std::chrono::time_point<std::chrono::system_clock> maintenant;
 
+    // Vérifie si on a arrêté la bouble manuellement
     bool stop = false;
 
     do {
@@ -230,18 +268,25 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
 
         sf::Event event;
         while (f.pollEvent(event)) {
+            // Clique sur la croix
             if (event.type == sf::Event::Closed) f.close();
             if (event.type == sf::Event::KeyPressed) {
+                // Déplacement à gauche
                 if (event.key.code == sf::Keyboard::Left)  deplacer(G.gr, 'G');
+                // Déplacement à droite
                 else if (event.key.code == sf::Keyboard::Right) deplacer(G.gr, 'D');
+                // Déplacement encois en bas
                 else if (event.key.code == sf::Keyboard::Enter) {
                         deplacer(G.gr, 'B');
                         placer(G.gr);
                         genereTetromino(G);
                         peuxReserver = true;
                         stop = true;
+                // Toune à gauche
                 } else if (event.key.code ==  sf::Keyboard::Up) tourner(G, true);
+                // Tourne à droite
                 else if (event.key.code == sf::Keyboard::Down) tourner(G, false);
+                // Reserve le tetromino
                 else if (event.key.code == sf::Keyboard::R and peuxReserver) {
                     reserver(G);
                     if (!premiereReserveEffectuee) {
@@ -261,30 +306,33 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
 
     } while (maintenant < fin and !stop);
 
+    // On fais decendre le courant
+    if (!stop) deplacer(G.gr, 'b');
 
+    // On génère le prochain si on a touché le sol
     if (collision(G.gr)) {
         placer(G.gr);
         genereTetromino(G);
         peuxReserver = true;
     }
 
-    if (!stop) deplacer(G.gr, 'b');
-
+    // On arrête le programme si on a fini
     if (fini(G.gr)) {
         std::cout<<"Vous êtes allez au niveau "<<level<<" avec un score de "<<score<<std::endl;
         f.close();
     }
 
-
+    // On affiche la grille
     dessinerGrille(f, G);
     f.display();
 }
 
 
 int main () {
+    // Initialisation de tout
     sf::RenderWindow fenetre(sf::VideoMode({500, 510}), "Tetris");
     fenetre.setFramerateLimit(24);
-    
+
     plateau g;
     initGrille(g.gr);
     std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
@@ -294,15 +342,16 @@ int main () {
     bool peuxReserver = true;
 
     int level = 1, Nouveaulevel = 1, nombreDeLignes = 10, score = 0, intervalle = 1000;
+
+    // Boucle de jeu
     while (fenetre.isOpen()) {
-        // sf::Event event;
-        // while (fenetre.pollEvent(event)) {
-        //     if (event.type == sf::Event::Closed)
-        //     fenetre.close();
-        // }
+        // On commence par jouer
         jouer(g, level, score, intervalle, fenetre, peuxReserver);
 
-         // Supprimer les lignes completes
+
+        // ꧁𓊈𒆜 Calcul du score 𒆜𓊉꧂
+
+        // Supprimer les lignes completes
         int ligneSupr = 0;
         for (int i = 0; i<HAUTEUR; ++i) {
             if (peuxSupprimerLigne(g.gr, i)) {
