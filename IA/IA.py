@@ -9,65 +9,51 @@ import random
 HOST = '127.0.0.1'
 PORT = 63424
 
-"Les heuristique"
-def aggregateheight(grille):
-    heights = []
-    h, w = np.shape(grille)
-    for col in range(w):
-        height = 0
-        for lig in range(h):
-            if grille[lig, col] == 1:
-                height = h - lig
-                break
-        heights.append(height)
-    return np.sum(heights)
-
-def completelines(grille):
-    complete = 0
-    h, w = np.shape(grille)
-    for lig in range(h):
-        full = True
-        for col in range(w):
-            if grille[lig, col] == 0:
-                full = False
-                break
-        if full:
-            complete += 1
-    return complete
-
-def hole(grille):
-    h, w = np.shape(grille)
+#Les heuristique
+def aggregate_height(g):
     total = 0
-    for col in range(w):
+    for col in range(W):
+        for lig in range(H):
+            if g[lig, col] == 1:
+                total += H - lig
+                break
+    return total
+
+
+def completelines(g):
+        return int(np.sum(np.all(g == 1, axis=1)))
+
+def holes(g):
+    total = 0
+    for col in range(W):
         block = False
-        for lig in range(h):
-            if grille[lig, col] == 1:
+        for lig in range(H):
+            if g[lig, col] == 1:
                 block = True
             elif block:
                 total += 1
     return total
+
             
-def bumpiness(grille):
+def bumpiness(g):
     heights = []
-    h, w = np.shape(grille)
-    for col in range(w):
-        height = 0
-        for lig in range(h):
-            if grille[lig, col] == 1:
-                height = h - lig
-        heights.append(height)
-    bump = 0
-    for i in range(len(heights)-1):
-        bump += np.abs(heights[i] - heights[i+1])
-    return bump
+    for col in range(W):
+        h = 0
+        for lig in range(H):
+            if g[lig, col] == 1:
+                h = H - lig
+                break
+        heights.append(h)
+    return sum(abs(heights[i] - heights[i+1]) for i in range(len(heights)-1))
+
 
 "Le score"
 def score(grille, a, b, c, d):
-    height = aggregateheight(grille)
-    lines = completelines(grille)
-    holes = hole(grille)
+    height = aggregate_height(grille)
+    lines = complete_lines(grille)
+    holes = holes(grille)
     bump = bumpiness(grille)
-    return -a*height + b*lines + -c*holes + -d*bump
+    return a*height + b*lines + c*holes + d*bump
 
 "optimisation de a, b, c, d"
 
@@ -83,18 +69,45 @@ def random_vect():
     return normalisation(v)
 "-------------------"
 
-def totaline():
-    totaline = 0
-    grille = np.zeros((20, 10))  
+def totaline(v):
+    grille = np.zeros((H, W), dtype=np.int8)
+    lignes = 0
+    a, b, c, d = v
+
     for _ in range(500):
-                
+        piece_type = random.choice(PIECES)
+        rot, col = best_move(grille, piece_type, a, b, c, d)
+        piece = rotate(TETROMINOS[piece_type], rot)
+        ph, pw = piece.shape
+        lig = 0
+        while not _collides(grille, piece, lig + 1, col):
+            lig += 1
+            if lig + ph >= H:
+                break
+        if _collides(grille, piece, lig, col):
+            break
+        tmp = grille.copy()
+        for i in range(ph):
+            for j in range(pw):
+                if piece[i, j] == 1:
+                    tmp[lig + i, col + j] = 1
+        pleines = int(np.sum(np.all(tmp == 1, axis=1)))
+        lignes += pleines
+        mask = ~np.all(tmp == 1, axis=1)
+        tmp  = tmp[mask]
+        tmp  = np.vstack([np.zeros((H - len(tmp), W), dtype=np.int8), tmp])
+        grille = tmp
 
-    return totaline
+        if np.any(grille[0] == 1):
+            break
 
-def fitness (v):
+    return lignes
+
+
+def fitness(v):
     total_lines = 0
     for _ in range(100):
-        total_lines += totaline()
+        total_lines += totaline(v)
     return total_lines
 
 def tournament_selection(population):
@@ -157,59 +170,69 @@ def collision(grille, piece, lig, col):
     for i in range(h):
         for j in range(w):
             if piece[i, j] == 1:
-                if lig+i >= H or col+j >= W:
+                r, c = lig + i, col + j
+                if r < 0 or r >= H or c < 0 or c >= W:
                     return True
-                if grille[lig+i, col+j] == 1:
+                if grille[r, c] == 1:
                     return True
     return False
 
-def placer(grille, piece, lig, col):
-    new_grille = grille.copy()
-    h, w = np.shape(piece)
-    for i in range(h):
-        for j in range(w):
-            if piece[i, j] == 1:
-                new_grille[lig+i, col+j] = 1
-    return new_grille
-
-def fairetomber(grille, piece, col):
-    h, w = np.shape(piece)
-    H, W = np.shape(grille)
-    if col+w > W:
+def descente(g, piece, col):
+    ph, pw = np.shape(piece)
+    if col + pw > W or col < 0:
         return None
-    for lig in range(H-h + 1):
-        if collision(grille, piece, lig, col):
-            return placer(grille, piece, lig-1, col)
-    return placer(grille, piece, H-h, col)
+    lig = 0
+    while not collision(g, piece, lig + 1, col):
+        lig += 1
+        if lig + ph > H:
+            break
+    if _collides(g, piece, lig, col):
+        return None
+    new_g = g.copy()
+    for i in range(ph):
+        for j in range(pw):
+            if piece[i, j] == 1:
+                new_g[lig + i, col + j] = 1
+    full = np.all(new_g == 1, axis=1)
+    new_g = new_g[~full]
+    new_g = np.vstack([np.zeros((full.sum(), W), dtype=np.int8), new_g])
+    return new_g
+
 
 "meilleur coup"
-def mllrcoup(grille, piece, a, b, c, d):
-    mllr = -float("inf")
-    mllr_action = None
-    piece = Tetromino[piece]
-
+def mllrcoup(g, piece_type, a, b, c, d):
+    best_s  = -float('inf')
+    best_action = (0, 0)
+    base_piece = TETROMINOS[piece_type]
+ 
     for rot in range(4):
-        p = tourner(piece, rot)
-        for col in range(np.shape(grille)[1]):
-            new_grille = fairetomber(grille, p, col)
-            if new_grille is None:
+        piece = rotate(base_piece, rot)
+        pw = piece.shape[1]
+        for col in range(W - pw + 1):
+            new_g = drop(g, piece, col)
+            if new_g is None:
                 continue
-            s = score(new_grille, a, b, c, d)
-            if s > mllr:
-                mllr = s
-                mllr_action = (rot, col)
-    return mllr_action
+            s = heuristic_score(new_g, a, b, c, d)
+            if s > best_s:
+                best_s = s
+                best_action = (rot, col)
+ 
+    return best_action
+
 
 "Connexion et jouer"
 def lire_grille():
     with open("grille.txt", "r") as f:
         lignes = f.read().splitlines()
-    piece = lignes[0]
-    grille = np.zeros((20, 10))
-    for i in range(20):
-        for j in range(10):
-            grille[i, j] = int(lignes[i+1][j])
-    return piece, grille
+    piece_type = lignes[0].strip()
+    g = np.zeros((H, W), dtype=np.int8)
+    for i in range(H):
+        ligne = lignes[i + 1] if i + 1 < len(lignes) else ''
+        for j in range(W):
+            c = ligne[j] if j < len(ligne) else ' '
+            g[i, j] = 1 if c == 'P' else 0
+    return piece_type, g
+
 
 def ecrire_coup(rot, col):
     with open("coup.txt", "w") as f:
@@ -221,7 +244,7 @@ def client():
     s.connect((HOST, PORT))
     print("[+]: IA connecter")
     while True:
-        msg = s.recv(4096).decode()
+        msg = s.recv(4096).decode().strip()
         if not msg:
             print("[!]: IA deconnecter")
             break
@@ -229,6 +252,7 @@ def client():
             piece, grille = lire_grille()
             rot, col = mllrcoup(grille, piece, -0.510066, 0.760666, -0.35663, -0.184483)
             ecrire_coup(rot, col)
-            s.send(b"OK")
+            s.send(b"OK\n")
+    s.close()
 
 client()

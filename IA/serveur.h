@@ -1,6 +1,8 @@
 #pragma once
 #include "../grille.h"
-#include "../jouer.h"
+#include <chrono>
+#include <SFML/Graphics.hpp>
+#include <cstdlib>
 #include <string>
 
 #define PORT 63424
@@ -18,7 +20,7 @@ void ecrire (std::string & title, grille & G);
 void lire (std::string & title, action & a);
 
 // Joue le coup calculer
-void joue(grille & G, action & a);
+void joue(plateau & G, action & a, int level, int score, int & interval, sf::RenderWindow & f);
 
 // Faire tourner le serveur et donc jouer
-int run(grille & G, );
+int run(plateau & P, int level, int score, int & interval, sf::RenderWindow & f);
