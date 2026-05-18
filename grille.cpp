@@ -1,5 +1,6 @@
 #include "grille.h"
 
+// Procédure pour initialiser une grille
 void initGrille (grille & g) {
     for (int i = 0; i<HAUTEUR; ++i) {
         for (int j = 0; j<LARGEUR; ++j) {
@@ -8,6 +9,7 @@ void initGrille (grille & g) {
     }
 }
 
+// Procédure de débug qui affiche une grille
 void afficheGrille (grille g) {
     for (int i = 0; i<HAUTEUR; ++i) {
         for (int j = 0; j<LARGEUR; ++j) {
@@ -16,48 +18,67 @@ void afficheGrille (grille g) {
     }
 }
 
+// Faire apparaitre un tetromini d'un certain type
 void apparait (grille & g, char type) {
     if (type == 'I') {
+        // . . . .
+        // - - - -
         g[0][3] = 'C';
         g[0][4] = 'C';
         g[0][5] = 'C';
         g[0][6] = 'C';
     } else if (type == 'O') {
+        // . - - .
+        // . - - .
         g[0][4] = 'C';
         g[0][5] = 'C';
         g[1][4] = 'C';
         g[1][5] = 'C';
     } else if (type == 'T') {
+        // . - - -
+        // . . - .
         g[0][4] = 'C';
         g[0][5] = 'C';
         g[0][6] = 'C';
         g[1][5] = 'C';
     } else if (type == 'L') {
+        // . - - -
+        // . - . .
         g[0][4] = 'C';
         g[0][5] = 'C';
         g[0][6] = 'C';
         g[1][4] = 'C';
     } else if (type == 'J') {
+        // . - - -
+        // . . . -
         g[0][4] = 'C';
         g[0][5] = 'C';
         g[0][6] = 'C';
         g[1][6] = 'C';
     } else if (type == 'Z') {
+        // . - - .
+        // . . - -
         g[0][4] = 'C';
         g[0][5] = 'C';
         g[1][5] = 'C';
         g[1][6] = 'C';
     } else if (type == 'S') {
+        // . . - -
+        // . - - .
         g[0][5] = 'C';
         g[0][6] = 'C';
         g[1][4] = 'C';
         g[1][5] = 'C';
     }
 
-    // Eviter les bugs de rotation
+    // Eviter les bugs de rotation avec le plafond
     deplacer(g, 'b');
 }
 
+
+
+
+// Choisis un tetromino au hasard
 void genereTetromino (plateau & g) {
     std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
     g.nextPrecedent = g.next;
@@ -65,14 +86,17 @@ void genereTetromino (plateau & g) {
     g.next = choix[std::rand()%7];
     g.nbRotations = 0;
 }
-
-// Version de debug
+// /!\ Version de debug /!
 // void genereTetromino (plateau & g) {
 //     g.nextPrecedent = g.next;
 //     apparait(g.gr, g.next);
 //     g.next = 'I';
 // }
 
+
+
+
+// Place le tetromino courant
 void placer (grille & g) {
     for (int i = 0; i<HAUTEUR; ++i) {
         for (int j = 0; j<LARGEUR; ++j) {
@@ -81,6 +105,11 @@ void placer (grille & g) {
     }
 }
 
+
+
+
+
+// Verifie si on peux déplacer le courant a gauche
 bool peuxGauche(grille g) {
     for (int i = 0; i < HAUTEUR; ++i)
         for (int j = 0; j < LARGEUR; ++j)
@@ -89,6 +118,7 @@ bool peuxGauche(grille g) {
     return true;
 }
 
+// Verifie si on peux déplacer le courant a droite
 bool peuxDroite(grille g) {
     for (int i = 0; i < HAUTEUR; ++i)
         for (int j = 0; j < LARGEUR; ++j)
@@ -97,6 +127,7 @@ bool peuxDroite(grille g) {
     return true;
 }
 
+// Verifie si on peux déplacer le courant en bas
 bool peuxDecendre(grille g) {
     for (int i = 0; i < HAUTEUR; ++i)
         for (int j = 0; j < LARGEUR; ++j)
@@ -105,6 +136,9 @@ bool peuxDecendre(grille g) {
     return true;
 }
 
+
+
+// Déplace le courant a gauche
 void gauche (grille & g) {
     for (int j = 0; j<LARGEUR-1; ++j) {
         for (int i = 0; i<HAUTEUR-1;++i) {
@@ -116,6 +150,7 @@ void gauche (grille & g) {
     }
 }
 
+// Déplace le courant a droite
 void droite (grille & g) {
     for (int j = LARGEUR-1; j>0; --j) {
         for (int i = 0; i<HAUTEUR-1; ++i) {
@@ -127,6 +162,7 @@ void droite (grille & g) {
     }
 }
 
+// Déplace le courant en bas
 void descendre (grille & g) {
     for (int i = HAUTEUR-1; i>0; --i) {
         for (int j = 0; j<LARGEUR; ++j) {
@@ -138,6 +174,9 @@ void descendre (grille & g) {
     }
 }
 
+
+
+// Déplace le courant dans la direction donnée
 void deplacer (grille & g, char dir) {
     if (dir == 'G' and peuxGauche(g)) {
         gauche(g);
@@ -146,19 +185,40 @@ void deplacer (grille & g, char dir) {
     } else if (dir == 'b' and peuxDecendre(g)) {
         descendre(g);
     } else if (dir == 'B') {
+        // On rajoute decendre au max
         while (peuxDecendre(g)) {
             descendre(g);
         }
     }
 }
 
+
+
+
+
+
+
+// Verifie si il y a une collision avec le sol
 bool collision (grille g) {
-    return !peuxDecendre(g);
+    // Si on ne peux pas décendre, on touche le sol
+    return !peuxDecendre(g); 
 }
 
+
+
+
+
+
+
+
+
+// On fais tourner a  gauche le courant au verifiant au cas par cas
 void tournerGauche (plateau & G, int x, int y) {
+    // On actualise la variable au cas où la piece vas à la réserve
     G.nbRotations = (G.nbRotations + 1) % 4;
 
+
+    //  ⊹₊˚‧︵‿₊୨ Les pièces ୧₊‿︵‧˚₊⊹
     // ------- I -------
     if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y][x+2]=='C' && G.gr[y][x+3]=='C') {
         G.gr[y][x]=' '; G.gr[y][x+2]=' '; G.gr[y][x+3]=' ';
@@ -236,10 +296,13 @@ void tournerGauche (plateau & G, int x, int y) {
     }
 }
 
-
+// On fais tourner a droite le courant au verifiant au cas par cas
 void tournerDroite (plateau & G, int x, int y) {
+    // On actualise la variable au cas où la piece vas à la réserve
     G.nbRotations = (G.nbRotations + 3) % 4;
 
+
+    //  ⊹₊˚‧︵‿₊୨ Les pièces ୧₊‿︵‧˚₊⊹
     // ------- I -------
     if (G.gr[y][x]=='C' && G.gr[y][x+1]=='C' && G.gr[y][x+2]=='C' && G.gr[y][x+3]=='C') {
         G.gr[y][x]=' '; G.gr[y][x+2]=' '; G.gr[y][x+3]=' ';
@@ -318,9 +381,11 @@ void tournerDroite (plateau & G, int x, int y) {
     }
 }
 
+// On tourne la pièce
 void tourner (plateau & g, bool sens) {
     grille copie = g.gr;
 
+    // On compte le nombre de courant
     bool stop = false;
     int i = 0;
     while (i < HAUTEUR && !stop) {
@@ -328,6 +393,7 @@ void tourner (plateau & g, bool sens) {
         while (j < LARGEUR && !stop) {
             if (g.gr[i][j] == 'C') {
                 stop = true;
+                // On tourne Le courant
                 if (sens) tournerGauche(g, j, i);
                 else tournerDroite(g, j, i);
             }
@@ -336,7 +402,8 @@ void tourner (plateau & g, bool sens) {
         ++i;
     }
 
-    // Vérifier si la grille est bonne
+    // On compte le nombre de courants sur la grille a avant et apès la rotation
+    // privée de la 1ère ligne (au cas ou le courant aurait traversé la grille)
     int nbCAvant = 0, nbCApres = 0;
     for (int i = 0; i < HAUTEUR; ++i) {
         for (int j = 1; j < LARGEUR; ++j) {
@@ -345,11 +412,17 @@ void tourner (plateau & g, bool sens) {
         }
     }
 
+    // Si on a pas le même nombre de courant avant et après
+    // On annule la rotation
     if (nbCAvant != nbCApres) {
         g.gr = copie;
     }
 }
 
+
+
+
+// Verifie si on peux supprimer la ligne l
 bool peuxSupprimerLigne (grille G, int l) {
     for (int i = 0; i<LARGEUR; ++i) {
         if (G[l][i] != 'P') return false;
@@ -357,7 +430,9 @@ bool peuxSupprimerLigne (grille G, int l) {
     return true;
 }
 
+// Supprime la ligne l
 void supprimerLigne (grille & G, int l) {
+    // On fais decendre tout ce qui est au dessus de l
     for (int i = l; i>0; --i) {
         for (int j = 0; j<LARGEUR; ++j) {
             G[i][j] = G[i-1][j];
@@ -370,15 +445,24 @@ void supprimerLigne (grille & G, int l) {
     }
 }
 
+
+
+
+
+// Verifie si on arrete le programme
 bool fini (grille G) {
+    // On vérifie qu'il n'y a aucun placé
     for (int i = 0; i<LARGEUR; ++i) {
-        if (G[0][i] == 'P') return true;
+        if (G[0][i] != ' ') return true;
     }
     return false;
 }
 
+
+
+// On reserve le courant
 void reserver (plateau & G) {
-    // Retire le courant
+    // On retire le courant
     for (int i = 0; i<HAUTEUR; ++i) {
         for (int j = 0; j<LARGEUR; ++j) {
             if (G.gr[i][j] == 'C') {
@@ -387,7 +471,7 @@ void reserver (plateau & G) {
         }
     }
 
-    // effectue l'échange
+    // On effectue l'échange
     apparait(G.gr, G.reserve);
     for (int i = 0; i<G.nbRotationsReserve; ++i) {
         tourner(G, true);
