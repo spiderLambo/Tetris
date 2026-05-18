@@ -3,6 +3,8 @@
 // Variable globale pour la 1ere réserve
 bool premiereReserveEffectuee = false;
 
+// Variable qui gere la pause
+bool pause = false;
 
 
 
@@ -36,7 +38,7 @@ void initRect (regctangle & rec, float taillex, float tailley, float x, float y,
 // Afficher le sivant
 void afficherNext (sf::RenderWindow & f, char next) {
     // Texte du "suivant"
-    afficherTexte(f, "Suivant : ", "./chomsky/Chomsky.woff", 300, 100);
+    afficherTexte(f, "Suivant : ", "./font/chomsky/Chomsky.woff", 300, 100);
 
 
     // 4 Rectangles pour les carrés qui constituent le tetromino
@@ -95,7 +97,7 @@ void afficherNext (sf::RenderWindow & f, char next) {
 // Affiche la réserve
 void afficherReserve (sf::RenderWindow & f, char reserve, int rotations) {
     // Affiche le texte "Reserve"
-    afficherTexte(f, "Reserve : ", "./chomsky/Chomsky.woff", 300, 250);
+    afficherTexte(f, "Reserve : ", "./font/chomsky/Chomsky.woff", 300, 250);
 
     // 4 Rectangles pour les carrés qui constituent le tetromino
     regctangle r1;
@@ -295,12 +297,14 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
                     }
                     peuxReserver = false;
                 }
+                // Pause
+                else if (event.key.code == sf::Keyboard::Space) pause = !pause;
             }
         }
 
         f.clear(sf::Color(19,19,31));
-        afficherTexte(f, "Level : " + std::to_string(level), "./chomsky/Chomsky.woff", 300, 20);
-        afficherTexte(f, "Score : " + std::to_string(score), "./chomsky/Chomsky.woff", 300, 60);
+        afficherTexte(f, "Level : " + std::to_string(level), "./font/chomsky/Chomsky.woff", 300, 20);
+        afficherTexte(f, "Score : " + std::to_string(score), "./font/chomsky/Chomsky.woff", 300, 60);
         dessinerGrille(f, G);
         f.display();
 
@@ -328,6 +332,20 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
 }
 
 
+
+// Afficher le menu
+void afficherMenuPause(sf::RenderWindow & f) {
+    f.clear(sf::Color(0,0,0));
+    sf::Font font;
+    font.loadFromFile("./font/chomsky/Chomsky.woff");
+    sf::Text text("Pause", font, 200);
+    text.setPosition(20, 100);
+    f.draw(text);
+    f.display();
+}
+
+
+
 int main () {
     // Initialisation de tout
     sf::RenderWindow fenetre(sf::VideoMode({500, 510}), "Tetris");
@@ -345,9 +363,21 @@ int main () {
 
     // Boucle de jeu
     while (fenetre.isOpen()) {
-        // On commence par jouer
-        jouer(g, level, score, intervalle, fenetre, peuxReserver);
-
+        if (pause) {
+            // On affiche le menu pause
+            afficherMenuPause(fenetre);
+            sf::Event event;
+            while (fenetre.pollEvent(event)) {
+                // Clique sur la croix
+                if (event.type == sf::Event::Closed) fenetre.close();
+                if (event.type == sf::Event::KeyPressed) {
+                    // dépause
+                    if (event.key.code == sf::Keyboard::Space) pause = !pause;
+                }
+            }
+        } else 
+            // On joue
+            jouer(g, level, score, intervalle, fenetre, peuxReserver);
 
         // ꧁𓊈𒆜 Calcul du score 𒆜𓊉꧂
 

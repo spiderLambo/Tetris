@@ -1,8 +1,8 @@
 MAKE: Menu
+	./Tetris
 
 Menu: menu player
 	g++ menu.o -o Tetris     -lsfml-graphics -lsfml-window -lsfml-system
-	./Tetris
 
 Player: player
 	./tetris

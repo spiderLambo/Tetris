@@ -32,5 +32,10 @@ void dessinerGrille (sf::RenderWindow & f, plateau G);
 
 
 
+// 𐔌   .  ⋮ PROCEDURES POUR AFFICHER LA GRILLE .ᐟ  ֹ   ₊ ꒱
+void afficherMenuPause(sf::RenderWindow & f);
+
+
+
 // 𐔌   .  ⋮ PROCEDURES POUR JOUER 1 TOUR .ᐟ  ֹ   ₊ ꒱
 void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow & f);
