@@ -1,6 +1,6 @@
 #pragma once
 #include "../grille.h"
-#include "../tetrominos.h"
+#include "../jouer.h"
 #include <string>
 
 #define PORT 63424
@@ -21,4 +21,4 @@ void lire (std::string & title, action & a);
 void joue(grille & G, action & a);
 
 // Faire tourner le serveur et donc jouer
-int run(grille & G);
+int run(grille & G, );

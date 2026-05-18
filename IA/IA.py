@@ -83,10 +83,18 @@ def random_vect():
     return normalisation(v)
 "-------------------"
 
+def totaline():
+    totaline = 0
+    grille = np.zeros((20, 10))  
+    for _ in range(500):
+                
+
+    return totaline
+
 def fitness (v):
     total_lines = 0
     for _ in range(100):
-        total_lines += 
+        total_lines += totaline()
     return total_lines
 
 def tournament_selection(population):
@@ -110,18 +118,19 @@ def genetic_algo():
     for _ in range(1000):
         population.append({"vector": random_vect(), "fitness": 0})
 
-    for generation in range(100):
-        for i in range(len(population)):
-            population[i]["fitness"] = fitness(population[i]["vector"])
-        children = []
-        while len(children) < 300:
-            p1, p2 = tournament_selection(population)
-            child = crossover(p1, p2)
-            child = mutation(child)
-            children.append({"vector": child, "fitness": 0})
-        population.sort(key=lambda x: x["fitness"], reverse=True)
-        population = population[:300]
-        population.extend(children)
+    for i in range(len(population)):
+        population[i]["fitness"] = fitness(population[i]["vector"])
+    
+    children = []
+    while len(children) < 300:
+        p1, p2 = tournament_selection(population)
+        child = crossover(p1, p2)
+        child = mutation(child)
+        children.append({"vector": child, "fitness": 0})
+
+    population.sort(key=lambda x: x["fitness"], reverse=True)
+    population = population[:300]
+    population.extend(children)
 
     population.sort(key=lambda x: x["fitness"], reverse=True)
     best = population[0]
@@ -211,7 +220,6 @@ def client():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
     print("[+]: IA connecter")
-    a, b, c, d = genetic_algo()
     while True:
         msg = s.recv(4096).decode()
         if not msg:
@@ -219,7 +227,7 @@ def client():
             break
         if msg.strip() == "GO":
             piece, grille = lire_grille()
-            rot, col = mllrcoup(grille, piece, a, b, c, d)
+            rot, col = mllrcoup(grille, piece, -0.510066, 0.760666, -0.35663, -0.184483)
             ecrire_coup(rot, col)
             s.send(b"OK")
 

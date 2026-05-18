@@ -60,11 +60,47 @@ void lire (std::string & title, action & a) {
 	fic.close();
 }
 
-void joue(grille & G, action & a) {
-	
+void joue(plateau & G, action & a, int level, int score, int & interval, sf::RenderWindow & f) {
+	std::chrono::time_point<std::chrono::system_clock> fin = std::chrono::system_clock::now() + std::chrono::milliseconds(interval);
+    	std::chrono::time_point<std::chrono::system_clock> maintenant;
+	do {
+		maintenant = std::chrono::system_clock::now();
+		for (int i = 0; i < a.rot; ++i) {
+			tourner(G, true);
+		}
+		for (int j = 0; j < LARGEUR - a.depla; ++j) {
+			deplacer(G.gr, 'D');
+		}
+		deplacer(G.gr, 'B');
+		placer(G.gr);
+		genereTetromino(G);
+
+		f.clear(sf::Color(19,19,31));
+        	afficherTexte(f, "Level : " + std::to_string(level), "../chomsky/Chomsky.woff", 300, 20);
+        	afficherTexte(f, "Score : " + std::to_string(score), "../chomsky/Chomsky.woff", 300, 60);
+        	dessinerGrille(f, G);
+        	f.display();
+	} while (maintenant < fin);
+
+	if (collision(G.gr)) {
+		placer(G.gr);
+        	genereTetromino(G);
+	}
+	for (int d = 0; d < HAUTEUR; ++d) {
+		if (peuxSupprimerLigne(G.gr, d)) {
+			supprimerLigne(G.gr, d);
+		}
+	}
+
+    	if (fini(G.gr)) {
+        	std::cout<<"Vous êtes allez au niveau "<<level<<" avec un score de "<<score<<std::endl;
+        	f.close();
+    	}
+	dessinerGrille(f, G);
+    	f.display();
 }
 
-int run(grille & G) {
+int run(plateau & P, int level, int score, int interval, sf::RenderWindow & f) {
 	int servfd, clifd;
 	struct sockaddr_in servaddr;
 	struct sockaddr_storage cliaddr;
@@ -103,7 +139,7 @@ int run(grille & G) {
 
 	bool boucle = true;
 	while (boucle) {
-		ecrire(ficgrille, G);
+		ecrire(ficgrille, P.gr);
         	const char* msg = "GO\n";
 		int envoyer = send(clifd, msg, strlen(msg), 0);
 		if (envoyer == -1) {
@@ -116,15 +152,32 @@ int run(grille & G) {
 			std::cout << "[!]> recv  error" << std::endl;
 			return -1;
 		} else if (recu == 0) {
-            std::cout << "[-]> client déconnecter" << std::endl;
-        } else {
-            buffer[recu] = '\0';
+            		std::cout << "[-]> client déconnecter" << std::endl;
+        	} else {
+            		buffer[recu] = '\0';
 			lire(ficcoup, a);
-			joue(G, a);
+			joue(P, a, level, score, interval; f);
 		}
 	}
 
 	close(clifd);
 	close(servfd);
+	return 0;
+}
+
+int main() {
+	sf::RenderWindow fenetre(sf::VideoMode({500, 510}), "Tetris");
+    	fenetre.setFramerateLimit(24);
+
+	plateau P;
+	initGrille(P.gr);
+	std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
+    	P.next = choix[std::rand()%7];
+	genereTetromino(P);
+
+	int level = 1, score = 0, intervalle = 1000;
+	while(fenetre.isOpen()) {
+		run(P, level, score, intervalle, fenetre);
+	}
 	return 0;
 }
