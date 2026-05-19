@@ -7,6 +7,53 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y) {
+    sf::Font font;
+    font.loadFromFile(police);
+    sf::Text text(texte, font, 25);
+    text.setPosition(x, y);
+    f.draw(text);
+}
+
+void initRect (regctangle & rec, float taillex, float tailley, float x, float y, sf::Color fond, sf::Color outline) {
+    rec.setSize({taillex, tailley});
+    rec.setPosition({x, y});
+    rec.setFillColor(fond);
+    rec.setOutlineColor(outline);
+    rec.setOutlineThickness(10);
+}
+
+void dessinerGrille (sf::RenderWindow & f, plateau G) {
+    regctangle grilleRegctangle;
+
+    // Afficher la grille
+    initRect(grilleRegctangle, 240, 490, 10, 10, sf::Color(28,28,46), sf::Color(64,64,96));
+    f.draw(grilleRegctangle);
+
+    // Afficher les lignes pour guider le joueur
+    for (int i = 1; i<LARGEUR; ++i) {
+        for (int j = 1; j<HAUTEUR; ++j) {
+            if (G.gr[j][i] == 'C' or G.gr[j][i-1] == 'C') {
+            regctangle ligne;
+            ligne.setSize({10, static_cast<float>(500-j*25)});
+            ligne.setPosition(25*i, j*25);
+            ligne.setFillColor(sf::Color(136,136,170));
+            f.draw(ligne);}
+        }
+    }
+
+    // Afficher les tetrominos
+    for (int i = 0; i<HAUTEUR; ++i) {
+        for (int j = 0; j<LARGEUR; ++j) {
+            if (G.gr[i][j] != ' ') {
+                regctangle r;
+                initRect(r, 15, 15, j*25+10, i*25+10, sf::Color(0, 53, 69), sf::Color(0, 136, 160));
+                f.draw(r);
+            }
+        }
+    }
+}
+
 void ecrire (std::string & title, grille & g) {
 	std::ofstream fic;
 	fic.open(title);
@@ -100,8 +147,8 @@ int run(plateau & P, int level, int score, int & interval, sf::RenderWindow & f)
 	struct sockaddr_in servaddr;
 	struct sockaddr_storage cliaddr;
 	action a;
-	std::string ficgrille = "grille.txt";
-	std::string ficcoup = "coup.txt";
+	std::string ficgrille = "IA/grille.txt";
+	std::string ficcoup = "IA/coup.txt";
 
 	servfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (servfd == -1) {
@@ -170,6 +217,7 @@ int main() {
 	std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
     	P.next = choix[std::rand()%7];
 	genereTetromino(P);
+	
 
 	int level = 1, score = 0, intervalle = 1000;
 	run(P, level, score, intervalle, fenetre);
