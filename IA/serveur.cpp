@@ -58,19 +58,19 @@ void ecrire (std::string & title, grille & g) {
 	std::ofstream fic;
 	fic.open(title);
 	if (fic.is_open()) {
-		if ((g[0][3] == 'C') and (g[0][4] == 'C') and (g[0][5] == 'C') and (g[0][6] == 'C')) {
+		if ((g[1][3] == 'C') and (g[1][4] == 'C') and (g[1][5] == 'C') and (g[1][6] == 'C')) {
 			fic << 'I';
-		} else if ((g[0][4] == 'C') and (g[0][5] == 'C') and (g[1][4] == 'C') and (g[1][5] == 'C')) {
+		} else if ((g[1][4] == 'C') and (g[1][5] == 'C') and (g[2][4] == 'C') and (g[2][5] == 'C')) {
 			fic << 'O';
-		} else if ((g[0][4] == 'C') and (g[0][5] == 'C') and (g[0][6] == 'C') and (g[1][5] == 'C')) {
+		} else if ((g[1][4] == 'C') and (g[1][5] == 'C') and (g[1][6] == 'C') and (g[2][5] == 'C')) {
 			fic << 'T';
-		} else if ((g[0][4] == 'C') and (g[0][5] == 'C') and (g[0][6] == 'C') and (g[1][4] == 'C')) {
+		} else if ((g[1][4] == 'C') and (g[1][5] == 'C') and (g[1][6] == 'C') and (g[2][4] == 'C')) {
 			fic << 'L';
-		} else if ((g[0][4] == 'C') and (g[0][5] == 'C') and (g[0][6] == 'C') and (g[1][6] == 'C')) {
+		} else if ((g[1][4] == 'C') and (g[1][5] == 'C') and (g[1][6] == 'C') and (g[2][6] == 'C')) {
 			fic << 'J';
-		} else if ((g[0][4] == 'C') and (g[0][5] == 'C') and (g[1][5] == 'C') and (g[1][6] == 'C')) {
+		} else if ((g[1][4] == 'C') and (g[1][5] == 'C') and (g[2][5] == 'C') and (g[2][6] == 'C')) {
 			fic << 'Z';
-		} else if ((g[0][5] == 'C') and (g[0][6] == 'C') and (g[1][4] == 'C') and (g[1][5] == 'C')) {
+		} else if ((g[1][5] == 'C') and (g[1][6] == 'C') and (g[2][4] == 'C') and (g[2][5] == 'C')) {
 			fic << 'S';
 		} else {
 			std::cout << "[!]> Courant non détecter" << std::endl;
@@ -106,21 +106,28 @@ void lire (std::string & title, action & a) {
 	fic.close();
 }
 
-void joue(plateau & G, action & a, int level, int score, int & interval, sf::RenderWindow & f) {
+void joue(plateau & G, action & a, int & level, int & score, int & interval, sf::RenderWindow & f) {
 	std::chrono::time_point<std::chrono::system_clock> fin = std::chrono::system_clock::now() + std::chrono::milliseconds(interval);
     	std::chrono::time_point<std::chrono::system_clock> maintenant;
+	std::cout << a.rot <<  " " << a.depla << std::endl;
+	int numligne = 0;
+	int nombreDeLignes = 10;
         for (int i = 0; i < a.rot; ++i) {
-			tourner(G, true);
-		}
-		for (int j = 0; j < LARGEUR - a.depla; ++j) {
+		tourner(G, true);
+	}
+	if ((LARGEUR - a.depla) < 5) {
+		for (int j = 0; j < 5-(LARGEUR - a.depla); ++j) {
 			deplacer(G.gr, 'D');
 		}
-		deplacer(G.gr, 'B');
+	} else if ((LARGEUR - a.depla) > 5) {
+		for (int k = 0; k < 5-(LARGEUR - a.depla); ++k) {
+			deplacer(G.gr, 'G');
+		}
+	}
+	deplacer(G.gr, 'B');
 	do {
 		maintenant = std::chrono::system_clock::now();
 		f.clear(sf::Color(19,19,31));
-        	afficherTexte(f, "Level : " + std::to_string(level), "../chomsky/Chomsky.woff", 300, 20);
-        	afficherTexte(f, "Score : " + std::to_string(score), "../chomsky/Chomsky.woff", 300, 60);
         	dessinerGrille(f, G);
         	f.display();
 	} while (maintenant < fin);
@@ -129,11 +136,27 @@ void joue(plateau & G, action & a, int level, int score, int & interval, sf::Ren
         placer(G.gr);
         genereTetromino(G);
         for (int d = 0; d < HAUTEUR; ++d) {
-            if (peuxSupprimerLigne(G.gr, d))
+            if (peuxSupprimerLigne(G.gr, d)) {
                 supprimerLigne(G.gr, d);
+		numligne++;
+		nombreDeLignes++;
+	    }
         }
+	int Nouveaulevel = nombreDeLignes/10;
+        if (numligne == 1) score = score + level * 100;
+        else if (numligne == 2) score = score + level * 300;
+        else if (numligne == 3) score = score + level * 500;
+        else if (numligne == 4) score = score + level * 800;
+        else if (numligne > 4) score = score + 50*numligne*level;
+        if (Nouveaulevel != level) {
+            if (level == 0) interval = 1000;
+            else if (level < 15) interval = interval * 0.75;
+            else interval = interval * 0.9;
+        }
+        level = Nouveaulevel;
         if (fini(G.gr)) {
-            std::cout << "Fin de partie — niveau " << level << " — score " << score << std::endl;
+		std::cout << "[SERVEUR]: client deconnecté" << std::endl;
+            std::cout << "Fin de parrie — niveau " << level << " — score " << score << std::endl;
             f.close();
             return;
         }
@@ -142,7 +165,7 @@ void joue(plateau & G, action & a, int level, int score, int & interval, sf::Ren
     }
 }
 
-int run(plateau & P, int level, int score, int & interval, sf::RenderWindow & f) {
+int run(plateau & P, int & level, int & score, int & interval, sf::RenderWindow & f) {
 	int servfd, clifd;
 	struct sockaddr_in servaddr;
 	struct sockaddr_storage cliaddr;
@@ -170,8 +193,8 @@ int run(plateau & P, int level, int score, int & interval, sf::RenderWindow & f)
 		return -1;
 	}
 
-    std::cout << "[SERVEUR]: en attente de connexion..." << std::endl;
-	
+    	std::cout << "[SERVEUR]: en attente de connexion..." << std::endl;
+
 	socklen_t size = sizeof(cliaddr);
 	clifd = accept(servfd, (struct sockaddr *)&cliaddr, &size);
 	if (clifd == -1) {
@@ -189,6 +212,7 @@ int run(plateau & P, int level, int score, int & interval, sf::RenderWindow & f)
 			std::cout << "[!]> send error" << std::endl;
 			return -1;
 		}
+		system("cat IA/grille.txt");
 		char buffer[1025];
 		int recu = recv(clifd, buffer, sizeof(buffer), 0);
 		if (recu == -1) {
@@ -198,6 +222,7 @@ int run(plateau & P, int level, int score, int & interval, sf::RenderWindow & f)
             		std::cout << "[-]> client déconnecter" << std::endl;
         	} else {
             		buffer[recu] = '\0';
+			system("cat IA/coup.txt");
 			lire(ficcoup, a);
 			joue(P, a, level, score, interval, f);
 		}
@@ -218,8 +243,7 @@ int main() {
     	P.next = choix[std::rand()%7];
 	genereTetromino(P);
 	
-
-	int level = 1, score = 0, intervalle = 1000;
-	run(P, level, score, intervalle, fenetre);
+	int level = 1, score = 0, interval = 1000;
+	run(P, level, score, interval, fenetre);
 	return 0;
 }

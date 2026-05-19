@@ -22,10 +22,10 @@ void ecrire (std::string & title, grille & G);
 void lire (std::string & title, action & a);
 
 // Joue le coup calculer
-void joue(plateau & G, action & a, int level, int score, int & interval, sf::RenderWindow & f);
+void joue(plateau & G, action & a, int & level, int & score, int & interval, sf::RenderWindow & f);
 
 // Faire tourner le serveur et donc jouer
-int run(plateau & P, int level, int score, int & interval, sf::RenderWindow & f);
+int run(plateau & P, int & level, int & score, int & interval, sf::RenderWindow & f);
 
 // partie affichage
 void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y);

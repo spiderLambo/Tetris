@@ -1,5 +1,5 @@
 """
-Dans le C++ main a chaque fois que un coup est jouer le C++ envoie un socket de la grille (placer, courant, joker). Ici on calcul alors le coup optimal et on renvoie donc les action a faire (deplacer*x, tourner*y, changerjoker:true/false, etc...)
+Dans le C++ main a chaque fois que un coup est jouer le C++ envoie un socket de la grille (placer, courant). Ici on calcul alors le coup optimal et on renvoie donc les action a faire (deplacer*x, tourner*y)
 """
 
 import socket
@@ -8,6 +8,9 @@ import random
 
 HOST = '127.0.0.1'
 PORT = 63424
+
+W = 10
+H = 20
 
 #Les heuristique
 def aggregate_height(g):
@@ -50,10 +53,10 @@ def bumpiness(g):
 "Le score"
 def score(grille, a, b, c, d):
     height = aggregate_height(grille)
-    lines = complete_lines(grille)
-    holes = holes(grille)
+    lines = completelines(grille)
+    hole = holes(grille)
     bump = bumpiness(grille)
-    return a*height + b*lines + c*holes + d*bump
+    return a*height + b*lines + c*hole + d*bump
 
 "optimisation de a, b, c, d"
 
@@ -80,11 +83,11 @@ def totaline(v):
         piece = rotate(TETROMINOS[piece_type], rot)
         ph, pw = piece.shape
         lig = 0
-        while not _collides(grille, piece, lig + 1, col):
+        while not collision(grille, piece, lig + 1, col):
             lig += 1
             if lig + ph >= H:
                 break
-        if _collides(grille, piece, lig, col):
+        if collision(grille, piece, lig, col):
             break
         tmp = grille.copy()
         for i in range(ph):
@@ -150,7 +153,7 @@ def genetic_algo():
     return best["vector"][0], best["vector"][1], best["vector"][2], best["vector"][3] 
 
 "Jeu"
-Tetromino = {
+TETROMINOS = {
     'I': np.array([[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]]),
     'O': np.array([[0, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0]]),
     'T': np.array([[0, 0, 0, 0], [0, 0, 0, 0], [0, 1, 1, 1], [0, 0, 1, 0]]),
@@ -186,7 +189,7 @@ def descente(g, piece, col):
         lig += 1
         if lig + ph > H:
             break
-    if _collides(g, piece, lig, col):
+    if collision(g, piece, lig, col):
         return None
     new_g = g.copy()
     for i in range(ph):
@@ -206,13 +209,13 @@ def mllrcoup(g, piece_type, a, b, c, d):
     base_piece = TETROMINOS[piece_type]
  
     for rot in range(4):
-        piece = rotate(base_piece, rot)
+        piece = tourner(base_piece, rot)
         pw = piece.shape[1]
         for col in range(W - pw + 1):
-            new_g = drop(g, piece, col)
+            new_g = descente(g, piece, col)
             if new_g is None:
                 continue
-            s = heuristic_score(new_g, a, b, c, d)
+            s = score(new_g, a, b, c, d)
             if s > best_s:
                 best_s = s
                 best_action = (rot, col)
@@ -225,32 +228,31 @@ def lire_grille():
     with open("grille.txt", "r") as f:
         lignes = f.read().splitlines()
     piece_type = lignes[0].strip()
-    g = np.zeros((H, W), dtype=np.int8)
-    for i in range(H):
+    g = np.zeros((20, 10), dtype=np.int8)
+    for i in range(20):
         ligne = lignes[i + 1] if i + 1 < len(lignes) else ''
-        for j in range(W):
+        for j in range(10):
             c = ligne[j] if j < len(ligne) else ' '
             g[i, j] = 1 if c == 'P' else 0
     return piece_type, g
-
 
 def ecrire_coup(rot, col):
     with open("coup.txt", "w") as f:
         f.write(f"{rot} {col}\n")
 
 def client():
-    print("connexion au serveur jeu (C++): {HOST}:{PORT}")
+    print(f"connexion au serveur jeu (C++): {HOST}:{PORT}")
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((HOST, PORT))
-    print("[+]: IA connecter")
+    print("[+]: IA connecté")
     while True:
         msg = s.recv(4096).decode().strip()
         if not msg:
-            print("[!]: IA deconnecter")
+            print("[-]: IA deconnecté")
             break
         if msg.strip() == "GO":
             piece, grille = lire_grille()
-            rot, col = mllrcoup(grille, piece, -0.510066, 0.760666, -0.35663, -0.184483)
+            rot, col = mllrcoup(grille, piece, a=-0.510066, b=0.760666, c=-0.35663, d=-0.184483)
             ecrire_coup(rot, col)
             s.send(b"OK\n")
     s.close()
