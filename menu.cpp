@@ -167,9 +167,9 @@ int main() {
 
     // Musique
     sf::Music music;
-    music.openFromFile("0bpm.wav");
+    music.openFromFile("tetrismusic.wav");
     music.setLoop(true);
-    float volume = 100;
+    float volume = 0;
     music.setVolume(volume);
     music.play();
 
@@ -179,7 +179,7 @@ int main() {
 
     float sliderMinX = 150;
     float sliderMaxX = 380;
-    float sliderX = sliderMaxX; // volume à 100% au départ
+    float sliderX = sliderMinX;
     bool dragging = false;
     
     while (fenetre.isOpen())
