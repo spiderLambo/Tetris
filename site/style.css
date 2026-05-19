@@ -1,0 +1,123 @@
+@import "charte.css";
+@import "animations.css";
+
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: var(--base);
+}
+
+
+nav {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    height: 100dvh;
+    width: 100dvw;
+}
+
+/* SCANLINES */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,0,110,.04)  0px,
+    rgba(255,0,110,.04)  1px,
+    rgba(0,180,216,.04)  1px,
+    rgba(0,180,216,.04)  2px,
+    transparent          2px,
+    transparent          4px
+  );
+}
+
+nav > ul {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    list-style-type: none;
+    padding-left: 20vw;
+
+
+    font-family: var(--font-space-mono);
+    font-size: 5vh;
+    text-transform: uppercase;
+    color: var(--texte-lofi);
+}
+
+/* Texte warning */
+.warning {
+    color: var(--amber-mort);
+}
+
+.warning::after {
+    content: '!';
+    animation: clignotte .5s ease-in-out infinite;
+}
+
+/* Textes désactivés */
+.desactive {
+    color: var(--texte-desactive);
+    text-decoration: line-through;
+}
+
+/* Textes clicables */
+
+.clickable {
+    position: relative;
+}
+
+.clickable:hover {
+    color: var(--matrix-vert);
+}
+
+.clickable:hover:before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: .5em;
+    height: .5em;
+    border-radius: 50%;
+    background-color: var(--matrix-vert);
+    animation: clignotte .9s ease-in-out infinite;
+}
+
+/* Focus le 1er */
+
+.clickable:first-child {
+    color: var(--matrix-vert);
+}
+
+.clickable:first-child:before {
+    content: '';
+    position: absolute;
+    left: -1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: .5em;
+    height: .5em;
+    border-radius: 50%;
+    background-color: var(--matrix-vert);
+    animation: clignotte .9s ease-in-out infinite;
+}
+
+/* Le survol des autres retire le focus sur le 1er */
+ul:has(.clickable:not(:first-child):hover) .clickable:first-child {
+    color: var(--texte-lofi);
+}
+
+ul:has(.clickable:not(:first-child):hover) .clickable:first-child::before {
+    display: none;
+}

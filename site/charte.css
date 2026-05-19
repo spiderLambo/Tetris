@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=VT323&display=swap');
+
+
+:root {
+    /* ꧁ঔৣ☬✞ COULEURS PRIMAIRES ✞☬ঔৣ꧂ */
+    --vhs-violet: #c77dff;
+    --tv-bleu: #00b4d8;
+    --erreur-rose: #ff006e;
+    --matrix-vert: #0fff50;
+    --amber-mort: #ffbe0b;
+    --texte-lofi: #c8b8e8;
+    --texte-desactive: #363636e1;
+
+
+    /* 𒄆𓁹✞ FONDS & SURFACES ✞𓁹𒄆 */
+    --void: #06000e;
+    --base: #0c0414;
+    --surface: #110820;
+    --eleve: #1e0a38;
+    --overlay: #2d1550;
+
+
+    /* 𒄆𓁹✞ FONT ✞𓁹𒄆 */
+    --font-vt323: 'VT323', monospace;
+    --font-space-mono: 'Space Mono', monospace;
+}
