@@ -100,7 +100,7 @@ void lire (std::string & title, action & a) {
 
 void joue(plateau & G, action & a, int & level, int & score, int & interval, sf::RenderWindow & f) {
 	std::chrono::time_point<std::chrono::system_clock> fin = std::chrono::system_clock::now() + std::chrono::milliseconds(interval);
-    	std::chrono::time_point<std::chrono::system_clock> maintenant;
+    std::chrono::time_point<std::chrono::system_clock> maintenant;
 	std::cout << a.rot <<  " " << a.depla << std::endl;
 	int numligne = 0;
     int colactuel = LARGEUR;
@@ -156,7 +156,7 @@ void joue(plateau & G, action & a, int & level, int & score, int & interval, sf:
         }
         level = Nouveaulevel;
         if (fini(G.gr)) {
-		std::cout << "[SERVEUR]: client deconnecté" << std::endl;
+		    std::cout << "[SERVEUR]: client deconnecté" << std::endl;
             std::cout << "Fin de parrie — niveau " << level << " — score " << score << std::endl;
             f.close();
             return;

@@ -16,7 +16,7 @@ struct action {
 };
 
 // Ecrit la grille du jeu a chaque longueur avec le courant en haut (le fichier est sans arret réecrit
-void ecrire (std::string & title, grille & G);
+void ecrire (std::string & title, plateau & P);
 
 // Lit l'action optimal calculer par le client et la stock dans action (le fichier n'est jamais réinitialiser, ce qui permet un historique des coups)
 void lire (std::string & title, action & a);
