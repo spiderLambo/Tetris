@@ -1,15 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Accueil</title>
   <link rel="stylesheet" href="animations.css">
+  <link rel="stylesheet" href="debut.css">
 </head>
 <body>
+    <p></p>
 
+
+    <script>
+        // Fonction pour ecrire
+        function ecrit (element, texte) {
+            for (let i = 0; i<texte.length; ++i) {
+                setTimeout(() => {
+                    element.innerText += texte[i];
+                }, i)
+            }
+        }
+
+        function ecritpoints(element) {
+            let texteOrigine = element.innerText;
+            let compteur = 0;
+
+            // On lance une action toutes les 150 millisecondes
+            let animation = setInterval(() => {
+                compteur++;
+                
+                // On calcule le nombre de points (0, 1, 2, ou 3)
+                let points = ".".repeat(compteur % 4);
+                
+                // On met à jour l'affichage
+                element.innerText = texteOrigine + points;
+
+                // Si tu veux arrêter l'animation après 20 étapes par exemple :
+                if (compteur >= 20) {
+                    clearInterval(animation); 
+                }
+            }, 150);
+        }
+
+        let p = document.querySelector("p");
+        let body = document.querySelector("body");
+        ecrit(p, 
+        ` ──────────────────────────────────────────────────── 
+        BIOS v2.7.1 — GHOST SYSTEMS INC — BUILD 2077.03.14
+         ──────────────────────────────────────────────────── 
+         CPU DETECTED : XENON-X9 @ 4.2GHz [8 cores] 
+         RAM DETECTED : 32768 MB DDR6 
+         STORAGE : /dev/sda [2TB NVMe] /dev/sdb [4TB cold] 
+         NETWORK ADAPTER : eth0 [GHOST-NET 10Gbps] 
+         GPU : NOVA-8800 [VRAM 24GB] 
+         POST CHECK PASSED 
+         ──────────────────────────────────────────────────── 
+         KERNEL : loading sector_os 9.4.1-ghost 
+         INITRAMFS : decompressing image [187MB] 
+         ENTROPY POOL : seeding from hardware 
+         RNG MEMORY MAP : 0x00000000 — 0x7FFFFFFFF 
+         VIRTUAL MEMORY : paging enabled 
+         SCHEDULER : CFS initialized [priority 0] 
+         IRQ ROUTING : 24 vectors mapped 
+         CLOCKSOURCE : tsc @ 4200.000 MHz 
+         KERNEL READY 
+         [ MOUNTING FILESYSTEMS ] 
+            / ........................ ext4 [OK] 
+            /boot .................... ext4 [OK] 
+            /tmp ..................... tmpfs [OK] 
+            /var ..................... ext4 [OK] 
+            /sector_null ............. ghost-fs [OK] 
+            /dev/sdb ................. cold storage — spun up [SLOW] 
+        ALL FILESYSTEMS MOUNTED 
+        [ NETWORK INIT ] 
+            eth0 : bringing interface up 
+            eth0 : negotiating 10Gbps full duplex 
+            eth0 : DHCP discover — broadcast 
+            eth0 : DHCP offer from 10.0.0.1 
+            eth0 : lease acquired 10.0.0.47 [TTL 86400s] 
+            DNS : resolver set 10.0.0.1 / 1.1.1.1 
+            GATEWAY : route added via 10.0.0.1 
+            FIREWALL : ruleset loaded [247 rules] 
+            VPN : tunnel ghost-net-03 — handshake 
+            VPN : cipher AES-256-GCM — key exchanged 
+            VPN : tun0 10.77.0.1 — peer 10.77.0.254 
+            NETWORK ONLINE 
+        [ SERVICES STARTUP ] 
+            syslogd ................. started [pid 412] 
+            cron .................... started [pid 413] 
+            sshd .................... started [pid 414] port 22 
+            ghost-daemon ............ started [pid 501] 
+            sector-sync ............. started [pid 502] 
+            memcached ............... started [pid 503] port 11211 
+            redis ................... started [pid 504] port 6379 
+            watchdog ................ started [pid 505] — degraded mode 
+            auth-broker ............. FAILED — retrying [1/3] 
+            auth-broker ............. FAILED — retrying [2/3] 
+            auth-broker ............. fallback mode — read only 
+            proxy-relay ............. started [pid 601] 
+            node-monitor ............ started [pid 602] 
+        [ CONNECTING TO MAINFRAME ] 
+            RESOLVING : mainframe.ghost.local 
+            DNS REPLY : 10.77.255.1 [ttl 300] 
+            TCP CONNECT : 10.77.255.1:4433 
+            TLS HANDSHAKE : TLSv1.3 — ECDHE-RSA-AES256 
+            CERTIFICATE : ghost-mainframe.crt [valid until 2099-01-01] 
+            SESSION TOKEN : 8f3a9c1d-00b4-4f7e-dead-0000000047fa 
+            PING MAINFRAME : 2ms 
+            SYNC CLOCK : offset -0.0003s — corrected 
+            CHANNEL : encrypted — AES-256-GCM 
+            UPLINK BANDWIDTH : 9.4 Gbps available 
+            DOWNLINK BANDWIDTH : 9.7 Gbps available 
+            MAINFRAME CONNECTED [ DATA SYNC ] 
+            pulling sector_null ........... [████████████] 100% 4.2GB 
+            pulling ghost_db_snapshot ..... [████████████] 100% 1.7GB 
+            pulling relay_config_v9 ........ [████████████] 100% 0.3MB 
+            pulling archive_cold_07 ....... [████████░░░░] 74% 12.1GB — slow 
+            checksum sector_null .......... SHA256 OK [a4f9c3b1] 
+            checksum ghost_db_snapshot .... SHA256 OK [7e00dead] 
+            checksum relay_config_v9 ...... SHA256 OK [f1a20047] 
+            checksum archive_cold_07 ...... PENDING — transfer incomplete 
+        [ INTEGRITY CHECK ] 
+            sector_null ........ 14 772 fichiers — intégrité 100% 
+            ghost_db ........... 2 441 entrées — intégrité 100% 
+            relay_config ....... 88 règles — intégrité 100% 
+            memory_residual .... corruption détectée — secteur 0x4FA 
+            memory_residual .... reconstruction partielle — 87% récupéré 
+            memory_residual .... 13% IRRÉCUPÉRABLE — données perdues 
+        ──────────────────────────────────────────────────── 
+        SYSTEM READY — SESSION 0x8F3A9C1D 1 WARNING — 2 ERRORS — uptime 0d 0h 0m 4s 
+        ──────────────────────────────────────────────────── 
+        CONNEXION `
+        );
+        setTimeout(() => {
+            ecritpoints(p);
+        }, 4625);
+        setTimeout(() => {
+            p.remove();
+            body.innerHTML = "<h1>BIENVENU</h1>";
+        }, 7625)
+    </script>
   <script>
-    setTimeout(() => { window.location.href = "Accueil.html"; }, 3000);
+    setTimeout(() => { window.location.href = "Accueil.html"; }, 8500);
   </script>
   <script src="transition.js"></script>
 

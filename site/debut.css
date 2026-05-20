@@ -1,0 +1,22 @@
+@import "charte.css";
+
+body {
+    background-color: var(--tv-bleu);
+    color: var(--tv-texte);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow: hidden;
+    font-family: var(--font-vt323);
+    font-size: 4vh;
+    position: relative;
+}
+
+h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    font-size: min(40vh, 40vw);
+    animation: fade-in .4s ease-in 1;
+}
