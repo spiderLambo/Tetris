@@ -1,32 +1,17 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accueil</title>
+  <link rel="stylesheet" href="animations.css">
 </head>
 <body>
-    <nav>
-        <ul>
-            <li class="clickable"><a href="./Presentation.html">Présentation</a></li>
-            <li class="clickable"><a href="./sujet.html">Sujet</a></li>
-            <li class="clickable algo">
-                <details>
-                    <summary>Algorithmes</summary>
-                    <ul>
-                        <li><a href="./algoTetris.html">Tetris</a></li>
-                        <li><a href="./algoRobot.html">Robot</a></li>
-                    </ul>
-                </details>
-            </li>
-            <li class="clickable"><a target="_blank" href="https://github.com/spiderLambo/Tetris">Code Source</a></li>
-            <li class="warning">LOG</li>
-            <li class="desactive">Archives</li>
-            <li class="desactive">QUIT</li>
-        </ul>
-    </nav>
 
-    <script src="script.js"></script>
+  <script>
+    setTimeout(() => { window.location.href = "Accueil.html"; }, 3000);
+  </script>
+  <script src="transition.js"></script>
+
 </body>
 </html>

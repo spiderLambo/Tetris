@@ -22,7 +22,7 @@ function apparait(element) {
   }
 }
 
-document.querySelectorAll("li:not(:has(*)), summary").forEach((el) => {
+document.querySelectorAll("li:not(:has(*)), summary, a").forEach((el) => {
   console.log(el);
   apparait(el);
 });
