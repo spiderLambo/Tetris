@@ -13,10 +13,11 @@ bool pause = false;
 // Affiche du texte
 void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y) {
     sf::Font font;
-    font.loadFromFile(police);
-    sf::Text text(texte, font, 25);
-    text.setPosition(x, y);
-    f.draw(text);
+    if (font.openFromFile(police)) {
+        sf::Text text(font, texte, 25);
+        text.setPosition({x, y});
+        f.draw(text);
+    }
 }
 
 // Initialise un rectangle
@@ -230,7 +231,7 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
             if (G.gr[j][i] == 'C' or G.gr[j][i-1] == 'C') {
                 regctangle ligne;
                 ligne.setSize({10, static_cast<float>(500-j*25)});
-                ligne.setPosition(25*i, j*25);
+                ligne.setPosition({static_cast<float>(25*i), static_cast<float>(j*25)});
                 ligne.setFillColor(sf::Color(136,136,170));
                 f.draw(ligne);
             }
@@ -269,28 +270,28 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
     do {
         maintenant = std::chrono::system_clock::now();
 
-        sf::Event event;
-        while (f.pollEvent(event)) {
+
+        while (const std::optional<sf::Event> event = f.pollEvent()) {
             // Clique sur la croix
-            if (event.type == sf::Event::Closed) f.close();
-            if (event.type == sf::Event::KeyPressed) {
+            if (event->is<sf::Event::Closed>()) f.close();
+            if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
                 // Déplacement à gauche
-                if (event.key.code == sf::Keyboard::Left)  deplacer(G.gr, 'G');
+                if (keyPressed->code == sf::Keyboard::Key::Left)  deplacer(G.gr, 'G');
                 // Déplacement à droite
-                else if (event.key.code == sf::Keyboard::Right) deplacer(G.gr, 'D');
+                else if (keyPressed->code == sf::Keyboard::Key::Right) deplacer(G.gr, 'D');
                 // Déplacement encois en bas
-                else if (event.key.code == sf::Keyboard::Enter) {
+                else if (keyPressed->code == sf::Keyboard::Key::Enter) {
                         deplacer(G.gr, 'B');
                         placer(G.gr);
                         genereTetromino(G);
                         peuxReserver = true;
                         stop = true;
                 // Toune à gauche
-                } else if (event.key.code ==  sf::Keyboard::Up) tourner(G, true);
+                } else if (keyPressed->code == sf::Keyboard::Key::Up) tourner(G, true);
                 // Tourne à droite
-                else if (event.key.code == sf::Keyboard::Down) tourner(G, false);
+                else if (keyPressed->code == sf::Keyboard::Key::Down) tourner(G, false);
                 // Reserve le tetromino
-                else if (event.key.code == sf::Keyboard::R and peuxReserver) {
+                else if (keyPressed->code == sf::Keyboard::Key::R and peuxReserver) {
                     reserver(G);
                     if (!premiereReserveEffectuee) {
                         premiereReserveEffectuee = true;
@@ -299,7 +300,7 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
                     peuxReserver = false;
                 }
                 // Pause
-                else if (event.key.code == sf::Keyboard::Space) pause = !pause;
+                else if (keyPressed->code == sf::Keyboard::Key::Space) pause = !pause;
             }
         }
 
@@ -338,11 +339,12 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
 void afficherMenuPause(sf::RenderWindow & f) {
     f.clear(sf::Color(0,0,0));
     sf::Font font;
-    font.loadFromFile("./font/chomsky/Chomsky.woff");
-    sf::Text text("Pause", font, 200);
-    text.setPosition(20, 100);
-    f.draw(text);
-    f.display();
+    if (font.openFromFile("./font/chomsky/Chomsky.woff")) {
+        sf::Text text(font, "Pause", 200);
+        text.setPosition({20, 100});
+        f.draw(text);
+        f.display();
+    }
 }
 
 
@@ -367,13 +369,12 @@ int main () {
         if (pause) {
             // On affiche le menu pause
             afficherMenuPause(fenetre);
-            sf::Event event;
-            while (fenetre.pollEvent(event)) {
+            while (const std::optional<sf::Event> event = fenetre.pollEvent()) {
                 // Clique sur la croix
-                if (event.type == sf::Event::Closed) fenetre.close();
-                if (event.type == sf::Event::KeyPressed) {
+                if (event->is<sf::Event::Closed>()) fenetre.close();
+                if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>()) {
                     // dépause
-                    if (event.key.code == sf::Keyboard::Space) pause = !pause;
+                    if (keyPressed->code == sf::Keyboard::Key::Space) pause = !pause;
                 }
             }
         } else 

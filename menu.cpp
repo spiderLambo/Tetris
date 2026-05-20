@@ -4,11 +4,12 @@
 // Affiche le texte
 void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, sf::Color couleur, int taille, float x, float y) {
     sf::Font font;
-    font.loadFromFile(police);
-    sf::Text text(texte, font, taille);
-    text.setFillColor(couleur);
-    text.setPosition(x, y);
-    f.draw(text);
+    if (font.openFromFile(police)) {
+        sf::Text text(font, texte, taille);
+        text.setFillColor(couleur);
+        text.setPosition({x, y});
+        f.draw(text);
+    }
 }
 
 
@@ -26,7 +27,7 @@ void afficherMenu(sf::RenderWindow& f, int selection)
     // Ligne de separation
     sf::RectangleShape ligne;
     ligne.setSize({380, 2});
-    ligne.setPosition(60, 150);
+    ligne.setPosition({60, 150});
     ligne.setFillColor(sf::Color(0, 255, 255, 180));
     f.draw(ligne);
 
@@ -58,7 +59,7 @@ void afficherMenu(sf::RenderWindow& f, int selection)
     {
         sf::RectangleShape scan;
         scan.setSize({500, 1});
-        scan.setPosition(0, y);
+        scan.setPosition({0, static_cast<float>(y)});
         scan.setFillColor(sf::Color(255, 255, 255, 10));
         f.draw(scan);
     }
@@ -80,7 +81,7 @@ void afficherParametres(sf::RenderWindow & f, float & sliderX, bool & dragging) 
     // Ligne de separation
     sf::RectangleShape ligne;
     ligne.setSize({450, 2});
-    ligne.setPosition(60, 100);
+    ligne.setPosition({60, 100});
     ligne.setFillColor(sf::Color(0, 255, 255, 180));
     f.draw(ligne);
 
@@ -136,13 +137,13 @@ void afficherParametres(sf::RenderWindow & f, float & sliderX, bool & dragging) 
     float sliderMaxX = 380;
 
     sf::RectangleShape barre({sliderMaxX - sliderMinX, 4});
-    barre.setPosition(sliderMinX, 410);
+    barre.setPosition({sliderMinX, 410});
     barre.setFillColor(sf::Color(180, 180, 220));
     f.draw(barre);
 
     // Curseur
     sf::CircleShape curseur(10);
-    curseur.setPosition(sliderX - 10, 400);
+    curseur.setPosition({sliderX - 10, 400});
     curseur.setFillColor(sf::Color(255, 0, 180));
     f.draw(curseur);
 
@@ -152,7 +153,7 @@ void afficherParametres(sf::RenderWindow & f, float & sliderX, bool & dragging) 
     {
         sf::RectangleShape scan;
         scan.setSize({500, 1});
-        scan.setPosition(0, y);
+        scan.setPosition({0, static_cast<float>(y)});
         scan.setFillColor(sf::Color(255, 255, 255, 10));
         f.draw(scan);
     }
@@ -167,89 +168,81 @@ int main() {
 
     // Musique
     sf::Music music;
-    music.openFromFile("tetrismusic.wav");
-    music.setLoop(true);
+    if (!music.openFromFile("tetrismusic.wav")) std::cout<<"[!]>musique non chargée"<<std::endl;
+    music.setLooping(true);
     float volume = 0;
     music.setVolume(volume);
     music.play();
 
     int selection = -1;
     bool peuxAfficherParametres = false;
-    bool retour = false;
 
     float sliderMinX = 150;
     float sliderMaxX = 380;
     float sliderX = sliderMinX;
     bool dragging = false;
     
-    while (fenetre.isOpen())
-    {
+    while (fenetre.isOpen()) {
         // souris
         sf::Vector2i mouse = sf::Mouse::getPosition(fenetre);
 
 
-        
-        sf::Event event;
-        while (fenetre.pollEvent(event))
-{
-    if (event.type == sf::Event::Closed) fenetre.close();
 
-    if (peuxAfficherParametres) {
-        if (event.type == sf::Event::MouseButtonPressed) {
-            if (mouse.x >= sliderX - 10 && mouse.x <= sliderX + 10 &&
-                mouse.y >= 400 && mouse.y <= 420)
-                dragging = true;
+        while (const std::optional<sf::Event> event = fenetre.pollEvent()) {
+            if (event->is<sf::Event::Closed>()) fenetre.close();
+
+            if (peuxAfficherParametres) {
+            if (event->is<sf::Event::MouseButtonPressed>()) {
+                    // Clic sur RETOUR
+                    if (mouse.x >= 170 && mouse.x <= 370 && mouse.y >= 450 && mouse.y <= 490) {
+                        peuxAfficherParametres = false;
+                    }
+                    // Clic sur le slider
+                    if (mouse.x >= sliderX - 10 && mouse.x <= sliderX + 10 &&
+                        mouse.y >= 400 && mouse.y <= 420)
+                        dragging = true;
+                }
+                if (event->is<sf::Event::MouseButtonReleased>())
+                    dragging = false;
+                else if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>()) {
+                    if (dragging) {
+                        sliderX = std::clamp(static_cast<float>(mouseMoved->position.x), sliderMinX, sliderMaxX);
+                        volume = (sliderX - sliderMinX) / (sliderMaxX - sliderMinX) * 100.f;
+                        music.setVolume(volume);
+                    }
+                }
+            } else if (event->getIf<sf::Event::MouseButtonPressed>()) {
+                if (selection == 0) system("./tetris");
+                if (selection == 2) peuxAfficherParametres = true;
+                if (selection == 3) fenetre.close();
+            }
         }
-        if (event.type == sf::Event::MouseButtonReleased)
-            dragging = false;
-        if (event.type == sf::Event::MouseMoved && dragging) {
-            sliderX = std::clamp((float)event.mouseMove.x, sliderMinX, sliderMaxX);
-            volume = (sliderX - sliderMinX) / (sliderMaxX - sliderMinX) * 100;
-            music.setVolume(volume);
-        }
-    }
-
-    if (event.type == sf::Event::MouseButtonPressed) {
-        if (peuxAfficherParametres && retour) {
-            peuxAfficherParametres = false;
-            retour = false;
-        }
-        else if (!peuxAfficherParametres) {
-            if (selection == 0) system("./tetris");
-            if (selection == 2) peuxAfficherParametres = true;
-            if (selection == 3) fenetre.close();
-        }
-    }
-}
-
-
-
-
 
         if (peuxAfficherParametres) {
-
+    
             // On affiche les paramètres
             afficherParametres(fenetre, sliderX, dragging);
-
-            // Changer le sprite au survol
-            if (mouse.y >= 450.f && mouse.y <= 490) {
+    
+                // Changer le sprite au survol
+            if (mouse.x >= 170 && mouse.x <= 370 && mouse.y >= 450 && mouse.y <= 490) {
                 afficherTexte(fenetre, "RETOUR", "font/savery/savery.regular.ttf",  sf::Color(255, 0, 180), 40, 170, 450);
                 fenetre.display();
-                retour = true;
-            } else retour = false;
+            } 
         } else {
             // Calcul de la zone Séléctionnée
             for (int i = 0; i < 4; i++) {
                 float y1 = 190.f + i * 90.f;
                 float y2 = y1 + 50.f;
- 
+     
                 if (mouse.y >= y1 && mouse.y <= y2) {
                     selection = i;
                 }
             }
-
+    
             // On affiche le menu
             afficherMenu(fenetre, selection);
         }
     }
+
+    return 0;
 }

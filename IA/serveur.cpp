@@ -11,12 +11,12 @@
 // Affiche du texte
 void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y) {
     sf::Font font;
-    font.loadFromFile(police);
-    sf::Text text(texte, font, 25);
-    text.setPosition(x, y);
-    f.draw(text);
-} 
-
+    if (font.openFromFile(police)) {
+        sf::Text text(font, texte, 25);
+        text.setPosition({x, y});
+        f.draw(text);
+    }
+}
 
 void initRect (regctangle & rec, float taillex, float tailley, float x, float y, sf::Color fond, sf::Color outline) {
     rec.setSize({taillex, tailley});
@@ -221,7 +221,7 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
             if (G.gr[j][i] == 'C' or G.gr[j][i-1] == 'C') {
                 regctangle ligne;
                 ligne.setSize({10, static_cast<float>(500-j*25)});
-                ligne.setPosition(25*i, j*25);
+                ligne.setPosition({static_cast<float>(25*i), static_cast<float>(j*25)});
                 ligne.setFillColor(sf::Color(136,136,170));
                 f.draw(ligne);
             }
