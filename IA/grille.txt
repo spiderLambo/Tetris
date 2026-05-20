@@ -1,8 +1,8 @@
+T          
     CCC   
-    PPC   
-    P     
-    PP    
-   PP     
+     C    
+          
+   P      
   PPP     
   PPPP    
      P    

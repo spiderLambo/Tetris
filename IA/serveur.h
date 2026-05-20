@@ -31,3 +31,9 @@ int run(plateau & P, int & level, int & score, int & interval, sf::RenderWindow 
 void initRect (regctangle & rec, float taille, float x, float y);
 
 void dessinerGrille (sf::RenderWindow & f, plateau G);
+
+void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y);
+
+void afficherNext (sf::RenderWindow & f, char next);
+
+void afficherReserve (sf::RenderWindow & f, char next, int rotation);

@@ -228,11 +228,12 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
     for (int i = 1; i<LARGEUR; ++i) {
         for (int j = 1; j<HAUTEUR; ++j) {
             if (G.gr[j][i] == 'C' or G.gr[j][i-1] == 'C') {
-            regctangle ligne;
-            ligne.setSize({10, static_cast<float>(500-j*25)});
-            ligne.setPosition(25*i, j*25);
-            ligne.setFillColor(sf::Color(136,136,170));
-            f.draw(ligne);}
+                regctangle ligne;
+                ligne.setSize({10, static_cast<float>(500-j*25)});
+                ligne.setPosition(25*i, j*25);
+                ligne.setFillColor(sf::Color(136,136,170));
+                f.draw(ligne);
+            }
         }
     }
 
