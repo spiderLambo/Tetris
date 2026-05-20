@@ -7,14 +7,6 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y) {
-    sf::Font font;
-    font.loadFromFile(police);
-    sf::Text text(texte, font, 25);
-    text.setPosition(x, y);
-    f.draw(text);
-}
-
 void initRect (regctangle & rec, float taillex, float tailley, float x, float y, sf::Color fond, sf::Color outline) {
     rec.setSize({taillex, tailley});
     rec.setPosition({x, y});
@@ -36,7 +28,7 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
             if (G.gr[j][i] == 'C' or G.gr[j][i-1] == 'C') {
             regctangle ligne;
             ligne.setSize({10, static_cast<float>(500-j*25)});
-            ligne.setPosition(25*i, j*25);
+            ligne.setPosition({25.f * i, 25.f * j});
             ligne.setFillColor(sf::Color(136,136,170));
             f.draw(ligne);}
         }
@@ -111,21 +103,28 @@ void joue(plateau & G, action & a, int & level, int & score, int & interval, sf:
     	std::chrono::time_point<std::chrono::system_clock> maintenant;
 	std::cout << a.rot <<  " " << a.depla << std::endl;
 	int numligne = 0;
+    int colactuel = LARGEUR;
 	int nombreDeLignes = 10;
-        for (int i = 0; i < a.rot; ++i) {
+    for (int i = 0; i < HAUTEUR; ++i)
+        for (int j = 0; j < LARGEUR; ++j)
+            if (G.gr[i][j] == 'C' && j < colactuel)
+                colactuel = j;
+    for (int i = 0; i < a.rot; ++i) {
 		tourner(G, true);
 	}
-    int colactuel = 4;
-    int sens = a.depla - colactuel;
-	if (sens > 0) {
-		for (int j = 0; j < sens; ++j) {
-			deplacer(G.gr, 'D');
-		}
-	} else if (sens < 0) {
-		for (int k = 0; k < -sens; ++k) {
-			deplacer(G.gr, 'G');
-		}
-	}
+    int colApresRot = LARGEUR;
+    for (int i = 0; i < HAUTEUR; ++i)
+        for (int j = 0; j < LARGEUR; ++j)
+            if (G.gr[i][j] == 'C' && j < colApresRot)
+                colApresRot = j;
+
+    int delta = a.depla - colApresRot;
+    if (delta > 0) {
+        for (int j = 0; j < delta; ++j) deplacer(G.gr, 'D');
+    } else if (delta < 0) {
+        for (int k = 0; k < -delta; ++k) deplacer(G.gr, 'G');
+    }
+
 	deplacer(G.gr, 'B');
 	do {
 		maintenant = std::chrono::system_clock::now();

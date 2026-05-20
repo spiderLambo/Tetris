@@ -228,10 +228,10 @@ def lire_grille():
     with open("grille.txt", "r") as f:
         lignes = f.read().splitlines()
     piece_type = lignes[0].strip()
-    g = np.zeros((20, 10), dtype=np.int8)
-    for i in range(20):
+    g = np.zeros((H, W), dtype=np.int8)
+    for i in range(H):
         ligne = lignes[i + 1] if i + 1 < len(lignes) else ''
-        for j in range(10):
+        for j in range(W):
             c = ligne[j] if j < len(ligne) else ' '
             g[i, j] = 1 if c == 'P' else 0
     return piece_type, g
@@ -252,8 +252,12 @@ def client():
             break
         if msg.strip() == "GO":
             piece, grille = lire_grille()
+            print(f"Pièce: {piece}")
+            print("Grille reçue:")
+            print(grille)
             rot, col = mllrcoup(grille, piece, a=-0.510066, b=0.760666, c=-0.35663, d=-0.184483)
             ecrire_coup(rot, col)
+            print(f"Coup calculé → rot={rot}, col={col}")
             s.send(b"OK\n")
     s.close()
 

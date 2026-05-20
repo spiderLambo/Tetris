@@ -1,20 +1,20 @@
     CCC   
-    PC    
-     P    
-     P    
-    PP    
-     P    
-     P    
+    C     
     PP    
     PP    
     P     
-    PP    
-     P    
-     P    
-     PP   
-     P    
-     P    
-     P    
-    PP    
-    PP    
-    PP    
+   PP     
+    P     
+   PP     
+    P     
+    P     
+   PP     
+    P     
+    P     
+   PP     
+  PPP     
+ PPP      
+ PPP      
+ P P      
+PP P      
+PPPP      

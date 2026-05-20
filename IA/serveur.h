@@ -28,8 +28,6 @@ void joue(plateau & G, action & a, int & level, int & score, int & interval, sf:
 int run(plateau & P, int & level, int & score, int & interval, sf::RenderWindow & f);
 
 // partie affichage
-void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y);
-
 void initRect (regctangle & rec, float taille, float x, float y);
 
 void dessinerGrille (sf::RenderWindow & f, plateau G);
