@@ -8,6 +8,11 @@ body {
     background-color: var(--base);
 }
 
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
 
 nav {
     position: relative;
@@ -55,6 +60,9 @@ nav > ul {
     color: var(--texte-lofi);
 }
 
+
+/* ✦•┈๑⋅⋯ Textes ⋯⋅๑┈•✦ */
+
 /* Texte warning */
 .warning {
     color: var(--amber-mort);
@@ -70,6 +78,14 @@ nav > ul {
     color: var(--texte-desactive);
     text-decoration: line-through;
 }
+
+
+
+
+
+
+
+
 
 /* Textes clicables */
 
@@ -95,11 +111,9 @@ nav > ul {
 }
 
 /* Focus le 1er */
-
 .clickable:first-child {
     color: var(--matrix-vert);
 }
-
 .clickable:first-child:before {
     content: '';
     position: absolute;
@@ -117,7 +131,46 @@ nav > ul {
 ul:has(.clickable:not(:first-child):hover) .clickable:first-child {
     color: var(--texte-lofi);
 }
-
 ul:has(.clickable:not(:first-child):hover) .clickable:first-child::before {
     display: none;
+}
+
+
+
+
+
+/* Algorithmes */
+.clickable.algo::before {
+    display: none;
+}
+
+.algo ul {
+    list-style-type: none;
+}
+
+.algo li {
+    color: var(--texte-lofi);
+}
+
+.algo li:hover {
+    color: var(--matrix-vert);
+}
+.algo li:hover::before {
+    content: '';
+    position: absolute;
+    transform: translateX(-150%) translateY(100%);
+    width: .5em;
+    height: .5em;
+    border-radius: 50%;
+    background-color: var(--matrix-vert);
+    animation: clignotte .9s ease-in-out infinite;
+}
+
+/* focus le premier */
+.algo:hover summary{
+    color: var(--matrix-vert);
+}
+
+.algo:has(li:hover):hover summary{
+    color: var(--texte-lofi);
 }
