@@ -115,12 +115,14 @@ void joue(plateau & G, action & a, int & level, int & score, int & interval, sf:
         for (int i = 0; i < a.rot; ++i) {
 		tourner(G, true);
 	}
-	if ((LARGEUR - a.depla) < 5) {
-		for (int j = 0; j < 5-(LARGEUR - a.depla); ++j) {
+    int colactuel = 4;
+    int sens = a.depla - colactuel;
+	if (sens > 0) {
+		for (int j = 0; j < sens; ++j) {
 			deplacer(G.gr, 'D');
 		}
-	} else if ((LARGEUR - a.depla) > 5) {
-		for (int k = 0; k < 5-(LARGEUR - a.depla); ++k) {
+	} else if (sens < 0) {
+		for (int k = 0; k < -sens; ++k) {
 			deplacer(G.gr, 'G');
 		}
 	}
