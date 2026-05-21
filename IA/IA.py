@@ -297,6 +297,7 @@ def client():
         if msg == "GO":
             piece, grid = lire_grille()
             print("PIECE :", piece)
+            print("GRILLE :", grid)
             if piece not in TETROMINOS:
                 print("piece invalide :", piece)
                 s.send(b"OK\n")
