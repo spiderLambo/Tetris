@@ -14,15 +14,10 @@ function apparait(element) {
     (n) => n.nodeType === Node.TEXT_NODE,
   );
 
-  const texte = textNode.textContent.trim();
+  const texte = textNode.textContent;
   for (let i = 0; i <= texte.length; i++) {
     setTimeout(() => {
       textNode.textContent = texte.slice(0, i) + randomchar(texte.length - i);
     }, i * 50);
   }
 }
-
-document.querySelectorAll("li:not(:has(*)), summary, a").forEach((el) => {
-  console.log(el);
-  apparait(el);
-});
