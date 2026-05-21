@@ -11,6 +11,10 @@ body {
     color: var(--texte-lofi);
 }
 
+*:not(li) {
+    overflow: auto;
+}
+
 /* SCANLINES */
 body::after {
   content: '';
@@ -56,16 +60,68 @@ section {
     gap: 5vh;
 }
 
-section > section {
+#installation {
+    display: block;
+}
+
+/* Cartes */
+.carte {
     background-color: var(--eleve);
+    height: 100%; 
+    perspective-origin: 50% 50%;
+    perspective: 800px;
+    transition: all 120ms ease;
+}
+.carte:hover {
+    box-shadow: 0 0 6px 2px var(--overlay);
+}
+
+section:has(.carte) {
+    perspective: 800px;
+    perspective-origin: 50% 50%;
+    overflow: hidden;
+}
+
+/* Tableau */
+table {
+    border-collapse: collapse;
+    width: 95%;
+}
+tr {
+    display: flex;
+    justify-content: space-evenly;
+}
+thead {
+    border-bottom: 2px solid var(--overlay);
+    background-color: var(--surface);
+}
+td {
+    text-align: center;
 }
 
 
 
+/* Autre */
+ul {
+    list-style-type: disc;
+}
+ul ul {
+    list-style-type: disc;
+}
+
+span {
+    color: var(--tv-bleu);
+}
+
+a {
+    text-decoration: line-through;
+    color: var(--texte-desactive);
+}
+
 /* Fleche retour */
 
 main > a {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     animation: clignotte 1s ease-in-out infinite;
