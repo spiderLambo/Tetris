@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sujet</title>
-    <link rel="stylesheet" href="sujet.css">
+    <link rel="stylesheet" type="text/css" href="sujet.css">
 </head>
 <body>
     <main>
@@ -12,9 +12,100 @@
         <section>
             <h1>Description du Sujet</h1>
             <p>
-                Voir le <a href="../sujet_tetris_concretisation.pdf">Sujet</a> <br>
-                Le sujet ici consiste 
+                Voir le <a href="../sujet_tetris_concretisation.pdf">Sujet</a>
             </p>
+
+            <section>
+                <p>
+                    Le sujet de concrétisation se découpe en deux objectifs :
+                </p>
+                <ul>
+                    <li>Créer une version jouable du jeu tetris respectant les spécifications décrites ci dessous</li>
+                    <li>Implémenter un robot capable d'atteindre le meilleur score possible</li>
+                </ul>
+            </section>
+
+
+            <section>
+                <h2>Présentation du jeu</h2>
+                <p>
+                    Le jeu se déroule sur une grille rectangulaire de taille 10 de large par 20 de haut dans laquelle
+                    tombent un par un des <a href="https://en.wikipedia.org/wiki/Tetromino">tetrimonos</a>. Pendant qu'un tetrimono tombe, le joueur a 4 actions possibles :
+                </p>
+                <ul>
+                    <li>Déplacer latéralement le tetrimono vers la droite ou la gauche</li>
+                    <li>Pivoter le tetrimono sur elle-même de 90°</li>
+                    <li>
+                        Lâcher le tetrimono, c'est à dire le balancer instantanément le plus bas possible en
+                        respectant les règles habituelles de collisions décrites plus bas
+                    </li>
+                    <li>
+                        Réserver le tetrimono, c'est à dire le mettre de côté selon les règles suivantes :
+                        <ul>
+                            <li>un seul tetrimono peut être réservée à la fois.</li>
+                            <li>
+                                lorsque le joueur veut réserver un autre tetrimono, il sera échangé avec l'ancien
+                                tetrimono réservé qui ne pourra plus l'être
+                            </li>
+                            <li>le tetrimono réservé est affiché sur le côté et conserve sa rotation</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>
+                    Le tetrimono tombe continuellement par accoups réguliers de durée <span>interval</span>ms jusqu'à ce
+                    qu'il aie un autre tetrimono directement en dessous de lui. Il reste alors 500ms au joueur pour
+                    l'ajuster (ou le deplacer latéralement au dessus du vide pour qu'il recommence à tomber) puis
+                    s'immobilise. Une fois immobilisé, le jeu vérifie si des lignes sont complétées (c'est à dire avec 10
+                    carrés) et supprime ces éventuelles lignes remplies, puis génère un nouveau tetrimono en haut
+                    au milieu de la grille. Le jeu affiche par ailleurs en permanance le prochaine tetrimono qui sera
+                    générée.
+                </p>
+            </section>
+
+            <section>
+                <h2>Calcul du score</h2>
+                <p>
+                    Lorsqu'une ou plusieurs lignes sont supprimées, le joueur gagne un certain nombre de points,
+                    décrits par le tableau ci dessous :
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>1 ligne</th>
+                            <th>2 ligne</th>
+                            <th>3 ligne</th>
+                            <th>Tetris (4 lignes)</th>
+                            <th>Combo bonus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>100x<span>level</span></td>
+                            <td>300x<span>level</span></td>
+                            <td>500x<span>level</span></td>
+                            <td>800x<span>level</span></td>
+                            <td>50x<span>combo_count</span>x<span>level</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li>
+                        <span>level</span> : niveau courant du jeu, commence à 0 et augmente de 1 toutes les 10 lignes
+                        complétées, determine aussi la vitesse des tetrimonos selon la formule suivante :
+                        <ul>
+                            <li>Si <span>level</span> = 0, <span>interval</span> = 1000</li>
+                            <li>Si <span>level</span> &lt; 15, <span>interval</span> = 0.75x<span>interval</span></li>
+                            <li>Sinon, <span>interval</span> = 0.9x<span>interval</span></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span>combo_count</span> : le nombre de tetrimonos consécutifs qui ont commplété des lignes à
+                        partir de la deuxième.
+                    </li>
+                </ul>
+            </section>
+
+
         </section>
         <section>
             <h1>Installation</h1>

@@ -57,10 +57,10 @@ section * {
 }
 
 /* Retournement */
-section:hover {
+.retourne {
     transform: rotateY(0deg);
 }
-section:hover * {
+.retourne * {
     visibility: visible;
 }
 

@@ -8,6 +8,7 @@ body {
     font-family: var(--font-space-mono);
     overflow-x: hidden;
     height: 100vh;
+    color: var(--texte-lofi);
 }
 
 /* SCANLINES */
@@ -28,10 +29,37 @@ body::after {
   );
 }
 
-
-p {
-    text-align: center;
+main {
+    margin-top: 5vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5vh;
+    position: relative;
 }
+
+section {
+    width: 80%;
+    position: relative;
+    margin-bottom: 2vh;
+    /* Effet de carte */
+    border-left: 2px solid var(--overlay);
+    padding: 2rem;
+    background-color: var(--surface);
+    transition: all .4s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5vh;
+}
+
+section > section {
+    background-color: var(--eleve);
+}
+
 
 
 /* Fleche retour */

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,12 +28,14 @@
     <script src="animationAppatition.js"></script>
     <script>
         document.querySelectorAll("section").forEach((el) => {
-            el.addEventListener("mouseover", () => {
+            el.addEventListener("mouseenter", () => {
                 el.querySelectorAll("*, *:before, *:after").forEach((enf) => {
-                    apparait(enf);
-                })
-            }, {once: true})
-        })
+                apparait(enf);
+                });
+                el.className = "retourne";
+            }, { once: true });
+            console.log(el)
+        });
     </script>
 </body>
 </html>

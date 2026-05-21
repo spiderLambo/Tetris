@@ -13,7 +13,7 @@ function apparait(element) {
   const textNode = [...element.childNodes].find(
     (n) => n.nodeType === Node.TEXT_NODE,
   );
-
+  if (!textNode || !textNode.textContent.trim()) return;
   const texte = textNode.textContent;
   for (let i = 0; i <= texte.length; i++) {
     setTimeout(() => {

@@ -18,7 +18,7 @@ robot: grille serveur
 
 
 # Menu
-Menu: menu
+Menu: menu player
 	g++ menu.o -o Tetris $(SFML_LIBS)
 
 
