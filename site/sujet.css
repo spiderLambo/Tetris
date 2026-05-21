@@ -1,0 +1,50 @@
+@import "charte.css";
+@import "animations.css";
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--base);
+    font-family: var(--font-space-mono);
+    overflow-x: hidden;
+    height: 100vh;
+}
+
+/* SCANLINES */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,0,110,.04)  0px,
+    rgba(255,0,110,.04)  1px,
+    rgba(0,180,216,.04)  1px,
+    rgba(0,180,216,.04)  2px,
+    transparent          2px,
+    transparent          4px
+  );
+}
+
+
+p {
+    text-align: center;
+}
+
+
+/* Fleche retour */
+
+main > a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: clignotte 1s ease-in-out infinite;
+}
+
+main > a svg {
+    fill: var(--eleve);
+    height: 20vh;
+    aspect-ratio: 1;
+}

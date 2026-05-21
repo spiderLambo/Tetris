@@ -80,7 +80,7 @@ h1::before,
 h1::after,
 h2::before,
 h2::after {
-  content: attr(contenu);
+  content: attr(title);
   position: absolute;
   top: 0; left: 0;
   width: 100%;
