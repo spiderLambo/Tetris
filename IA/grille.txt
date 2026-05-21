@@ -1,20 +1,20 @@
-T          
-    CCC   
-     C    
+I          
+   CCCC   
           
-   P      
-  PPP     
-  PPPP    
-     P    
-     PPP  
-     P P  
-P    P PP 
-P PP PPPP 
-P PPPPPPP 
-P PPPPPPPP
+P     P  P
+P    PP PP
+PP  P P PP
+P   P PPPP
+P   PPPPPP
+PPPPP PPPP
+PPPPP PPP 
+PPPPPP PP 
+PPPPPP PP 
 PP PPPPPPP
-PP PPPPPPP
-PPPPPPP PP
-PPPPPPPPP 
-PPPPPPP PP
+PP PPP P P
+PPPPPPP  P
 PPPPPPPP P
+PPPP PP PP
+PPPP PP PP
+PPP PPPPPP
+PPP PPPPP 

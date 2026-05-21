@@ -8,16 +8,6 @@
 #include <arpa/inet.h>
 
 
-// Affiche du texte
-void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y) {
-    sf::Font font;
-    if (font.openFromFile(police)) {
-        sf::Text text(font, texte, 25);
-        text.setPosition({x, y});
-        f.draw(text);
-    }
-}
-
 void initRect (regctangle & rec, float taillex, float tailley, float x, float y, sf::Color fond, sf::Color outline) {
     rec.setSize({taillex, tailley});
     rec.setPosition({x, y});
@@ -25,187 +15,6 @@ void initRect (regctangle & rec, float taillex, float tailley, float x, float y,
     rec.setOutlineColor(outline);
     rec.setOutlineThickness(10);
 }
-
-// Afficher le sivant
-void afficherNext (sf::RenderWindow & f, char next) {
-    // Texte du "suivant"
-    afficherTexte(f, "Suivant : ", "./font/chomsky/Chomsky.woff", 300, 100);
-
-
-    // 4 Rectangles pour les carrés qui constituent le tetromino
-    regctangle r1;
-    regctangle r2;
-    regctangle r3;
-    regctangle r4;
-
-
-    // En fonction du suivant on initialise différamment
-    if (next == 'I') {
-        initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(0, 245, 255));
-        initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(0, 245, 255));
-        initRect(r3, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(0, 245, 255));
-        initRect(r4, 15, 15, 425, 175, sf::Color::Transparent, sf::Color(0, 245, 255));
-    } else if (next == 'O') {
-        initRect(r1, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(255, 0, 128));
-        initRect(r2, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(255, 0, 128));
-        initRect(r3, 15, 15, 375, 200, sf::Color::Transparent, sf::Color(255, 0, 128));
-        initRect(r4, 15, 15, 400, 200, sf::Color::Transparent, sf::Color(255, 0, 128));
-    } else if (next == 'T') {
-        initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r3, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r4, 15, 15, 375, 200, sf::Color::Transparent, sf::Color(123, 47, 255));
-    } else if (next == 'L') {
-        initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r3, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r4, 15, 15, 350, 200, sf::Color::Transparent, sf::Color(57, 255, 20));
-    } else if (next == 'J') {
-        initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(255, 230, 0));
-        initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(255, 230, 0));
-        initRect(r3, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(255, 230, 0));
-        initRect(r4, 15, 15, 400, 200, sf::Color::Transparent, sf::Color(255, 230, 0));
-    } else if (next == 'Z') {
-        initRect(r1, 15, 15, 350, 175, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r2, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r3, 15, 15, 375, 200, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r4, 15, 15, 400, 200, sf::Color::Transparent, sf::Color(255, 106, 0));
-    } else if (next == 'S') {
-        initRect(r1, 15, 15, 375, 175, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r2, 15, 15, 400, 175, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r3, 15, 15, 350, 200, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r4, 15, 15, 375, 200, sf::Color::Transparent, sf::Color(255, 106, 0));
-    }
-
-    // Dessine les carrés
-    f.draw(r1);
-    f.draw(r2);
-    f.draw(r3);
-    f.draw(r4);
-}
-
-
-// Affiche la réserve
-void afficherReserve (sf::RenderWindow & f, char reserve, int rotations) {
-    // Affiche le texte "Reserve"
-    afficherTexte(f, "Reserve : ", "./font/chomsky/Chomsky.woff", 300, 250);
-
-    // 4 Rectangles pour les carrés qui constituent le tetromino
-    regctangle r1;
-    regctangle r2;
-    regctangle r3;
-    regctangle r4;
-
-
-    // En fonction du réservé et de la rotation
-    // on initialise différamment
-    if (reserve == 'I' and (rotations == 0 or rotations == 2)) {
-        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
-        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
-        initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
-        initRect(r4, 15, 15, 425, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
-    } else if (reserve == 'I' and (rotations == 1 or rotations == 3)) {
-        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(0, 245, 255));
-        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(0, 245, 255));
-        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(0, 245, 255));
-        initRect(r4, 15, 15, 375, 400, sf::Color::Transparent, sf::Color(0, 245, 255));
-    } else if (reserve == 'O') {
-        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 0, 128));
-        initRect(r2, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(255, 0, 128));
-        initRect(r3, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 0, 128));
-        initRect(r4, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(255, 0, 128));
-    } else if (reserve == 'T'  and rotations == 0) {
-        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
-    } else if (reserve == 'T'  and rotations == 1) {
-        initRect(r1, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
-    } else if (reserve == 'T'  and rotations == 2) {
-        initRect(r1, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r3, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r4, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
-    } else if (reserve == 'T'  and rotations == 3) {
-        initRect(r1, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(123, 47, 255));
-        initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(123, 47, 255));
-    } else if (reserve == 'L' and rotations == 0) {
-        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r4, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-    } else if (reserve == 'L' and rotations == 1) {
-        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r4, 15, 15, 400, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
-    } else if (reserve == 'L' and rotations == 2) {
-        initRect(r1, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r3, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r4, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
-    } else if (reserve == 'L' and rotations == 3) {
-        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r4, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
-    } else if (reserve == 'J' and rotations == 0) {
-        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(255, 230, 0));
-        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 230, 0));
-        initRect(r3, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(255, 230, 0));
-        initRect(r4, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(255, 230, 0));
-    } else if (reserve == 'J' and rotations == 1) {
-        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r4, 15, 15, 350, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
-    } else if (reserve == 'J' and rotations == 2) {
-        initRect(r1, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r3, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r4, 15, 15, 400, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
-    } else if (reserve == 'J' and rotations == 3) {
-        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r2, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r3, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(57, 255, 20));
-        initRect(r4, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(57, 255, 20));
-    } else if (reserve == 'Z' and (rotations == 0 or rotations == 2)) {
-        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r3, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r4, 15, 15, 400, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
-    }  else if (reserve == 'Z' and (rotations == 1 or rotations == 3)) {
-        initRect(r1, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r2, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r3, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r4, 15, 15, 350, 375, sf::Color::Transparent, sf::Color(255, 106, 0));
-    } else if (reserve == 'S' and (rotations == 0 or rotations == 2)) {
-        initRect(r1, 15, 15, 375, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r2, 15, 15, 400, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r3, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
-    } else if (reserve == 'S' and (rotations == 1 or rotations == 3)) {
-        initRect(r1, 15, 15, 350, 325, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r2, 15, 15, 375, 375, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r3, 15, 15, 350, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
-        initRect(r4, 15, 15, 375, 350, sf::Color::Transparent, sf::Color(255, 106, 0));
-    }
-
-    // Dessine les carrés
-    f.draw(r1);
-    f.draw(r2);
-    f.draw(r3);
-    f.draw(r4);
-}
-
-
-
-
 
 // Afficher la grille
 void dessinerGrille (sf::RenderWindow & f, plateau G) {
@@ -227,12 +36,6 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
             }
         }
     }
-
-    // Afficher le next
-    afficherNext(f, G.next);
-
-    // Afficher la reserve
-    afficherReserve(f, G.reserve, G.nbRotationsReserve);
 
     // Afficher les tetrominos
     for (int i = 0; i<HAUTEUR; ++i) {
@@ -330,9 +133,6 @@ void joue(plateau & G, action & a, int & level, int & score, int & interval, sf:
 	do {
 		maintenant = std::chrono::system_clock::now();
 		f.clear(sf::Color(19,19,31));
-			afficherTexte(f, "Level : " + std::to_string(level), "./font/chomsky/Chomsky.woff", 300, 20);
-	        afficherTexte(f, "Score : " + std::to_string(score), "./font/chomsky/Chomsky.woff", 300, 60);
-
         	dessinerGrille(f, G);
         	f.display();
 	} while (maintenant < fin);
@@ -367,8 +167,6 @@ void joue(plateau & G, action & a, int & level, int & score, int & interval, sf:
         }
 
 		f.clear(sf::Color(19,19,31));
-        afficherTexte(f, "Level : " + std::to_string(level), "./font/chomsky/Chomsky.woff", 300, 20);
-        afficherTexte(f, "Score : " + std::to_string(score), "./font/chomsky/Chomsky.woff", 300, 60);
         dessinerGrille(f, G);
         f.display();
     }
@@ -403,6 +201,8 @@ int run(plateau & P, int & level, int & score, int & interval, sf::RenderWindow 
 	}
 
     	std::cout << "[SERVEUR]: en attente de connexion..." << std::endl;
+
+	system("python3 IA/IA.py &");
 
 	socklen_t size = sizeof(cliaddr);
 	clifd = accept(servfd, (struct sockaddr *)&cliaddr, &size);
@@ -446,6 +246,7 @@ int main() {
 	sf::RenderWindow fenetre(sf::VideoMode({500, 510}), "Tetris");
     	fenetre.setFramerateLimit(24);
 
+	std::srand(std::time(0));
 	plateau P;
 	initGrille(P.gr);
 	std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
