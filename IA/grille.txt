@@ -1,20 +1,22 @@
-I          
-   CCCC   
-      P   
-     PP   
-  PPP P P 
-  PPP P PP
-  PPPPP PP
- PPPP P PP
- PPPP PPPP
-PPPPPPPP P
-PP PPPPP P
-PPPP PPP P
-PPPP PPPPP
-PPPPPPP  P
-PPP PPP  P
-PPPPPPPP P
+T
+I
+          
+    CCC   
+     C    
+          
+          
+          
+        P 
+   PPPPPP 
+ P PPPPPPP
+ P P PPPP 
+PPPPPP PPP
+PP P P PPP
+PPPP P P P
+ PPPPPP  P
  PPPPPPPPP
- PPPP PPP 
-PPPPP PP  
-PPPPPPPP  
+PPPP PPPPP
+ PPPPPPPP 
+PP PPPPPPP
+PPPPPPP PP
+PPPPPPPPP 

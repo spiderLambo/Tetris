@@ -7,6 +7,14 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, float x, float y) {
+    sf::Font font;
+    if (font.openFromFile(police)) {
+        sf::Text text(font, texte, 25);
+        text.setPosition({x, y});
+        f.draw(text);
+    }
+}
 
 void initRect (regctangle & rec, float taillex, float tailley, float x, float y, sf::Color fond, sf::Color outline) {
     rec.setSize({taillex, tailley});
@@ -16,15 +24,12 @@ void initRect (regctangle & rec, float taillex, float tailley, float x, float y,
     rec.setOutlineThickness(10);
 }
 
-// Afficher la grille
 void dessinerGrille (sf::RenderWindow & f, plateau G) {
     regctangle grilleRegctangle;
 
-    // Afficher la grille
     initRect(grilleRegctangle, 240, 490, 10, 10, sf::Color(28,28,46), sf::Color(64,64,96));
     f.draw(grilleRegctangle);
 
-    // Afficher les lignes pour guider le joueur
     for (int i = 1; i<LARGEUR; ++i) {
         for (int j = 1; j<HAUTEUR; ++j) {
             if (G.gr[j][i] == 'C' or G.gr[j][i-1] == 'C') {
@@ -37,7 +42,6 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
         }
     }
 
-    // Afficher les tetrominos
     for (int i = 0; i<HAUTEUR; ++i) {
         for (int j = 0; j<LARGEUR; ++j) {
             if (G.gr[i][j] != ' ') {
@@ -50,30 +54,33 @@ void dessinerGrille (sf::RenderWindow & f, plateau G) {
 }
 
 
-void ecrire (std::string & title, grille & g) {
+void ecrire (std::string & title, plateau & P) {
 	std::ofstream fic;
 	fic.open(title);
 	if (fic.is_open()) {
-		if ((g[1][3] == 'C') and (g[1][4] == 'C') and (g[1][5] == 'C') and (g[1][6] == 'C')) {
+		if ((P.gr[1][3] == 'C') and (P.gr[1][4] == 'C') and (P.gr[1][5] == 'C') and (P.gr[1][6] == 'C')) {
 			fic << 'I';
-		} else if ((g[1][4] == 'C') and (g[1][5] == 'C') and (g[2][4] == 'C') and (g[2][5] == 'C')) {
+		} else if ((P.gr[1][4] == 'C') and (P.gr[1][5] == 'C') and (P.gr[2][4] == 'C') and (P.gr[2][5] == 'C')) {
 			fic << 'O';
-		} else if ((g[1][4] == 'C') and (g[1][5] == 'C') and (g[1][6] == 'C') and (g[2][5] == 'C')) {
+		} else if ((P.gr[1][4] == 'C') and (P.gr[1][5] == 'C') and (P.gr[1][6] == 'C') and (P.gr[2][5] == 'C')) {
 			fic << 'T';
-		} else if ((g[1][4] == 'C') and (g[1][5] == 'C') and (g[1][6] == 'C') and (g[2][4] == 'C')) {
+		} else if ((P.gr[1][4] == 'C') and (P.gr[1][5] == 'C') and (P.gr[1][6] == 'C') and (P.gr[2][4] == 'C')) {
 			fic << 'L';
-		} else if ((g[1][4] == 'C') and (g[1][5] == 'C') and (g[1][6] == 'C') and (g[2][6] == 'C')) {
+		} else if ((P.gr[1][4] == 'C') and (P.gr[1][5] == 'C') and (P.gr[1][6] == 'C') and (P.gr[2][6] == 'C')) {
 			fic << 'J';
-		} else if ((g[1][4] == 'C') and (g[1][5] == 'C') and (g[2][5] == 'C') and (g[2][6] == 'C')) {
+		} else if ((P.gr[1][4] == 'C') and (P.gr[1][5] == 'C') and (P.gr[2][5] == 'C') and (P.gr[2][6] == 'C')) {
 			fic << 'Z';
-		} else if ((g[1][5] == 'C') and (g[1][6] == 'C') and (g[2][4] == 'C') and (g[2][5] == 'C')) {
+		} else if ((P.gr[1][5] == 'C') and (P.gr[1][6] == 'C') and (P.gr[2][4] == 'C') and (P.gr[2][5] == 'C')) {
 			fic << 'S';
 		} else {
 			std::cout << "[!]> Courant non détecter" << std::endl;
 		}
+		fic << "\n";
+		fic << P.next;
+		fic << "\n";
 		for (int i = 0; i < HAUTEUR; ++i) {
 			for (int j = 0; j < LARGEUR; ++j) {
-				fic << g[i][j];
+				fic << P.gr[i][j];
 			}
 			fic << "\n";
 		}
@@ -132,6 +139,8 @@ void joue(plateau & G, action & a, int & level, int & score, int & interval, sf:
 	do {
 		maintenant = std::chrono::system_clock::now();
 		f.clear(sf::Color(19,19,31));
+		afficherTexte(f, "Level : " + std::to_string(level), "../font/chomsky/Chomsky.woff", 300, 20);
+        	afficherTexte(f, "Score : " + std::to_string(score), "../font/chomsky/Chomsky.woff", 300, 60);
         	dessinerGrille(f, G);
         	f.display();
 	} while (maintenant < fin);
@@ -213,7 +222,7 @@ int run(plateau & P, int & level, int & score, int & interval, sf::RenderWindow 
     	std::cout << "[SERVEUR]: client connecté" << std::endl;
 
 	while (f.isOpen()) {
-		ecrire(ficgrille, P.gr);
+		ecrire(ficgrille, P);
         	const char* msg = "GO\n";
 		int envoyer = send(clifd, msg, strlen(msg), 0);
 		if (envoyer == -1) {
