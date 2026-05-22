@@ -44,7 +44,7 @@ main {
     position: relative;
 }
 
-section {
+section, .carte {
     width: 80%;
     position: relative;
     margin-bottom: 2vh;

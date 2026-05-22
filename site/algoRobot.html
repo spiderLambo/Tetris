@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <main>
+        <section>
+            <h1>Robot</h1>
+            <p>Pour le robot, nous nous sommes aidés de cet <a href="https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/" target="_blank">article</a></p>
+        </section>
+
+        <section>
+            <h2>Principe</h2>
+            <p>
+                A chaque coup le robot va regarder le courant, le suivant et la réserve, et avec il va simuler toutes
+                les positions possibles avec ces pièces. <br>
+                Puis pour chaque positions, il va attribuer un score à la grille, et va faire celle correspondant au 
+                meilleur score.
+            </p>
+        </section>
+
+        <section>
+            <h2>Calcul du score</h2>
+            <p>
+                Pour calculer le score, nous nous référons à l'<a href="https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/" target="_blank">article</a> <br>
+                On regarde 4 valeurs : la hauteur, les lignes, les trous et les bosses.
+            </p>
+            <div>
+                <h3>La hauteur</h3>
+                <p>
+                    Pour calculer cette valeur, on somme la distance de la tuile la plus haute dans chaque
+                    colonne au bas de la grille, comme dans l'exemple : <br>
+                    <img src="images/hauteur.png" alt="Hauteur"> <br>
+                    Ici hauteur vaut 48 = 3 + 5 + ... + 4 + 5. <br>
+                    On cherchera donc a minimiser cette valeur.
+                </p>
+            </div>
+            <div>
+                <h3>Les lignes</h3>
+                <p>
+                    Pour calculer cette valeur, on somme le nombre de lignes complètes, comme dans l'exemple : <br>
+                    <img src="images/lignes.png" alt="Lignes"> <br>
+                    Ici lignes vaut 2. <br>
+                    On cherchera donc a maximiser cette valeur.
+                </p>
+            </div>
+            <div>
+                <h3>Les trous</h3>
+                <p>
+                    Pour calculer cette valeur, on somme le nombre d'espace vide dans la grille, comme dans l'exemple : <br>
+                    <img src="images/trous.png" alt="Trous"> <br>
+                    Ici trous vaut 2. <br>
+                    On cherchera donc a minimiser cette valeur.
+                </p>
+            </div>
+            <div>
+                <h3>Les bosses</h3>
+                <p>
+                    <img src="images/bump.png" alt="Les bosses"> <br>
+                    Ici la présence de ces puits indique que les lignes qui peuvent être dégagées facilement ne sont pas dégagées, ce qu'on veux donc éviter. <br>
+                    Pour calculer cette valeur, on somme les différences absolues entre les deux colonnes adjacentes comme dans l'exemple : <br>
+                    <img src="images/hauteur.png" alt="Les bosses"> <br>
+                    Ici bosses vaut 6 = |3-5|+|5-5|+...+|4-4|+|4-5| <br>
+                    On cherchera donc a minimiser cette valeur.
+                </p>
+            </div>
+
+            <p>
+                Ainsi pour calculer le score, on fais donc a*hauteur+b*lignes+c*trous+d*bosses, où a, b, c, et d, sont des constantes. <br>
+                Grâce à l'<a href="https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/" target="_blank">article</a> nous
+                avons accès au valeurs optimales trouvés grâce à un algorithme génétique que nous avons fais. Cepandant pour une meilleur fiabilité, nous avons 
+                décidés d'utiliser les valeurs de l'<a href="https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/" target="_blank">article</a>. <br>
+                Les valeurs sont donc :
+            </p>
+            <ul>
+                <li>a = -0.510066</li>
+                <li>b = 0.760666</li>
+                <li>c = -0.35663</li>
+                <li>d = -0.184483</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Implémentation</h2>
+
+            <p>
+                Pour implémenter ce robot, nous le fesons en python. <br>
+                Le code c++ ouvre un serveur et communique à chaque frame avec le script python par l'intemédiare des fichiers textes. <br>
+                Chaque script lit ce qui est ecrit dans coups.txt/grille.txt et écrit dans l'autre fichier. <br>
+                En suite on applique ce qui a été décrit précédamment.
+            </p>
+        </section>
+    </main>
+</body>
+</html>
