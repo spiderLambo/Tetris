@@ -3,9 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tetris</title>
 </head>
 <body>
-    
+    <main>
+        <a href="Accueil.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M22.0003 12.9999L22.0004 11L8.41421 11V5.58582L2 12L8.41421 18.4142L8.41421 13L22.0003 12.9999Z"></path></svg></a>
+
+        <h1>Tetris</h1>
+
+        <section>
+            <h2>Principe</h2>
+            <p>
+                Pour représenter la grille de jeu nous fesons une liste de liste de caracrères. <br>
+                Il y a 3 caracrères possibles: 
+            </p>
+            <ul>
+                <li>'&nbsp;&nbsp;' pour un emplacement vide</li>
+                <li>'P' pour un tetromino déjà placé</li>
+                <li>'C' pour le tetromino courant</li>
+            </ul>
+            <p>
+                Puis on défini un enregistrement qui contient notre grille, des informations sur le prochain, le courant et sur la réserve. <br>
+            </p>
+        </section>
+
+        <section>
+            <h2>Terominos</h2>
+            <p>
+                Les tetrominos sont associés à des lettres : <br>
+                <img src="images/Tetrominos.png" alt="Tetrominos"> <br>
+                Grâce à ça on peux facilement génerer le courant a partir d'une lettre. <br>
+                Pour tourner les tetrominos on vérifie au cas par cas en fonction du tétromino que le courant forme. <br>
+                Pour déplacer le courant, on déplace les 'C'. <br>
+                On rajoute également une procédures pour placer le courant. <br>
+                Une fonction pour verifier si le courant dois arrêter de descendre. <br>
+                Une procédure pour supprimer une ligne. <br>
+                Une fonction pour verifier si le jeu dois s'arrêter. <br>
+                Et une procédure pour réserver le courant
+            </p>
+        </section>
+
+        <section>
+            <h2>Jeu</h2>
+            <p>
+                Pour afficher le jeu on utilise <a href="https://www.sfml-dev.org/fr/">SFML</a>. On commence par 
+                définir des procédures pour dessiner l'etat du plateau. <br>
+            </p>
+            <h3>Le code se présente donc de la manière suivante :</h3>
+            <ol>
+                <li>Tant que le jeu n'est pas fini</li>
+                <li>
+                    <ol>
+                        <li>Tant que l'interval de temps n'est pas écoulé, on regarde les entrées et on affiche la grille</li>
+                        <li>Puis on vérifie si le courant touche le sol</li>
+                        <li>Puis on vérifie si le jeu dois s'arrêter</li>
+                        <li>Et on affiche la grille</li>
+                    </ol>
+                </li>
+                <li>On calcule le score, le niveau et l'interval de temps pour que le courant descende</li>
+            </ol>
+        </section>
+    </main>
 </body>
 </html>

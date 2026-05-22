@@ -264,7 +264,7 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
     // Renvoie maintenant
     std::chrono::time_point<std::chrono::system_clock> maintenant;
 
-    // Vérifie si on a arrêté la bouble manuellement
+    // Vérifie si on a arrêté la boucle manuellement
     bool stop = false;
 
     do {
@@ -286,7 +286,7 @@ void jouer(plateau & G, int level, int score, int & interval, sf::RenderWindow &
                         genereTetromino(G);
                         peuxReserver = true;
                         stop = true;
-                // Toune à gauche
+                // Tourne à gauche
                 } else if (keyPressed->code == sf::Keyboard::Key::Up) tourner(G, true);
                 // Tourne à droite
                 else if (keyPressed->code == sf::Keyboard::Key::Down) tourner(G, false);
