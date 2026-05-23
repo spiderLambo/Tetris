@@ -8,6 +8,11 @@ body {
     font-family: var(--font-space-mono);
     overflow-x: hidden;
     height: 100vh;
+    color: var(--texte-lofi);
+}
+
+*:not(li) {
+    overflow: auto;
 }
 
 /* SCANLINES */
@@ -28,11 +33,9 @@ body::after {
   );
 }
 
-
-/* Sections */
 main {
+    margin-top: 5vh;
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -41,82 +44,76 @@ main {
     position: relative;
 }
 
-section {
+section, .carte {
     width: 80%;
     position: relative;
+    margin-bottom: 2vh;
     /* Effet de carte */
     border-left: 2px solid var(--overlay);
-    padding: 1rem;
+    padding: 2rem;
     background-color: var(--surface);
-    transform: rotateY(180deg);
     transition: all .4s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5vh;
 }
 
-section * {
-    visibility: hidden;
+#installation {
+    display: block;
 }
 
-/* Retournement */
-.retourne {
-    transform: rotateY(0deg);
+/* Cartes */
+.carte {
+    background-color: var(--eleve);
+    height: 100%; 
+    perspective-origin: 50% 50%;
+    perspective: 800px;
+    transition: all 120ms ease;
 }
-.retourne * {
-    visibility: visible;
-}
-
-
-
-
-/* Titres */
-h1, h2 {
-    color: var(--vhs-violet);
-    position: relative;
-    font-size: 10vh;
-    margin: 0;
+.carte:hover {
+    box-shadow: 0 0 6px 2px var(--overlay);
 }
 
-/* Effet de glitch */
-h1::before,
-h1::after,
-h2::before,
-h2::after {
-  content: attr(title);
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
+section:has(.carte) {
+    perspective: 800px;
+    perspective-origin: 50% 50%;
+    overflow: hidden;
 }
 
-/* moitié haute */
-h1::before,
-h2::before {
-  color: var(--blue-tv);
-  clip-path: inset(0 0 40% 0); 
-  transform: translateX(3px);
+/* Tableau */
+table {
+    border-collapse: collapse;
+    width: 95%;
+}
+tr {
+    display: flex;
+    justify-content: space-evenly;
+}
+thead {
+    border-bottom: 2px solid var(--overlay);
+    background-color: var(--surface);
+}
+td {
+    text-align: center;
 }
 
- /* moitié basse */
-h1::after,
-h2::after {
-  color: var(--erreur-rose);
-  clip-path: inset(60% 0 0 0);
-  transform: translateX(-3px);
+
+
+/* Autre */
+ul {
+    list-style-type: disc;
+}
+ul ul {
+    list-style-type: disc;
 }
 
-/* Paragraphes */
-p {
-    font-size: 3vh;
-}
-
-h1 + p {
-    color: var(--texte-lofi);
-}
-
-h1 + p a {
-    text-decoration: none;
+span {
     color: var(--tv-bleu);
 }
 
-h2 + p {
+a {
     text-decoration: line-through;
     color: var(--texte-desactive);
 }
@@ -124,7 +121,7 @@ h2 + p {
 /* Fleche retour */
 
 main > a {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     animation: clignotte 1s ease-in-out infinite;

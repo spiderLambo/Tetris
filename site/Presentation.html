@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,20 +8,34 @@
 </head>
 <body>
     <main>
-            <section>
-                <h1>Présentation</h1>
-                <p>
-                    Projet réalisé par <a href="https://github.com/arhhhhh404" target="_blank">Martin Kerloch</a> et <a href="https://github.com/spiderLambo" target="_blank">Shaya Ben Mansour--Barreau</a>, étudiants en DLMI à l'Université d'Angers
-                </p>
-            </section>
+        <a href="Accueil.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M22.0003 12.9999L22.0004 11L8.41421 11V5.58582L2 12L8.41421 18.4142L8.41421 13L22.0003 12.9999Z"></path></svg></a>
+        <section>
+            <h1 title="Présentation">Présentation</h1>
+            <p>
+                Projet réalisé par <a href="https://github.com/arhhhhh404" target="_blank">Martin Kerloch</a> et <a href="https://github.com/spiderLambo" target="_blank">Shaya Ben Mansour--Barreau</a>, étudiants en DLMI à l'Université d'Angers
+            </p>
+        </section>
 
-            <section>
-                <h2>Nous contacter:</h2>
-                <p>
-                    shaya.benmansour-barreau@etud.univ-angers.fr<br>
-                    martin.kerloch@etud.univ-angers.fr
-                </p>
-            </section>
-        </main>
+        <section>
+            <h2 title="Nous contacter:">Nous contacter:</h2>
+            <p>
+                shaya.benmansour-barreau@etud.univ-angers.fr<br>
+                martin.kerloch@etud.univ-angers.fr
+            </p>
+        </section>
+    </main>
+
+    <script src="animationAppatition.js"></script>
+    <script>
+        document.querySelectorAll("section").forEach((el) => {
+            el.addEventListener("mouseenter", () => {
+                el.querySelectorAll("*, *:before, *:after").forEach((enf) => {
+                apparait(enf);
+                });
+                el.className = "retourne";
+            }, { once: true });
+            console.log(el)
+        });
+    </script>
 </body>
 </html>

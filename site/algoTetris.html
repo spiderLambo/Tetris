@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris</title>
+    <link rel="stylesheet" href="tetris.css">
+</head>
+<body>
+    <main>
+        <svg width="2503" height="1403" viewBox="0 0 2503 1403" fill="none" xmlns="http://www.w3.org/2000/svg" class="effet">
+            <path class="effet-2" stroke="#ff006e" stroke-width="1" stroke-width="4" fill="none" fill-rule="evenodd" stroke-linecap="butt" stroke-linejoin="round" fill="none" stroke-opacity="1" stroke-dasharray="50,20" stroke-dashoffset="3000" d="M31.5 340L30.0045 62.3347C30.0016 61.8006 30.2125 61.2875 30.5903 60.9097L91.5 0" stroke="#ff006e" stroke-width="2" />
+            <path class="effet-1" d="M2360 -0.5V203.172C2360 203.702 2360.21 204.211 2360.59 204.586L2487.41 331.414C2487.79 331.789 2488 332.298 2488 332.828V1377.5C2488 1378.6 2487.1 1379.5 2486 1379.5H1827.83C1827.3 1379.5 1826.79 1379.29 1826.41 1378.91L1794.59 1347.09C1794.21 1346.71 1793.7 1346.5 1793.17 1346.5H1507.33C1506.8 1346.5 1506.29 1346.71 1505.91 1347.09L1474.09 1378.91C1473.71 1379.29 1473.2 1379.5 1472.67 1379.5H552.328C551.798 1379.5 551.289 1379.71 550.914 1380.09L531.086 1399.91C530.711 1400.29 530.202 1400.5 529.672 1400.5H257.828C257.298 1400.5 256.789 1400.29 256.414 1399.91L236.586 1380.09C236.211 1379.71 235.702 1379.5 235.172 1379.5H19C17.8954 1379.5 17 1378.6 17 1377.5V576.828C17 576.298 17.2107 575.789 17.5858 575.414L40.4142 552.586C40.7893 552.211 41 551.702 41 551.172V350.328C41 349.798 40.7893 349.289 40.4142 348.914L17.5858 326.086C17.2107 325.711 17 325.202 17 324.672V54.3284C17 53.798 17.2107 53.2893 17.5858 52.9142L71 -0.5" stroke="#00ffff" stroke-width="2" />
+           <path class="effet-2" stroke="#ff006e" stroke-width="1" stroke-width="4" fill="none" fill-rule="evenodd" stroke-linecap="butt" stroke-linejoin="round" fill="none" stroke-opacity="1" stroke-dasharray="50,20" stroke-dashoffset="3000" d="M880.5 1380.5L863.086 1363.09C862.711 1362.71 862.202 1362.5 861.672 1362.5H546.828C546.298 1362.5 545.789 1362.71 545.414 1363.09L519.586 1388.91C519.211 1389.29 518.702 1389.5 518.172 1389.5H352.828C352.298 1389.5 351.789 1389.71 351.414 1390.09L340 1401.5M18 1309.5L1.58579 1293.09C1.21071 1292.71 1 1292.2 1 1291.67V971.328C1 970.798 1.21071 970.289 1.58579 969.914L18 953.5L30.9142 940.586C31.2893 940.211 31.5 939.702 31.5 939.172V564" stroke="#ff006e" stroke-width="2" />
+        </svg>
+
+
+        <a href="Accueil.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M22.0003 12.9999L22.0004 11L8.41421 11V5.58582L2 12L8.41421 18.4142L8.41421 13L22.0003 12.9999Z"></path></svg></a>
+
+        <h1>Tetris</h1>
+
+        <section>
+            <h2>Principe</h2>
+            <p>
+                Pour représenter la grille de jeu nous fesons une liste de liste de caracrères. <br>
+                Il y a 3 caracrères possibles: 
+            </p>
+            <ul>
+                <li>'&nbsp;' pour un emplacement vide</li>
+                <li>'P' pour un tetromino déjà placé</li>
+                <li>'C' pour le tetromino courant</li>
+            </ul>
+            <p>
+                Puis on défini un enregistrement qui contient notre grille, des informations sur le prochain, le courant et sur la réserve. <br>
+            </p>
+        </section>
+
+        <section>
+            <h2>Terominos</h2>
+            <p>
+                Les tetrominos sont associés à des lettres : <br> <br>
+                <img src="images/Tetrominos.png" alt="Tetrominos"> <br>
+                Grâce à ça on peux facilement génerer le courant a partir d'une lettre. <br>
+                Pour tourner les tetrominos on vérifie au cas par cas en fonction du tétromino que le courant forme. <br>
+                Pour déplacer le courant, on déplace les 'C'. <br>
+                On rajoute également une procédures pour placer le courant. <br>
+                Une fonction pour verifier si le courant dois arrêter de descendre. <br>
+                Une procédure pour supprimer une ligne. <br>
+                Une fonction pour verifier si le jeu dois s'arrêter. <br>
+                Et une procédure pour réserver le courant.
+            </p>
+        </section>
+
+        <section>
+            <h2>Jeu</h2>
+            <p>
+                Pour afficher le jeu on utilise <a href="https://www.sfml-dev.org/fr/" target="_blank">SFML</a>. On commence par 
+                définir des procédures pour dessiner l'etat du plateau. <br>
+            </p>
+            <h3>Le code se présente donc de la manière suivante :</h3>
+            <ol>
+                <li>Tant que le jeu n'est pas fini</li>
+                <li>
+                    <ol>
+                        <li>Tant que l'interval de temps n'est pas écoulé, on regarde les entrées et on affiche la grille</li>
+                        <li>Puis on vérifie si le courant touche le sol</li>
+                        <li>Puis on vérifie si le jeu dois s'arrêter</li>
+                        <li>Et on affiche la grille</li>
+                        <li>On calcule le score, le niveau et l'interval de temps pour que le courant descende</li>
+                    </ol>
+                </li>
+            </ol>
+        </section>
+    </main>
+
+    <script src="animationAppatition.js"></script>
+    <script>
+        document.querySelectorAll("h1, h2, a").forEach((el) => {
+                apparait(el);
+            });
+    </script>
+    <script>
+        document.querySelectorAll(".effet-1").forEach((path) => {
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+
+        let start = null;
+        const duration = 1000;
+
+        function animate(timestamp) {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / duration, 1);
+            path.style.strokeDashoffset = length * (1 - progress);
+            path.style.strokeOpacity = progress;
+            if (progress < 1) requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+        });
+        document.querySelectorAll(".effet-2").forEach((path) => {
+            path.style.strokeOpacity = 0;
+
+            setTimeout(() => {
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+
+        let start = null;
+        const duration = 1000;
+
+        function animate(timestamp) {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / duration, 1);
+            path.style.strokeDashoffset = length * (1 - progress);
+            path.style.strokeOpacity = progress;
+            if (progress < 1) requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+    },1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot</title>
+    <link rel="stylesheet" href="robot.css">
+</head>
+<body>
+    <main>
+        <svg width="2503" height="1403" viewBox="0 0 2503 1403" fill="none" xmlns="http://www.w3.org/2000/svg" class="effet">
+            <path class="effet-2" stroke="#ff006e" stroke-width="1" stroke-width="4" fill="none" fill-rule="evenodd" stroke-linecap="butt" stroke-linejoin="round" fill="none" stroke-opacity="1" stroke-dasharray="50,20" stroke-dashoffset="3000" d="M31.5 340L30.0045 62.3347C30.0016 61.8006 30.2125 61.2875 30.5903 60.9097L91.5 0" stroke="#ff006e" stroke-width="2" />
+            <path class="effet-1" d="M2360 -0.5V203.172C2360 203.702 2360.21 204.211 2360.59 204.586L2487.41 331.414C2487.79 331.789 2488 332.298 2488 332.828V1377.5C2488 1378.6 2487.1 1379.5 2486 1379.5H1827.83C1827.3 1379.5 1826.79 1379.29 1826.41 1378.91L1794.59 1347.09C1794.21 1346.71 1793.7 1346.5 1793.17 1346.5H1507.33C1506.8 1346.5 1506.29 1346.71 1505.91 1347.09L1474.09 1378.91C1473.71 1379.29 1473.2 1379.5 1472.67 1379.5H552.328C551.798 1379.5 551.289 1379.71 550.914 1380.09L531.086 1399.91C530.711 1400.29 530.202 1400.5 529.672 1400.5H257.828C257.298 1400.5 256.789 1400.29 256.414 1399.91L236.586 1380.09C236.211 1379.71 235.702 1379.5 235.172 1379.5H19C17.8954 1379.5 17 1378.6 17 1377.5V576.828C17 576.298 17.2107 575.789 17.5858 575.414L40.4142 552.586C40.7893 552.211 41 551.702 41 551.172V350.328C41 349.798 40.7893 349.289 40.4142 348.914L17.5858 326.086C17.2107 325.711 17 325.202 17 324.672V54.3284C17 53.798 17.2107 53.2893 17.5858 52.9142L71 -0.5" stroke="#00ffff" stroke-width="2" />
+           <path class="effet-2" stroke="#ff006e" stroke-width="1" stroke-width="4" fill="none" fill-rule="evenodd" stroke-linecap="butt" stroke-linejoin="round" fill="none" stroke-opacity="1" stroke-dasharray="50,20" stroke-dashoffset="3000" d="M880.5 1380.5L863.086 1363.09C862.711 1362.71 862.202 1362.5 861.672 1362.5H546.828C546.298 1362.5 545.789 1362.71 545.414 1363.09L519.586 1388.91C519.211 1389.29 518.702 1389.5 518.172 1389.5H352.828C352.298 1389.5 351.789 1389.71 351.414 1390.09L340 1401.5M18 1309.5L1.58579 1293.09C1.21071 1292.71 1 1292.2 1 1291.67V971.328C1 970.798 1.21071 970.289 1.58579 969.914L18 953.5L30.9142 940.586C31.2893 940.211 31.5 939.702 31.5 939.172V564" stroke="#ff006e" stroke-width="2" />
+        </svg>
+
+        <a href="Accueil.html"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M22.0003 12.9999L22.0004 11L8.41421 11V5.58582L2 12L8.41421 18.4142L8.41421 13L22.0003 12.9999Z"></path></svg></a>
+
+        <h1>Robot</h1>
+
+        <section>
+            <p>Pour le robot, nous nous sommes aidés de cet <a href="https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/" target="_blank">article</a></p>
+        </section>
+
+        <section>
+            <h2>Principe</h2>
+            <p>
+                A chaque coup le robot va regarder le courant, le suivant et la réserve, et avec il va simuler toutes
+                les positions possibles avec ces pièces. <br>
+                Puis pour chaque positions, il va attribuer un score à la grille, et va faire celle correspondant au 
+                meilleur score.
+            </p>
+        </section>
+
+        <section>
+            <h2>Calcul du score</h2>
+            <p>
+                Pour calculer le score, nous nous référons à l'<a href="https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/" target="_blank">article</a>. <br>
+                On regarde 4 valeurs : la hauteur, les lignes, les trous et les bosses.
+            </p>
+            <div>
+                <h3>La hauteur</h3>
+                <p>
+                    Pour calculer cette valeur, on somme la distance de la tuile la plus haute dans chaque
+                    colonne au bas de la grille, comme dans l'exemple : <br> <br>
+                    <img src="images/hauteur.png" alt="Hauteur"> <br>
+                    Ici hauteur vaut 48 = 3 + 5 + ... + 4 + 5. <br>
+                    On cherchera donc a minimiser cette valeur.
+                </p>
+            </div>
+            <div>
+                <h3>Les lignes</h3>
+                <p>
+                    Pour calculer cette valeur, on somme le nombre de lignes complètes, comme dans l'exemple : <br> <br>
+                    <img src="images/lignes.png" alt="Lignes"> <br>
+                    Ici lignes vaut 2. <br>
+                    On cherchera donc a maximiser cette valeur.
+                </p>
+            </div>
+            <div>
+                <h3>Les trous</h3>
+                <p>
+                    Pour calculer cette valeur, on somme le nombre d'espace vide dans la grille, comme dans l'exemple : <br> <br>
+                    <img src="images/trous.png" alt="Trous"> <br>
+                    Ici trous vaut 2. <br>
+                    On cherchera donc a minimiser cette valeur.
+                </p>
+            </div>
+            <div>
+                <h3>Les bosses</h3>
+                <p>
+                    <img src="images/bump.png" alt="Les bosses"> <br>
+                    Ici la présence de ces puits indique que les lignes qui peuvent être dégagées facilement ne sont pas dégagées, ce qu'on veux donc éviter. <br>
+                    Pour calculer cette valeur, on somme les différences absolues entre les deux colonnes adjacentes comme dans l'exemple : <br> <br>
+                    <img src="images/hauteur.png" alt="Les bosses"> <br>
+                    Ici bosses vaut 6 = |3-5|+|5-5|+...+|4-4|+|4-5| <br>
+                    On cherchera donc a minimiser cette valeur.
+                </p>
+            </div>
+
+            <p>
+                Ainsi pour calculer le score, on fais donc a*hauteur+b*lignes+c*trous+d*bosses, où a, b, c, et d, sont des constantes. <br>
+                Grâce à l'<a href="https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/" target="_blank">article</a> nous
+                avons accès au valeurs optimales trouvés grâce à un algorithme génétique que nous avons fais. Cepandant pour une meilleur fiabilité, nous avons 
+                décidés d'utiliser les valeurs de l'<a href="https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/" target="_blank">article</a>. <br>
+                Les valeurs sont donc :
+            </p>
+            <ul>
+                <li>a = -0.510066</li>
+                <li>b = 0.760666</li>
+                <li>c = -0.35663</li>
+                <li>d = -0.184483</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Implémentation</h2>
+
+            <p>
+                Pour implémenter ce robot, nous le fesons en python. <br>
+                Le code C++ ouvre un serveur et communique à chaque frame avec le script python par l'intermédiaire des fichiers textes. <br>
+                Chaque script lit ce qui est ecrit dans coups.txt/grille.txt et écrit dans l'autre fichier. <br>
+                En suite on applique ce qui a été décrit précédamment.
+            </p>
+        </section>
+    </main>
+
+    <script src="animationAppatition.js"></script>
+    <script>
+        document.querySelectorAll("h1, h2, a").forEach((el) => {
+                apparait(el);
+            });
+    </script>
+    <script>
+        document.querySelectorAll(".effet-1").forEach((path) => {
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+
+        let start = null;
+        const duration = 1000;
+
+        function animate(timestamp) {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / duration, 1);
+            path.style.strokeDashoffset = length * (1 - progress);
+            path.style.strokeOpacity = progress;
+            if (progress < 1) requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+        });
+        document.querySelectorAll(".effet-2").forEach((path) => {
+            path.style.strokeOpacity = 0;
+
+            setTimeout(() => {
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+
+        let start = null;
+        const duration = 1000;
+
+        function animate(timestamp) {
+            if (!start) start = timestamp;
+            const progress = Math.min((timestamp - start) / duration, 1);
+            path.style.strokeDashoffset = length * (1 - progress);
+            path.style.strokeOpacity = progress;
+            if (progress < 1) requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+    },1000);
+        });
+    </script>
+</body>
+</html>

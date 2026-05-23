@@ -8,6 +8,7 @@ body {
     font-family: var(--font-space-mono);
     overflow-x: hidden;
     height: 100vh;
+    color: var(--texte-lofi);
 }
 
 /* SCANLINES */
@@ -28,11 +29,9 @@ body::after {
   );
 }
 
-
-/* Sections */
 main {
+    margin: 0;
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -44,87 +43,72 @@ main {
 section {
     width: 80%;
     position: relative;
+    margin-bottom: 2vh;
     /* Effet de carte */
     border-left: 2px solid var(--overlay);
-    padding: 1rem;
+    padding: 2rem;
     background-color: var(--surface);
-    transform: rotateY(180deg);
+    transition: all .4s ease-in-out;
+    gap: 5vh;
+}
+
+section:hover {
+    box-shadow: 0 0 6px 2px var(--overlay);
+}
+section:hover,
+h1:hover {
+    text-shadow: 
+    0 0 10px var(--erreur-rose),
+    0 0 40px var(--blue-tv),
+    0 0 80px var(--vhs-violet);
+}
+
+h1 {
     transition: all .4s ease-in-out;
 }
 
-section * {
-    visibility: hidden;
-}
-
-/* Retournement */
-.retourne {
-    transform: rotateY(0deg);
-}
-.retourne * {
-    visibility: visible;
-}
-
-
-
-
-/* Titres */
-h1, h2 {
-    color: var(--vhs-violet);
-    position: relative;
-    font-size: 10vh;
-    margin: 0;
-}
-
-/* Effet de glitch */
-h1::before,
-h1::after,
-h2::before,
-h2::after {
-  content: attr(title);
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-}
-
-/* moitié haute */
-h1::before,
-h2::before {
-  color: var(--blue-tv);
-  clip-path: inset(0 0 40% 0); 
-  transform: translateX(3px);
-}
-
- /* moitié basse */
-h1::after,
-h2::after {
-  color: var(--erreur-rose);
-  clip-path: inset(60% 0 0 0);
-  transform: translateX(-3px);
-}
-
-/* Paragraphes */
 p {
-    font-size: 3vh;
+    width: 100%;
+    text-align: justify;
+    transition: all .4s ease-in-out;
 }
 
-h1 + p {
-    color: var(--texte-lofi);
+h2 {
+    text-align: center;
 }
 
-h1 + p a {
-    text-decoration: none;
-    color: var(--tv-bleu);
+/* Image */
+img {
+    display: block;
+    width: 50%;
+    margin: 0 auto;
+    aspect-ratio: auto;
 }
 
-h2 + p {
+
+
+
+/* Autre */
+
+a {
     text-decoration: line-through;
     color: var(--texte-desactive);
+    transition: all .4s ease-in-out;
+}
+section:hover a {
+    text-decoration: none;
+    color: var(--vhs-violet);
+    text-shadow: var(--void) 2px 5px 3px;
+}
+
+li {
+    list-style-type: none;
 }
 
 /* Fleche retour */
 
 main > a {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     animation: clignotte 1s ease-in-out infinite;
@@ -134,4 +118,14 @@ main > a svg {
     fill: var(--eleve);
     height: 20vh;
     aspect-ratio: 1;
+}
+
+
+/* Effet sur le coté */
+
+.effet {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
 }
