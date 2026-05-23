@@ -1,0 +1,131 @@
+@import "charte.css";
+@import "animations.css";
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--base);
+    font-family: var(--font-space-mono);
+    overflow-x: hidden;
+    height: 100vh;
+    color: var(--texte-lofi);
+}
+
+/* SCANLINES */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255,0,110,.04)  0px,
+    rgba(255,0,110,.04)  1px,
+    rgba(0,180,216,.04)  1px,
+    rgba(0,180,216,.04)  2px,
+    transparent          2px,
+    transparent          4px
+  );
+}
+
+main {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5vh;
+    position: relative;
+}
+
+section {
+    width: 80%;
+    position: relative;
+    margin-bottom: 2vh;
+    /* Effet de carte */
+    border-left: 2px solid var(--overlay);
+    padding: 2rem;
+    background-color: var(--surface);
+    transition: all .4s ease-in-out;
+    gap: 5vh;
+}
+
+section:hover {
+    box-shadow: 0 0 6px 2px var(--overlay);
+}
+section:hover,
+h1:hover {
+    text-shadow: 
+    0 0 10px var(--erreur-rose),
+    0 0 40px var(--blue-tv),
+    0 0 80px var(--vhs-violet);
+}
+
+h1 {
+    transition: all .4s ease-in-out;
+}
+
+p {
+    width: 100%;
+    text-align: justify;
+    transition: all .4s ease-in-out;
+}
+
+h2 {
+    text-align: center;
+}
+
+/* Image */
+img {
+    display: block;
+    width: 50%;
+    margin: 0 auto;
+    aspect-ratio: auto;
+}
+
+
+
+
+/* Autre */
+
+a {
+    text-decoration: line-through;
+    color: var(--texte-desactive);
+    transition: all .4s ease-in-out;
+}
+section:hover a {
+    text-decoration: none;
+    color: var(--vhs-violet);
+    text-shadow: var(--void) 2px 5px 3px;
+}
+
+li {
+    list-style-type: none;
+}
+
+/* Fleche retour */
+
+main > a {
+    position: fixed;
+    top: 0;
+    left: 0;
+    animation: clignotte 1s ease-in-out infinite;
+}
+
+main > a svg {
+    fill: var(--eleve);
+    height: 20vh;
+    aspect-ratio: 1;
+}
+
+
+/* Effet sur le coté */
+
+.effet {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+}
