@@ -8,6 +8,10 @@ MAKE: Menu
 	./Tetris
 
 
+Bot: bot
+	./bot
+bot: serv grille
+	g++ -Wall serveur.o grille.o -o bot $(SFML_LIBS)
 	
 # Robot
 Robot: robot
@@ -45,7 +49,8 @@ menu:
 	g++ -Wall -I/usr/local/include -DSFML_STATIC -c menu.cpp -o menu.o
 serveur:
 	g++ -Wall $(SFML_FLAGS) -c IA/serveur.cpp -o serveur.o
-
+serv:
+	g++ -Wall $(SFML_FLAGS) -c serveur.cpp -o serveur.o
 
 
 
@@ -53,4 +58,4 @@ serveur:
 
 # Clean
 clean:
-	rm -f grille.o jouer.o tetris Tetris menu.o serveur.o grille.o robot
+	rm -f grille.o jouer.o tetris Tetris menu.o serveur.o grille.o test robot bot
