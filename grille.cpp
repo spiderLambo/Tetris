@@ -80,6 +80,8 @@ void apparait (grille & g, char type) {
 
 // Choisis un tetromino au hasard
 void genereTetromino (plateau & g) {
+    // Seed différante à chaque fois
+    srand(time(0));
     std::array <char, 7> choix = {'I', 'O', 'T', 'L', 'J', 'S', 'Z'};
     g.nextPrecedent = g.next;
     apparait(g.gr, g.next);
