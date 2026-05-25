@@ -1,9 +1,16 @@
 #pragma once
-#include "../grille.h"
+#include "grille.h"
 #include <chrono>
 #include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <string>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <cstring>
+#include <unistd.h>
+#include <arpa/inet.h>
 
 #define PORT 63424
 

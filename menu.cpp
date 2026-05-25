@@ -1,5 +1,4 @@
 #include "menu.h"
-#include <iostream>
 
 // Affiche le texte
 void afficherTexte (sf::RenderWindow & f, std::string texte,std::string police, sf::Color couleur, int taille, float x, float y) {
@@ -212,7 +211,8 @@ int main() {
                     }
                 }
             } else if (event->getIf<sf::Event::MouseButtonPressed>()) {
-                if (selection == 0) system("./tetris");
+                if (selection == 0) system("./tetris &");
+                if (selection == 1) system("./robot &");
                 if (selection == 2) peuxAfficherParametres = true;
                 if (selection == 3) fenetre.close();
             }

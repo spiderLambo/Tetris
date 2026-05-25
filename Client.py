@@ -9,25 +9,28 @@ W = 10
 H = 20
 
 TETROMINOS = {
-    'I': np.array([[1, 1, 1, 1]], dtype=np.int8),
-    'O': np.array([[1, 1],[1, 1]], dtype=np.int8),
-    'T': np.array([[1, 1, 1],[0, 1, 0]], dtype=np.int8),
-    'L': np.array([[1, 1, 1],[1, 0, 0]], dtype=np.int8),
-    'J': np.array([[1, 1, 1],[0, 0, 1]], dtype=np.int8),
-    'S': np.array([[0, 1, 1],[1, 1, 0]], dtype=np.int8),
-    'Z': np.array([[1, 1, 0],[0, 1, 1]], dtype=np.int8),
+    "I": np.array([[1, 1, 1, 1]], dtype=np.int8),
+    "O": np.array([[1, 1], [1, 1]], dtype=np.int8),
+    "T": np.array([[1, 1, 1], [0, 1, 0]], dtype=np.int8),
+    "L": np.array([[1, 1, 1], [1, 0, 0]], dtype=np.int8),
+    "J": np.array([[1, 1, 1], [0, 0, 1]], dtype=np.int8),
+    "S": np.array([[0, 1, 1], [1, 1, 0]], dtype=np.int8),
+    "Z": np.array([[1, 1, 0], [0, 1, 1]], dtype=np.int8),
 }
 
-#optimisation de a, b, c, d
+
+# optimisation de a, b, c, d
 def normalisation(v):
     norm = np.linalg.norm(v)
     if norm == 0:
         return random_vect()
-    return v/norm
+    return v / norm
+
 
 def random_vect():
     v = np.random.uniform(-1, 1, 4)
     return normalisation(v)
+
 
 def totaline(v, piece):
     grille = np.zeros((H, W), dtype=np.int8)
@@ -54,8 +57,8 @@ def totaline(v, piece):
         pleines = int(np.sum(np.all(tmp == 1, axis=1)))
         lignes += pleines
         mask = ~np.all(tmp == 1, axis=1)
-        tmp  = tmp[mask]
-        tmp  = np.vstack([np.zeros((H - len(tmp), W), dtype=np.int8), tmp])
+        tmp = tmp[mask]
+        tmp = np.vstack([np.zeros((H - len(tmp), W), dtype=np.int8), tmp])
         grille = tmp
 
         if np.any(grille[0] == 1):
@@ -63,20 +66,24 @@ def totaline(v, piece):
 
     return lignes
 
+
 def fitness(v):
     total_lines = 0
     for _ in range(100):
         total_lines += totaline(v)
     return total_lines
 
+
 def tournament_selection(population):
     sample = random.sample(population, 100)
     sample.sort(key=lambda x: x["fitness"], reverse=True)
     return sample[0], sample[1]
 
+
 def crossover(p1, p2):
-    child = ((p1["vector"]*p1["fitness"]) + (p2["vector"]*p2["fitness"]))
+    child = (p1["vector"] * p1["fitness"]) + (p2["vector"] * p2["fitness"])
     return normalisation(child)
+
 
 def mutation(v):
     if np.random.random() < 0.05:
@@ -85,6 +92,7 @@ def mutation(v):
         v = normalisation(v)
     return v
 
+
 def genetic_algo():
     population = []
     for _ in range(1000):
@@ -92,7 +100,7 @@ def genetic_algo():
 
     for i in range(len(population)):
         population[i]["fitness"] = fitness(population[i]["vector"])
-    
+
     children = []
     while len(children) < 300:
         p1, p2 = tournament_selection(population)
@@ -106,11 +114,13 @@ def genetic_algo():
 
     population.sort(key=lambda x: x["fitness"], reverse=True)
     best = population[0]
-    return best["vector"][0], best["vector"][1], best["vector"][2], best["vector"][3] 
+    return best["vector"][0], best["vector"][1], best["vector"][2], best["vector"][3]
 
-#Jeu
+
+# Jeu
 def rotation(piece, n):
     return np.rot90(piece, -n)
+
 
 def collision(grille, piece, row, col):
     ph, pw = piece.shape
@@ -127,6 +137,7 @@ def collision(grille, piece, row, col):
             if r >= 0 and grille[r, c] == 1:
                 return True
     return False
+
 
 def descente(grille, piece, col):
     ph, pw = piece.shape
@@ -150,6 +161,7 @@ def descente(grille, piece, col):
         new_grille = np.vstack((top, new_grille))
     return new_grille, cleared
 
+
 def column_heights(grille):
     heights = []
     for col in range(W):
@@ -161,8 +173,10 @@ def column_heights(grille):
         heights.append(h)
     return heights
 
+
 def aggregate_height(grille):
     return sum(column_heights(grille))
+
 
 def holes(grille):
     total = 0
@@ -175,6 +189,7 @@ def holes(grille):
                 total += 1
     return total
 
+
 def bumpiness(grille):
     h = column_heights(grille)
     total = 0
@@ -182,13 +197,21 @@ def bumpiness(grille):
         total += abs(h[i] - h[i + 1])
     return total
 
+
 A = -0.510066
-B =  0.760666
+B = 0.760666
 C = -0.35663
 D = -0.184483
 
+
 def eval(grille, cleared):
-    return (A * aggregate_height(grille) + B * cleared + C * holes(grille) + D * bumpiness(grille))
+    return (
+        A * aggregate_height(grille)
+        + B * cleared
+        + C * holes(grille)
+        + D * bumpiness(grille)
+    )
+
 
 def lookahead(grille, nexte, cleared1):
     local_score = -999999999
@@ -201,6 +224,7 @@ def lookahead(grille, nexte, cleared1):
             if score > local_score:
                 local_score = score
     return local_score
+
 
 def mllrcoup(grille, piece_type, nexte_type):
     best_score = -999999999
@@ -220,9 +244,10 @@ def mllrcoup(grille, piece_type, nexte_type):
                 best_col = col
     return best_rot, best_col
 
-#client et lecture
+
+# client et lecture
 def lire_grille():
-    with open("IA/grille.txt", "r") as f:
+    with open("grille.txt", "r") as f:
         lines = f.read().splitlines()
     if len(lines) == 0:
         return None, np.zeros((H, W), dtype=np.int8)
@@ -234,13 +259,15 @@ def lire_grille():
             break
         line = lines[i + 2]
         for j in range(min(W, len(line))):
-            if line[j] == 'P':
+            if line[j] == "P":
                 grille[i, j] = 1
     return piece, grille, nexte
 
+
 def ecrire_coup(rot, col):
-    with open("IA/coup.txt", "w") as f:
+    with open("coup.txt", "w") as f:
         f.write(f"{rot} {col}\n")
+
 
 def client():
     print(f"connexion serveur : {HOST}:{PORT}")
@@ -267,5 +294,6 @@ def client():
             ecrire_coup(rot, col)
             s.send(b"OK\n")
     s.close()
+
 
 client()
