@@ -290,7 +290,6 @@ int run(plateau & P, int & level, int & score, int & interval, sf::RenderWindow 
 			std::cout << "[!]> send error" << std::endl;
 			return -1;
 		}
-		system("cat grille.txt");
 		char buffer[1025];
 		int recu = recv(clifd, buffer, sizeof(buffer), 0);
 		if (recu == -1) {
@@ -300,7 +299,6 @@ int run(plateau & P, int & level, int & score, int & interval, sf::RenderWindow 
             		std::cout << "[-]> client déconnecter" << std::endl;
         	} else {
             		buffer[recu] = '\0';
-			system("cat coup.txt");
 			lire(ficcoup, a);
 			joue(P, a, level, score, interval, f);
 		}

@@ -281,16 +281,11 @@ def client():
             break
         if msg == "GO":
             piece, grille, nexte = lire_grille()
-            print("PIECE :", piece)
-            print("NEXT :", nexte)
-            print("GRILLE :", grille)
             if piece not in TETROMINOS:
                 print("piece invalide :", piece)
                 s.send(b"OK\n")
                 continue
             rot, col = mllrcoup(grille, piece, nexte)
-            print("rotation =", rot)
-            print("colonne  =", col)
             ecrire_coup(rot, col)
             s.send(b"OK\n")
     s.close()
